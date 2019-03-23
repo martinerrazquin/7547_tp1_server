@@ -1,0 +1,11 @@
+{
+  "extends": "strongloop",
+  "parserOptions": { 
+    "ecmaVersion": 6 
+  },
+  "env": {
+    "commonjs": true,
+    "node": true,
+    "mocha": true
+  }
+}

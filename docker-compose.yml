@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  app:
+    image: "node:8"
+    working_dir: /usr/src/app
+    environment:
+      - PORT=3000
+      - NODE_ENV=development
+    depends_on:
+      - postgres
+    ports:
+      - "3000:3000"
+      - "9229:9229"
+    volumes:
+      - .:/usr/src/app
+    links:
+      - "postgres:database"
+    command: npm run development
+      
+  postgres:
+    image: debezium/postgres:9.6
+    ports:
+    - 5432:5432
+    environment:
+    - POSTGRES_USER=tp1_server
+    - POSTGRES_PASSWORD=tp1_server
+    - POSTGRES_DB=tp1_server

@@ -1,0 +1,14 @@
+#!/usr/bin/env node
+'use strict';
+
+var { debug } = require('../config/dependencies');
+
+// Initialize DB.
+require('../models');
+
+var app = require('../app');
+var port = process.env.PORT || '3000';
+
+app.listen(port, () => {
+  debug('Listening on port: ' + port);
+});
