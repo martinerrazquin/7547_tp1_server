@@ -16,5 +16,3 @@ The API uses Sequelize to connect to its PostgreSQL DB, and changes are handled 
 
 ## Before pushing
 Make sure that all tests pass and there are no code style errors by running `docker-compose exec app npm test` before pushing.
-
-# HypeChat API Rest
