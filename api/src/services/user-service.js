@@ -11,8 +11,7 @@ UserService.create = async(userData) => {
 };
 
 UserService.getById = async(userId) => {
-  var user = await User.findByPk(userId);
-  return user;
+  return await User.findByPk(userId);
 };
 
 module.exports = UserService;
