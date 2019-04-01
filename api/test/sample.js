@@ -2,7 +2,7 @@
 
 var chai = require('chai');
 var chaiHttp = require('chai-http');
-var app = require('../api/app');
+var app = require('../src/app');
 
 chai.use(chaiHttp);
 chai.should();

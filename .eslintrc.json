@@ -1,7 +1,7 @@
 {
   "extends": "strongloop",
   "parserOptions": { 
-    "ecmaVersion": 6 
+    "ecmaVersion": 9
   },
   "env": {
     "commonjs": true,

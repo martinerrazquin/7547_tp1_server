@@ -2,8 +2,7 @@ version: '3'
 
 services:
   app:
-    image: "node:8"
-    working_dir: /usr/src/app
+    build: .
     environment:
       - PORT=3000
       - NODE_ENV=development
@@ -14,9 +13,9 @@ services:
       - "9229:9229"
     volumes:
       - .:/usr/src/app
+      - /usr/src/app/node_modules
     links:
       - "postgres:database"
-    command: npm run development
       
   postgres:
     image: debezium/postgres:9.6
@@ -26,3 +25,11 @@ services:
     - POSTGRES_USER=tp1_server
     - POSTGRES_PASSWORD=tp1_server
     - POSTGRES_DB=tp1_server
+
+  migrations:
+    image: 7547_tp1_server_app:latest
+    command: ["./wait-for-it/wait-for-it.sh", "postgres:5432", "--", "npm", "run", "db:migrate"]
+    links:
+      - postgres
+    depends_on:
+      - postgres

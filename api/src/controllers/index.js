@@ -1,6 +1,6 @@
 'use strict';
 
-var { processFilesInDir } = require('../bin/helpers');
+var { processFilesInDir } = require('../helpers/file-handler');
 
 var controllers = {};
 

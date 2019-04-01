@@ -2,13 +2,13 @@
   "name": "7547-tp1-server",
   "version": "1.0.0",
   "scripts": {
-    "start": "node ./api/bin/www",
-    "development": "npm install && nodemon -L ./api/bin/www",
-    "pretest": "eslint --ignore-path .gitignore . --fix",
-    "test": "mocha",
-    "covered-test": "nyc mocha",
+    "start": "node ./api/src/bin/www",
+    "development": "npm install && nodemon -L ./api/src/bin/www",
+    "pretest": "eslint . --fix",
+    "test": "mocha api/test/**/*",
+    "covered-test": "nyc mocha api/test/**/*",
     "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
-    "db:migrate": "./node_modules/.bin/sequelize db:migrate --migrations-path api/config/sequelize/migrations --seeders-path api/config/sequelize/seeders --models-path api/models --config api/config/sequelize/config.json"
+    "db:migrate": "./node_modules/.bin/sequelize db:migrate"
   },
   "dependencies": {
     "debug": "~2.6.9",
@@ -28,6 +28,7 @@
     "eslint-config-strongloop": "^2.1.0",
     "mocha": "^6.0.2",
     "nodemon": "^1.18.10",
-    "nyc": "^13.3.0"
+    "nyc": "^13.3.0",
+    "sinon": "^7.3.1"
   }
 }
