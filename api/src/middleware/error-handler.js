@@ -1,6 +1,10 @@
 'use strict';
 
-module.exports.ErrorHandler = (err) => {
+var ErrorHandler = {};
+
+ErrorHandler.name = 'errorHandler';
+
+ErrorHandler.default = (err, req, res, next) => {
   var response = {
     status: 500,
     json: {},
@@ -11,6 +15,7 @@ module.exports.ErrorHandler = (err) => {
     response.json.type = 'validationError';
     response.json.validationErrors = [];
     // response.json.raw = err;
+
     err.errors.forEach((error) => {
       switch (error.type) {
         case 'notNull Violation':
@@ -23,5 +28,7 @@ module.exports.ErrorHandler = (err) => {
     });
   }
 
-  return response;
+  res.status(response.status).json(response.json);
 };
+
+module.exports = ErrorHandler;
