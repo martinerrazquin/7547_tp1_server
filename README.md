@@ -1,6 +1,11 @@
 # 7547_tp1_server
 Servidor para TP1 de 75.47 - Taller de Desarrollo de Proyectos 2
 
+[![Build Status](https://travis-ci.com/martinerrazquin/7547_tp1_server.svg?token=cxW52jpx7sfJZG9rsfwE&branch=master)](https://travis-ci.com/martinerrazquin/7547_tp1_server)
+[![codecov](https://codecov.io/gh/martinerrazquin/7547_tp1_server/branch/master/graph/badge.svg?token=1J3EwBI3ow)](https://codecov.io/gh/martinerrazquin/7547_tp1_server)
+![Heroku](https://heroku-badge.herokuapp.com/?app=server7547&root=ping)
+
+
 ## Run
 * `docker-compose up`
 
