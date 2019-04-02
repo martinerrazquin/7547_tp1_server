@@ -6,13 +6,15 @@ var UserController = {};
 
 UserController.name = 'UserController';
 
-UserController.create = async(req, res) => {
-  var user = await UserService.create(req.body);
+UserController.create = async(req, res, next) => {
+  var user = await UserService.create(req.body)
+    .catch(err => next(err));
   res.json(user);
 };
 
-UserController.retrieve = async(req, res) => {
-  var user = await UserService.getById(req.params.userId);
+UserController.retrieve = async(req, res, next) => {
+  var user = await UserService.getById(req.params.userId)
+    .catch(err => next(err));
   if (user) {
     res.json(user);
   } else {

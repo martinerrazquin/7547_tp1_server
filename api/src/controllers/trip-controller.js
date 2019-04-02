@@ -6,13 +6,15 @@ var TripController = {};
 
 TripController.name = 'TripController';
 
-TripController.create = async(req, res) => {
-  var trip = await TripService.create(req.body);
+TripController.create = async(req, res, next) => {
+  var trip = await TripService.create(req.body)
+    .catch(err => next(err));
   res.json(trip);
 };
 
-TripController.retrieve = async(req, res) => {
-  var trip = await TripService.getById(req.params.tripId);
+TripController.retrieve = async(req, res, next) => {
+  var trip = await TripService.getById(req.params.tripId)
+    .catch(err => next(err));
   if (trip) {
     res.json(trip);
   } else {
@@ -20,8 +22,9 @@ TripController.retrieve = async(req, res) => {
   }
 };
 
-TripController.update = async(req, res) => {
-  var trip = await TripService.update(req.params.tripId, req.body);
+TripController.update = async(req, res, next) => {
+  var trip = await TripService.update(req.params.tripId, req.body)
+    .catch(err => next(err));
   res.json(trip);
 };
 

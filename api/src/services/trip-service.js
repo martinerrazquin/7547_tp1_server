@@ -7,6 +7,9 @@ var TripService = {};
 TripService.name = 'TripService';
 
 TripService.create = async(tripData) => {
+  delete tripData.id;
+  delete tripData.status;
+  delete tripData.driverId;
   return await Trip.create(tripData);
 };
 
