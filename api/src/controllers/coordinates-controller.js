@@ -1,25 +1,24 @@
 'use strict';
 
-// TODO
-// var { CoordinatesService } = require('../services');
+var { CoordinatesService } = require('../services');
 
 var CoordinatesController = {};
 
 CoordinatesController.name = 'CoordinatesController';
 
 CoordinatesController.get_coords =
-    // TODO
-    (req, res) => {
-      if (!req.body.direction || !req.body.direction.trim()){
+    async(req, res, next) => {
+      if (!req.query.direction || !req.query.direction.trim()){
         res.status(400).send();
         return;
       }
-      res.json({
-        lat: -34.5311936,
-        lng: -58.54854270000001,
-        formatted_address: 'Rafael Obligado 6692, ' +
-            'B1606AOP Villa Adelina, Buenos Aires, Argentina',
-      });
+      console.log(req.query.direction);
+      var xd = await CoordinatesService
+        .get_coords(req.query.direction)
+        .catch((err) => next(err));
+
+      console.log(xd);
+      res.json(xd);
     };
 
 
