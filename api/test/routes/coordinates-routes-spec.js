@@ -108,6 +108,18 @@ describe('Coordinates Routes Test', () => {
       chai.assert.strictEqual(res.status, 400, 'Status was not 400');
     });
 
+    it('should return error 404 when non-existant direction is passed',
+      async() => {
+        var e = new Error();
+        e.name = 'NoResultsFoundOnSearch';
+        CoordinatesService.get_coords.rejects(e);
+
+        var res = await chai.request(app)
+          .get('/coordinates')
+          .query({direction: 'rafael obligado 6696'});
+
+        chai.assert.strictEqual(res.status, 404, 'Status was not 404');
+      });
   });
 
 });

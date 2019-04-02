@@ -13,7 +13,9 @@ CoordinatesService.get_coords = async(direction) => {
 
   var maps_r = await googleMapsClient.places({query: direction}).asPromise();
   if (maps_r.json.status === 'ZERO_RESULTS') {
-    throw new Error('no results'); // FIXME
+    var e = new Error('no results'); // TODO: separate on specific Error Type?
+    e.name = 'NoResultsFoundOnSearch';
+    throw e;
   }
   var first_result = maps_r.json.results[0];
   resp.formatted_address = first_result.formatted_address;
