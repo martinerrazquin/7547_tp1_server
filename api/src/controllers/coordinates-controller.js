@@ -1,19 +1,20 @@
 'use strict';
 
-//TODO
-//var { CoordinatesService } = require('../services');
+// TODO
+// var { CoordinatesService } = require('../services');
 
 var CoordinatesController = {};
 
 CoordinatesController.name = 'CoordinatesController';
 
 CoordinatesController.get_coords =
-    //TODO
+    // TODO
     (req, res) => {
       res.json({
         lat: -34.5311936,
         lng: -58.54854270000001,
-        formatted_address: "Rafael Obligado 6692, B1606AOP Villa Adelina, Buenos Aires, Argentina"
+        formatted_address: 'Rafael Obligado 6692, ' +
+            'B1606AOP Villa Adelina, Buenos Aires, Argentina',
       });
     };
 
