@@ -10,6 +10,10 @@ CoordinatesController.name = 'CoordinatesController';
 CoordinatesController.get_coords =
     // TODO
     (req, res) => {
+      if (!req.body.direction || !req.body.direction.trim()){
+        res.status(400).send();
+        return;
+      }
       res.json({
         lat: -34.5311936,
         lng: -58.54854270000001,
