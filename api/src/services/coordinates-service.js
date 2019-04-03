@@ -1,6 +1,6 @@
 'use strict';
 
-var { MapsService } = require('../services');
+var MapsService = require('../services/maps-service');
 
 
 var CoordinatesService = {};
