@@ -1,10 +1,17 @@
 'use strict';
 
-var GoogleMapsClientService = require('@google/maps').createClient({
+
+var googleMapsClientService = require('@google/maps').createClient({
   key: process.env.GOOGLE_API_KEY,
   Promise: Promise,
 });
 
-GoogleMapsClientService.name = 'GoogleMapsClientService';
+var MapsService = {};
 
-module.exports = GoogleMapsClientService;
+MapsService.name = 'MapsService';
+
+MapsService.places = (direction) => {
+  return googleMapsClientService.places({query: direction}).asPromise();
+};
+
+module.exports = MapsService;

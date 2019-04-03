@@ -1,6 +1,6 @@
 'use strict';
 
-var googleMapsClient = require('./maps-service');
+var MapsService = require('../services/maps-service');
 
 
 var CoordinatesService = {};
@@ -11,7 +11,7 @@ CoordinatesService.get_coords = async(direction) => {
 
   var resp = {};
 
-  var maps_r = await googleMapsClient.places({query: direction}).asPromise();
+  var maps_r = await MapsService.places(direction);
   if (maps_r.json.status === 'ZERO_RESULTS') {
     var e = new Error('no results'); // TODO: separate on specific Error Type?
     e.name = 'NoResultsFoundOnSearch';
