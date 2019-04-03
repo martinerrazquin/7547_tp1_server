@@ -17,6 +17,8 @@ services:
       - /usr/src/app/node_modules
     links:
       - "postgres:database"
+    env_file:
+      - process.env
       
   postgres:
     image: debezium/postgres:9.6

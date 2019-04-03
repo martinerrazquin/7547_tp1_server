@@ -28,6 +28,11 @@ ErrorHandler.default = (err, req, res, next) => {
     });
   }
 
+  if (err.name === 'NoResultsFoundOnSearch'){
+    response.status = 404;
+    response.json.type = 'noResults';
+  }
+
   res.status(response.status).json(response.json);
 };
 
