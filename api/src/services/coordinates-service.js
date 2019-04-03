@@ -7,7 +7,7 @@ var CoordinatesService = {};
 
 CoordinatesService.name = 'CoordinatesService';
 
-CoordinatesService.get_coords = async(direction) => {
+CoordinatesService.getCoords = async(direction) => {
 
   var resp = {};
 

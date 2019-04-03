@@ -30,8 +30,7 @@ ErrorHandler.default = (err, req, res, next) => {
 
   if (err.name === 'NoResultsFoundOnSearch'){
     response.status = 404;
-    response.json.message = 'No results found, please try again ' +
-        'with another address.';
+    response.json.type = 'noResults';
   }
 
   res.status(response.status).json(response.json);

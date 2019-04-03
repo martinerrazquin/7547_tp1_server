@@ -66,7 +66,7 @@ describe('Coordinates Service Test', () => {
         'B1606AOP Villa Adelina, Buenos Aires, Argentina',
   };
 
-  describe('get_coords', () => {
+  describe('getCoords', () => {
     it('should return correct response when direction gives results',
       async() => {
 
@@ -75,9 +75,8 @@ describe('Coordinates Service Test', () => {
 
 
         var result = await CoordinatesService
-          .get_coords('rafael obligado 6692');
+          .getCoords('rafael obligado 6692');
 
-        console.log(result); // DEBUG
 
         chai.assert.deepEqual(result, mock_correct_data,
           'Result does not match expected one');
