@@ -11,4 +11,7 @@ module.exports = {
   Sequelize: Sequelize,
   express: require('express'),
   logger: require('morgan'),
+  googleMapsClientService: require('@google/maps').createClient({
+    key: process.env.GOOGLE_API_KEY,
+    Promise: Promise}),
 };
