@@ -9,7 +9,7 @@ TripController.name = 'TripController';
 TripController.create = async(req, res, next) => {
   try {
     var trip = await TripService.create(req.body);
-    res.json(trip);
+    trip ? res.json(trip) : res.status(500).send();
   } catch (err) {
     next(err);
   }
@@ -21,8 +21,8 @@ TripController.createSimulated = async(req, res, next) => {
     var driver = await DriverService.createFake(trip.origin);
     trip.status = 'En camino';
     trip.driverId = driver.id;
-    trip = await TripService.update(trip.id, trip.toJSON());
-    res.json(trip);
+    trip = await TripService.update(trip.id, trip);
+    trip ? res.json(trip) : res.status(500).send();
   } catch (err) {
     next(err);
   }
@@ -47,8 +47,7 @@ TripController.update = async(req, res, next) => {
   }
 
   try {
-    var trip = await TripService
-      .update(req.params.tripId, req.body);
+    var trip = await TripService.update(req.params.tripId, req.body);
     trip ? res.json(trip) : res.status(404).send();
   } catch (err) {
     next(err);

@@ -10,11 +10,13 @@ TripService.create = async(tripData) => {
   delete tripData.id;
   delete tripData.status;
   delete tripData.driverId;
-  return await Trip.create(tripData);
+  var trip = await Trip.create(tripData);
+  return trip && trip.toJSON ? trip.toJSON() : trip;
 };
 
 TripService.getById = async(tripId) => {
-  return await Trip.findByPk(tripId);
+  var trip = await Trip.findByPk(tripId);
+  return trip && trip.toJSON ? trip.toJSON() : trip;
 };
 
 TripService.update = async(tripId, tripData) => {
@@ -23,7 +25,12 @@ TripService.update = async(tripId, tripData) => {
     where: { id: tripId },
   });
 
-  return updated.length > 1 && updated[1].length > 0 && updated[1][0];
+  if (updated.length === 1) {
+    return null;
+  } else {
+    var trip = updated[1][0];
+    return trip.toJSON ? trip.toJSON() : trip;
+  }
 };
 
 TripService.getLocationData = async(tripId) => {
