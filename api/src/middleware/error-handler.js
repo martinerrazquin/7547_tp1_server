@@ -7,7 +7,9 @@ ErrorHandler.name = 'errorHandler';
 ErrorHandler.default = (err, req, res, next) => {
   var response = {
     status: 500,
-    json: {},
+    json: {
+      status: 'error',
+    },
   };
 
   if (err.name === 'SequelizeValidationError') {

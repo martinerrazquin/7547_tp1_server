@@ -79,10 +79,7 @@ describe('Trip Routes Test', () => {
 
   var expectedBuscandoLocationdata = {
     status: 'Buscando',
-    currentLocation: {
-      lat: 0,
-      lng: 0,
-    },
+    currentLocation: null,
   };
 
 
