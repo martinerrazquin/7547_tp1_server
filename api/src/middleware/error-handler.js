@@ -28,6 +28,8 @@ ErrorHandler.default = (err, req, res, next) => {
           break;
       }
     });
+  } else {
+    console.error(err);
   }
 
   res.status(response.status).json(response.json);
