@@ -19,7 +19,7 @@ CoordinatesController.getCoords = async(req, res, next) => {
       .getCoords(req.query.direction);
     xd && res.json(xd);
   } catch (err) {
-    if (err.message === 'NoResultsFoundOnSearch') {
+    if (err.name === 'NoResultsFoundOnSearch') {
       return res.status(404).json({
         status: 'error',
         type: 'noResults',

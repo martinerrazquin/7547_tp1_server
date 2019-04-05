@@ -12,7 +12,9 @@ CoordinatesService.getCoords = async(direction) => {
 
   var maps_r = await MapsService.places(direction);
   if (maps_r.json.status === 'ZERO_RESULTS') {
-    throw new Error('NoResultsFoundOnSearch');
+    var e = new Error();
+    e.name = 'NoResultsFoundOnSearch';
+    throw e;
   }
   var first_result = maps_r.json.results[0];
   resp.formatted_address = first_result.formatted_address;
