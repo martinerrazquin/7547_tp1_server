@@ -35,6 +35,15 @@ describe('Trip Routes Test', () => {
     driverId: null,
   };
 
+  var expectedEnCaminoLocationdata = {
+    status: 'En camino',
+    currentLocation: {
+      lng: -58.54854270000001,
+      lat: -34.5311936,
+    },
+  };
+
+
   describe('GET /trips/:tripId', () => {
     it('should return invalid when trip does not exist', async() => {
       Trip.findByPk.returns(null);
@@ -88,5 +97,38 @@ describe('Trip Routes Test', () => {
         'Response was not what was expected'
       );
     });
+  });
+
+  describe('GET /trips/:tripId/location', () => {
+    it('should return 404 when trip does not exist', async() => {
+      Trip.findByPk.returns(null);
+
+
+      var res = await chai.request(app).get('/trips/1/location');
+
+      chai.assert.strictEqual(res.status,
+        404,
+        'Status was not 404');
+    });
+
+    it('should return both correct coordinates when ' +
+        'trip is in "En camino" state', async() => {
+
+      Trip.findByPk.returns(tripData);
+
+      var res = await chai.request(app).get('/trips/1/location');
+
+      chai.assert.strictEqual(
+        res.status,
+        200,
+        'Status was not 200'
+      );
+      chai.assert.deepEqual(
+        res.body,
+        expectedEnCaminoLocationdata,
+        'Response was not what was expected'
+      );
+    });
+
   });
 });

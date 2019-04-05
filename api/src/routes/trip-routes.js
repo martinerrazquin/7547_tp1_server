@@ -9,4 +9,8 @@ module.exports = (app) => {
   app.route('/trips/:tripId')
     .get(TripController.retrieve)
     .put(TripController.update);
+
+  app.route('/trips/:tripId/location')
+    .get(TripController.getLocation);
+
 };

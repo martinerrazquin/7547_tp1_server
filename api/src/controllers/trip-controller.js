@@ -1,6 +1,7 @@
 'use strict';
 
 var { TripService } = require('../services');
+// var { TripService, DriverService } = require('../services');
 
 var TripController = {};
 
@@ -26,6 +27,41 @@ TripController.update = async(req, res, next) => {
   var trip = await TripService.update(req.params.tripId, req.body)
     .catch(err => next(err));
   res.json(trip);
+};
+
+TripController.getLocation = async(req, res, next) => {
+  // TODO: agregar filtro de que no este terminado el viaje?
+  var trip = await TripService.getById(req.params.tripId)
+    .catch(err => next(err));
+  if (!trip) {
+    res.status(404).send();
+  } else {
+    var resp = {};
+    resp.status = trip.status;
+    resp.currentLocation = {};
+    if (trip.status === 'Buscando'){ // buscando chofer
+      resp.currentLocation.lat = 0;
+      resp.currentLocation.lng = 0;
+    } else { // chofer asignado
+      /* TODO
+      var driver = await DriverService.getById(trip.driverId)
+          .catch(err=> next(err));
+      if (!driver){                   //red flag: chofer no existente asignado
+        res.status(500).send();
+      }
+      else {                          //chofer encontrado
+        // TODO: se puede reemplazar por un
+        // TODO: resp.currentLocation = driver.currentLocation?
+        resp.currentLocation.lng = driver.currentLocation.lng;
+        resp.currentLocation.lat = driver.currentLocation.lat;
+      }
+      */
+      // FIXME: mocked response
+      resp.currentLocation.lng = -58.54854270000001;
+      resp.currentLocation.lat = -34.5311936;
+    }
+    res.json(resp);
+  }
 };
 
 module.exports = TripController;
