@@ -9,7 +9,22 @@ TripController.name = 'TripController';
 TripController.create = async(req, res, next) => {
   var trip = await TripService.create(req.body)
     .catch(next);
-  res.json(trip);
+  trip && res.json(trip);
+};
+
+TripController.createSimulated = async(req, res, next) => {
+  var trip = await TripService.create(req.body)
+    .catch(next);
+  if (trip) {
+    var driver = await DriverService.createFake(trip.origin)
+      .catch(next);
+    if (driver) {
+      trip.status = 'En camino';
+      trip.driverId = driver.id;
+      trip = await TripService.update(trip.id, trip.toJSON());
+      trip && res.json(trip);
+    }
+  }
 };
 
 TripController.retrieve = async(req, res, next) => {
@@ -43,12 +58,8 @@ TripController.getLocation = async(req, res, next) => {
     var resp = {};
     resp.status = trip.status;
     resp.currentLocation = {};
-    if (trip.status === 'Buscando'){ // buscando chofer
+    if (['Buscando', 'Finalizado'].indexOf(trip.status) > -1){
       resp.currentLocation = null;
-    } else if (trip.status === 'Finalizado') {
-      // TODO: mandar un 404? o algo por el estilo.
-      // también habría que manejar el caso de un viaje
-      // cancelado más adelante, si no me acuerdo mal.
     } else {
       // chofer asignado
       var driver = await DriverService.getById(trip.driverId)

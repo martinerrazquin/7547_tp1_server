@@ -7,6 +7,17 @@ var DriverService = {};
 
 DriverService.name = 'DriverService';
 
+DriverService.createFake = async(nearLocation) => {
+  return await Driver.create({
+    userId: null,
+    // TODO: add random offset
+    currentLocation: {
+      lat: nearLocation.lat,
+      lng: nearLocation.lng,
+    },
+  });
+};
+
 DriverService.getById = async(driverId) => {
   return await Driver.findByPk(driverId);
 };
