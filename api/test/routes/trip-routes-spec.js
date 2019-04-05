@@ -4,7 +4,7 @@ var chai = require('chai');
 var chaiHttp = require('chai-http');
 var sinon = require('sinon');
 var app = require('../../src/app');
-var { Trip, Driver } = require('../../src/models');
+var { Trip } = require('../../src/models');
 
 chai.use(chaiHttp);
 
@@ -13,21 +13,14 @@ describe('Trip Routes Test', () => {
     sinon.stub(Trip, 'create');
     sinon.stub(Trip, 'findByPk');
     sinon.stub(Trip, 'update');
-    sinon.stub(Driver, 'findByPk');
   });
 
   beforeEach(() => {
-    Trip.create.resetHistory();
-    Trip.findByPk.resetHistory();
-    Trip.update.resetHistory();
-    Driver.findByPk.resetHistory();
+    sinon.resetHistory();
   });
 
   after(() => {
-    Trip.create.restore();
-    Trip.findByPk.restore();
-    Trip.update.restore();
-    Driver.findByPk.restore();
+    sinon.restore();
   });
 
   var tripData = {
@@ -56,6 +49,16 @@ describe('Trip Routes Test', () => {
     },
     status: 'En camino',
     driverId: 1,
+    driver: {
+      id: 1,
+      userId: 2,
+      currentLocation: {
+        lng: -58.54854270000001,
+        lat: -34.5311936,
+      },
+      createdAt: '2019-04-05T17:05:10.939Z',
+      updatedAt: '2019-04-05T17:05:10.939Z',
+    },
   };
 
   var expectedEnCaminoLocationdata = {
@@ -64,17 +67,6 @@ describe('Trip Routes Test', () => {
       lng: -58.54854270000001,
       lat: -34.5311936,
     },
-  };
-
-  var driverData = {
-    id: 1,
-    userId: 2,
-    currentLocation: {
-      lng: -58.54854270000001,
-      lat: -34.5311936,
-    },
-    createdAt: '2019-04-05T17:05:10.939Z',
-    updatedAt: '2019-04-05T17:05:10.939Z',
   };
 
   var expectedBuscandoLocationdata = {
@@ -155,7 +147,6 @@ describe('Trip Routes Test', () => {
         'trip is in "En camino" state', async() => {
 
       Trip.findByPk.returns(confirmedTripData);
-      Driver.findByPk.returns(driverData);
 
       var res = await chai.request(app).get('/trips/1/location');
 

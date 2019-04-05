@@ -58,28 +58,8 @@ TripController.update = async(req, res, next) => {
 TripController.getLocation = async(req, res, next) => {
   // TODO: agregar filtro de que no este terminado el viaje?
   try {
-    var trip = await TripService.getById(req.params.tripId);
-    if (!trip) {
-      res.status(404).send();
-    } else {
-      var resp = {};
-      resp.status = trip.status;
-      resp.currentLocation = {};
-      if (['Buscando', 'Finalizado'].includes(trip.status)){
-        resp.currentLocation = null;
-      } else {
-        // chofer asignado
-        var driver = await DriverService.getById(trip.driverId);
-        if (!driver) {
-          // red flag: chofer no existente asignado
-          res.status(500).send();
-        } else {
-          // chofer encontrado
-          resp.currentLocation = driver.currentLocation;
-        }
-      }
-      res.json(resp);
-    }
+    var locationData = await TripService.getLocationData(req.params.tripId);
+    locationData ? res.json(locationData) : res.status(404).send();
   } catch (err) {
     next(err);
   }
