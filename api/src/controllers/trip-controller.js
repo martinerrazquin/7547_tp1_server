@@ -24,6 +24,7 @@ TripController.retrieve = async(req, res, next) => {
 };
 
 TripController.update = async(req, res, next) => {
+  // TODO: Check that the tripId's in data and params are the same.
   var trip = await TripService.update(req.params.tripId, req.body)
     .catch(err => next(err));
   res.json(trip);
@@ -63,5 +64,18 @@ TripController.getLocation = async(req, res, next) => {
     res.json(resp);
   }
 };
+
+TripController.testingJSONB = async(req, res, next) => {
+  var region = { 
+    lat:  { min: 16, max: 20 },
+    lng: { min: 15, max: 20 },
+  };
+  var trip = await TripService.getByOriginRegion(region);
+  if (trip) {
+    res.json(trip);  
+  } else {
+    res.status(404).send();
+  }
+}
 
 module.exports = TripController;

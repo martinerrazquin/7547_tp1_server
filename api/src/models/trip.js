@@ -2,11 +2,11 @@
 module.exports = (sequelize, Sequelize) => {
   const Trip = sequelize.define('Trip', {
     origin: {
-      type: Sequelize.STRING,
+      type: Sequelize.JSONB,
       allowNull: false,
     },
     destination: {
-      type: Sequelize.STRING,
+      type: Sequelize.JSONB,
       allowNull: false,
     },
     status: {
