@@ -23,7 +23,7 @@ TripService.update = async(tripId, tripData) => {
     where: { id: tripId },
   });
 
-  return updated[1][0];
+  return updated[1].length > 0 && updated[1][0];
 };
 
 module.exports = TripService;
