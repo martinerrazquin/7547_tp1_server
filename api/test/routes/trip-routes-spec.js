@@ -31,15 +31,25 @@ describe('Trip Routes Test', () => {
     id: 1,
     origin: 'some origin',
     destination: 'some destination',
-    status: 'En camino',
+    status: 'Buscando',
     driverId: null,
   };
 
+  /*
   var expectedEnCaminoLocationdata = {
     status: 'En camino',
     currentLocation: {
       lng: -58.54854270000001,
       lat: -34.5311936,
+    },
+  };
+  */
+
+  var expectedBuscandoLocationdata = {
+    status: 'Buscando',
+    currentLocation: {
+      lat: 0,
+      lng: 0,
     },
   };
 
@@ -111,8 +121,30 @@ describe('Trip Routes Test', () => {
         'Status was not 404');
     });
 
+    /*
+    // TODO: mock Driver.findByPk to return a fake location when migrated
     it('should return both correct coordinates when ' +
         'trip is in "En camino" state', async() => {
+
+      Trip.findByPk.returns(confirmedTripData);
+
+      var res = await chai.request(app).get('/trips/1/location');
+
+      chai.assert.strictEqual(
+        res.status,
+        200,
+        'Status was not 200'
+      );
+      chai.assert.deepEqual(
+        res.body,
+        expectedEnCaminoLocationdata,
+        'Response was not what was expected'
+      );
+    });
+     */
+
+    it('should return both 0 coordinates when ' +
+        'trip is in "Buscando" state', async() => {
 
       Trip.findByPk.returns(tripData);
 
@@ -125,7 +157,7 @@ describe('Trip Routes Test', () => {
       );
       chai.assert.deepEqual(
         res.body,
-        expectedEnCaminoLocationdata,
+        expectedBuscandoLocationdata,
         'Response was not what was expected'
       );
     });

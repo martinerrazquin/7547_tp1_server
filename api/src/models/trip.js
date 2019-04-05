@@ -12,7 +12,7 @@ module.exports = (sequelize, Sequelize) => {
     status: {
       type: Sequelize.STRING,
       allowNull: false,
-      defaultValue: 'En camino',
+      defaultValue: 'Buscando',
     },
     driverId: {
       type: Sequelize.INTEGER,
