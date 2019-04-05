@@ -56,7 +56,6 @@ TripController.update = async(req, res, next) => {
 };
 
 TripController.getLocation = async(req, res, next) => {
-  // TODO: agregar filtro de que no este terminado el viaje?
   try {
     var locationData = await TripService.getLocationData(req.params.tripId);
     locationData ? res.json(locationData) : res.status(404).send();

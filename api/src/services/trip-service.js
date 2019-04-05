@@ -49,7 +49,12 @@ TripService.getLocationData = async(tripId) => {
     throw e;
   } else {
     // chofer encontrado
-    resp.currentLocation = trip.driver.currentLocation;
+    if (typeof trip.driver.currentLocation === 'string') {
+      resp.currentLocation = JSON.parse(trip.driver.currentLocation);
+    } else {
+      resp.currentLocation = trip.driver.currentLocation;
+    }
+
   }
   return resp;
 };
