@@ -1,7 +1,6 @@
 'use strict';
 
-var { TripService } = require('../services');
-// var { TripService, DriverService } = require('../services');
+var { TripService, DriverService } = require('../services');
 
 var TripController = {};
 
@@ -43,23 +42,19 @@ TripController.getLocation = async(req, res, next) => {
     if (trip.status === 'Buscando'){ // buscando chofer
       resp.currentLocation.lat = 0;
       resp.currentLocation.lng = 0;
-    } else { // chofer asignado
-      /* TODO
+    } else {
+      // chofer asignado
       var driver = await DriverService.getById(trip.driverId)
-          .catch(err=> next(err));
-      if (!driver){                   //red flag: chofer no existente asignado
+        .catch(err => next(err));
+      if (!driver){
+        // red flag: chofer no existente asignado
         res.status(500).send();
+      } else {
+        // chofer encontrado
+        resp.currentLocation = driver.currentLocation;
+        // resp.currentLocation.lng = driver.currentLocation.lng;
+        // resp.currentLocation.lat = driver.currentLocation.lat;
       }
-      else {                          //chofer encontrado
-        // TODO: se puede reemplazar por un
-        // TODO: resp.currentLocation = driver.currentLocation?
-        resp.currentLocation.lng = driver.currentLocation.lng;
-        resp.currentLocation.lat = driver.currentLocation.lat;
-      }
-      */
-      // FIXME: mocked response
-      resp.currentLocation.lng = -58.54854270000001;
-      resp.currentLocation.lat = -34.5311936;
     }
     res.json(resp);
   }

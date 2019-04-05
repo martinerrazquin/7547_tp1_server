@@ -5,7 +5,12 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.INTEGER,
     },
     currentLocation: {
-      type: Sequelize.STRING,
+      type: Sequelize.JSONB,
+      allowNull: false,
+      defaultValue: {
+        lat: 0,
+        lng: 0,
+      },
     },
   }, {});
 

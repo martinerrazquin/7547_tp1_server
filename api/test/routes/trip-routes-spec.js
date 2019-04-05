@@ -4,7 +4,7 @@ var chai = require('chai');
 var chaiHttp = require('chai-http');
 var sinon = require('sinon');
 var app = require('../../src/app');
-var { Trip } = require('../../src/models');
+var { Trip, Driver } = require('../../src/models');
 
 chai.use(chaiHttp);
 
@@ -13,18 +13,21 @@ describe('Trip Routes Test', () => {
     sinon.stub(Trip, 'create');
     sinon.stub(Trip, 'findByPk');
     sinon.stub(Trip, 'update');
+    sinon.stub(Driver, 'findByPk');
   });
 
   beforeEach(() => {
     Trip.create.resetHistory();
     Trip.findByPk.resetHistory();
     Trip.update.resetHistory();
+    Driver.findByPk.resetHistory();
   });
 
   after(() => {
     Trip.create.restore();
     Trip.findByPk.restore();
     Trip.update.restore();
+    Driver.findByPk.restore();
   });
 
   var tripData = {
@@ -41,7 +44,20 @@ describe('Trip Routes Test', () => {
     driverId: null,
   };
 
-  /*
+  var confirmedTripData = {
+    id: 1,
+    origin: {
+      lat: 0,
+      lng: 0,
+    },
+    destination: {
+      lat: 0,
+      lng: 0,
+    },
+    status: 'En camino',
+    driverId: 1,
+  };
+
   var expectedEnCaminoLocationdata = {
     status: 'En camino',
     currentLocation: {
@@ -49,7 +65,17 @@ describe('Trip Routes Test', () => {
       lat: -34.5311936,
     },
   };
-  */
+
+  var driverData = {
+    id: 1,
+    userId: 2,
+    currentLocation: {
+      lng: -58.54854270000001,
+      lat: -34.5311936,
+    },
+    createdAt: '2019-04-05T17:05:10.939Z',
+    updatedAt: '2019-04-05T17:05:10.939Z',
+  };
 
   var expectedBuscandoLocationdata = {
     status: 'Buscando',
@@ -127,12 +153,12 @@ describe('Trip Routes Test', () => {
         'Status was not 404');
     });
 
-    /*
-    // TODO: mock Driver.findByPk to return a fake location when migrated
+
     it('should return both correct coordinates when ' +
         'trip is in "En camino" state', async() => {
 
       Trip.findByPk.returns(confirmedTripData);
+      Driver.findByPk.returns(driverData);
 
       var res = await chai.request(app).get('/trips/1/location');
 
@@ -147,7 +173,6 @@ describe('Trip Routes Test', () => {
         'Response was not what was expected'
       );
     });
-     */
 
     it('should return both 0 coordinates when ' +
         'trip is in "Buscando" state', async() => {
