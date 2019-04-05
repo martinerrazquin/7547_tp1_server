@@ -66,16 +66,16 @@ TripController.getLocation = async(req, res, next) => {
 };
 
 TripController.testingJSONB = async(req, res, next) => {
-  var region = { 
-    lat:  { min: 16, max: 20 },
+  var region = {
+    lat: { min: 16, max: 20 },
     lng: { min: 15, max: 20 },
   };
   var trip = await TripService.getByOriginRegion(region);
   if (trip) {
-    res.json(trip);  
+    res.json(trip);
   } else {
     res.status(404).send();
   }
-}
+};
 
 module.exports = TripController;

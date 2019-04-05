@@ -34,21 +34,21 @@ TripService.getByOriginRegion = async(region) => {
       origin: {
         lat: {
           [Sequelize.Op.between]: [
-            region.lat.min, 
-            region.lat.max
-          ]
+            region.lat.min,
+            region.lat.max,
+          ],
         },
         lng: {
           [Sequelize.Op.between]: [
-            region.lng.min, 
-            region.lng.max
-          ]
-        }
-      }
-    }
+            region.lng.min,
+            region.lng.max,
+          ],
+        },
+      },
+    },
   });
 
   return results && results;
-}
+};
 
 module.exports = TripService;

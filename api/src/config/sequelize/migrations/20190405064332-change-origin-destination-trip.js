@@ -20,7 +20,7 @@ module.exports = {
           lat: 0,
           lng: 0,
         },
-      })
+      }),
     ];
   },
 
@@ -37,7 +37,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
         defaultValue: '',
-      })
+      }),
     ];
   },
 };

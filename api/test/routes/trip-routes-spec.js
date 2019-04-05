@@ -29,8 +29,14 @@ describe('Trip Routes Test', () => {
 
   var tripData = {
     id: 1,
-    origin: 'some origin',
-    destination: 'some destination',
+    origin: {
+      lat: 0,
+      lng: 0,
+    },
+    destination: {
+      lat: 0,
+      lng: 0,
+    },
     status: 'Buscando',
     driverId: null,
   };
@@ -92,8 +98,8 @@ describe('Trip Routes Test', () => {
       var res = await chai.request(app)
         .post('/trips')
         .send({
-          origin: 'some origin',
-          destination: 'some destination',
+          origin: tripData.origin,
+          destination: tripData.destination,
         });
 
       chai.assert.strictEqual(
