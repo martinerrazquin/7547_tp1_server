@@ -7,7 +7,9 @@ ErrorHandler.name = 'errorHandler';
 ErrorHandler.default = (err, req, res, next) => {
   var response = {
     status: 500,
-    json: {},
+    json: {
+      status: 'error',
+    },
   };
 
   if (err.name === 'SequelizeValidationError') {
@@ -26,11 +28,8 @@ ErrorHandler.default = (err, req, res, next) => {
           break;
       }
     });
-  }
-
-  if (err.name === 'NoResultsFoundOnSearch'){
-    response.status = 404;
-    response.json.type = 'noResults';
+  } else {
+    console.error(err);
   }
 
   res.status(response.status).json(response.json);

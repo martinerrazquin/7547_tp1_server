@@ -8,12 +8,11 @@ var CoordinatesService = {};
 CoordinatesService.name = 'CoordinatesService';
 
 CoordinatesService.getCoords = async(direction) => {
-
   var resp = {};
 
   var maps_r = await MapsService.places(direction);
   if (maps_r.json.status === 'ZERO_RESULTS') {
-    var e = new Error('no results'); // TODO: separate on specific Error Type?
+    var e = new Error();
     e.name = 'NoResultsFoundOnSearch';
     throw e;
   }
