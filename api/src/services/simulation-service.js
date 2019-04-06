@@ -1,6 +1,7 @@
 'use strict';
 
 var DriverService = require('./driver-service');
+var TripService = require('./trip-service');
 var { geolocationUtils } = require('../config/dependencies');
 
 var SimulationService = {};
@@ -13,7 +14,7 @@ var sleep = (ms) => {
   });
 };
 
-SimulationService.startSimulation = async(driver, route) => {
+SimulationService.startSimulation = async(trip, route) => {
   if (!route || !route.routes
     || !route.routes[0]
     || !route.routes[0].legs
@@ -21,10 +22,10 @@ SimulationService.startSimulation = async(driver, route) => {
     return;
   }
 
+  var driver = await DriverService.getById(trip.driverId);
   var currentIndex = 0;
   var steps = route.routes[0].legs[0].steps;
   while (currentIndex < steps.length) {
-    console.log('Im updating');
     var headingDistance = geolocationUtils.headingDistanceTo(
       driver.currentLocation,
       steps[currentIndex].end_location
@@ -46,11 +47,9 @@ SimulationService.startSimulation = async(driver, route) => {
 
     driver = await DriverService.update(driver.id, driver);
     await sleep(1000);
-
-    console.log('current location: ');
-    console.log(driver.currentLocation);
-    console.log('current index is ' + currentIndex + '/' + steps.length);
   }
+  trip.status = 'En origen';
+  await TripService.update(trip.id, trip);
 };
 
 module.exports = SimulationService;

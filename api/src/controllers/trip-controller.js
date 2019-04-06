@@ -30,7 +30,7 @@ TripController.createSimulated = async(req, res, next) => {
       driver.currentLocation,
       trip.origin,
     ]);
-    SimulationService.startSimulation(driver, route);
+    SimulationService.startSimulation(trip, route);
     trip = await TripService.update(trip.id, trip);
     trip ? res.json(trip) : res.status(500).send();
   } catch (err) {
