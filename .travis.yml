@@ -8,3 +8,9 @@ script:
   - npm run pretest
   - npm run covered-test
   - npm run report-coverage
+
+deploy:
+  provider: heroku
+  api_key: $HEROKU_API_KEY
+  app:
+    master: server7547
