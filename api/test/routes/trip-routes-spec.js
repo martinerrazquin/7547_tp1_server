@@ -5,6 +5,7 @@ var chaiHttp = require('chai-http');
 var sinon = require('sinon');
 var app = require('../../src/app');
 var { Trip, Driver } = require('../../src/models');
+var { MapsService } = require('../../src/services');
 
 chai.use(chaiHttp);
 
@@ -14,6 +15,7 @@ describe('Trip Routes Test', () => {
     sinon.stub(Trip, 'findByPk');
     sinon.stub(Trip, 'update');
     sinon.stub(Driver, 'create');
+    sinon.stub(MapsService, 'getDirections');
   });
 
   beforeEach(() => {
@@ -237,6 +239,7 @@ describe('Trip Routes Test', () => {
       Trip.create.returns(tripData);
       Driver.create.returns(driverData);
       Trip.update.returns([0, [confirmedTripData]]);
+      MapsService.getDirections.returns(null);
 
       var res = await chai.request(app)
         .post('/trips/simulated')

@@ -1,6 +1,11 @@
 'use strict';
 
-var { TripService, DriverService } = require('../services');
+var {
+  TripService,
+  DriverService,
+  MapsService,
+  SimulationService,
+} = require('../services');
 
 var TripController = {};
 
@@ -21,6 +26,12 @@ TripController.createSimulated = async(req, res, next) => {
     var driver = await DriverService.createFake(trip.origin);
     trip.status = 'En camino';
     trip.driverId = driver.id;
+    var route = await MapsService.getDirections([
+      driver.currentLocation,
+      trip.origin,
+      trip.destination,
+    ]);
+    SimulationService.startSimulation(driver, route);
     trip = await TripService.update(trip.id, trip);
     trip ? res.json(trip) : res.status(500).send();
   } catch (err) {
