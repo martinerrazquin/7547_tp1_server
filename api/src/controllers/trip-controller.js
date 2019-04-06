@@ -27,9 +27,9 @@ TripController.createSimulated = async(req, res, next) => {
     trip.status = 'En camino';
     trip.driverId = driver.id;
     var route = await MapsService.getDirections([
-      driver.currentLocation,
-      trip.origin,
-      trip.destination,
+        driver.currentLocation,
+        trip.origin,
+        trip.destination,
     ]);
     SimulationService.startSimulation(driver, route);
     trip = await TripService.update(trip.id, trip);
