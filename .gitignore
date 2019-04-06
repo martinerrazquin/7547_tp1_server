@@ -11,6 +11,3 @@ node_modules/
 
 #sublime
 *.sublime*
-
-#env_files
-*.env
