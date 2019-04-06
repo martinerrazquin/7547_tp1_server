@@ -23,13 +23,13 @@ TripController.create = async(req, res, next) => {
 TripController.createSimulated = async(req, res, next) => {
   try {
     var trip = await TripService.create(req.body);
-    var driver = await DriverService.createFake(trip.origin);
+    var driver = await DriverService.createFake(JSON.parse(trip.origin));
     trip.status = 'En camino';
     trip.driverId = driver.id;
     var route = await MapsService.getDirections([
-      driver.currentLocation,
-      trip.origin,
-      trip.destination,
+        JSON.parse(driver.currentLocation),
+        JSON.parse(trip.origin),
+        JSON.parse(trip.destination),
     ]);
     SimulationService.startSimulation(driver, route);
     trip = await TripService.update(trip.id, trip);
