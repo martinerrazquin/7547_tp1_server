@@ -12,9 +12,9 @@ module.exports = (sequelize, Sequelize) => {
         lng: 0,
       },
       get() {
-          const value = this.getDataValue('currentLocation');
-          return (typeof value === 'string') ? JSON.parse(value) : value;
-      }
+        const value = this.getDataValue('currentLocation');
+        return (typeof value === 'string') ? JSON.parse(value) : value;
+      },
     },
   }, {});
 
