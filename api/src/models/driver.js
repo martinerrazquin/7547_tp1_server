@@ -11,6 +11,10 @@ module.exports = (sequelize, Sequelize) => {
         lat: 0,
         lng: 0,
       },
+      get() {
+        const value = this.getDataValue('currentLocation');
+        return (typeof value === 'string') ? JSON.parse(value) : value;
+      },
     },
   }, {});
 

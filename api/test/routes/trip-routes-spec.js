@@ -5,6 +5,9 @@ var chaiHttp = require('chai-http');
 var sinon = require('sinon');
 var app = require('../../src/app');
 var { Trip, Driver } = require('../../src/models');
+var { MapsService } = require('../../src/services');
+
+var data = require('./trip-routes-spec-data');
 
 chai.use(chaiHttp);
 
@@ -14,69 +17,20 @@ describe('Trip Routes Test', () => {
     sinon.stub(Trip, 'findByPk');
     sinon.stub(Trip, 'update');
     sinon.stub(Driver, 'create');
+    sinon.stub(Driver, 'update');
+    sinon.stub(MapsService, 'getDirections');
   });
+
+  var clock;
 
   beforeEach(() => {
     sinon.resetHistory();
+    clock = sinon.useFakeTimers();
   });
 
   after(() => {
     sinon.restore();
   });
-
-  var tripData = {
-    id: 1,
-    origin: {
-      lat: 0,
-      lng: 0,
-    },
-    destination: {
-      lat: 0,
-      lng: 0,
-    },
-    status: 'Buscando',
-    driverId: null,
-  };
-
-  var driverData = {
-    id: 1,
-    userId: null,
-    currentLocation: {
-      lng: -58.54854270000001,
-      lat: -34.5311936,
-    },
-    createdAt: '2019-04-05T17:05:10.939Z',
-    updatedAt: '2019-04-05T17:05:10.939Z',
-  };
-
-  var confirmedTripData = {
-    id: 1,
-    origin: {
-      lat: 0,
-      lng: 0,
-    },
-    destination: {
-      lat: 0,
-      lng: 0,
-    },
-    status: 'En camino',
-    driverId: 1,
-    driver: driverData,
-  };
-
-  var expectedEnCaminoLocationdata = {
-    status: 'En camino',
-    currentLocation: {
-      lng: -58.54854270000001,
-      lat: -34.5311936,
-    },
-  };
-
-  var expectedBuscandoLocationdata = {
-    status: 'Buscando',
-    currentLocation: null,
-  };
-
 
   describe('GET /trips/:tripId', () => {
     it('should return invalid when trip does not exist', async() => {
@@ -92,7 +46,7 @@ describe('Trip Routes Test', () => {
     });
 
     it('should return trip data when trip exists', async() => {
-      Trip.findByPk.returns(tripData);
+      Trip.findByPk.returns(data.tripData);
 
       var res = await chai.request(app).get('/trips/1');
 
@@ -103,7 +57,7 @@ describe('Trip Routes Test', () => {
       );
       chai.assert.deepEqual(
         res.body,
-        tripData,
+        data.tripData,
         'Response was not what was expected'
       );
     });
@@ -111,13 +65,13 @@ describe('Trip Routes Test', () => {
 
   describe('POST /trips', () => {
     it('should return ok when trip is valid', async() => {
-      Trip.create.returns(tripData);
+      Trip.create.returns(data.tripData);
 
       var res = await chai.request(app)
         .post('/trips')
         .send({
-          origin: tripData.origin,
-          destination: tripData.destination,
+          origin: data.tripData.origin,
+          destination: data.tripData.destination,
         });
 
       chai.assert.strictEqual(
@@ -127,7 +81,7 @@ describe('Trip Routes Test', () => {
       );
       chai.assert.deepEqual(
         res.body,
-        tripData,
+        data.tripData,
         'Response was not what was expected'
       );
     });
@@ -135,13 +89,13 @@ describe('Trip Routes Test', () => {
 
   describe('PUT /trips', () => {
     it('should return ok when new trip data is valid', async() => {
-      Trip.update.returns([1, [tripData]]);
+      Trip.update.returns([1, [data.tripData]]);
 
       var res = await chai.request(app)
         .put('/trips/1')
         .send({
-          origin: tripData.origin,
-          destination: tripData.destination,
+          origin: data.tripData.origin,
+          destination: data.tripData.destination,
         });
 
       chai.assert.strictEqual(
@@ -151,20 +105,20 @@ describe('Trip Routes Test', () => {
       );
       chai.assert.deepEqual(
         res.body,
-        tripData,
+        data.tripData,
         'Response was not what was expected'
       );
     });
 
     it('should return invalid when there\'s an id missmatch', async() => {
-      Trip.update.returns([1, [tripData]]);
+      Trip.update.returns([1, [data.tripData]]);
 
       var res = await chai.request(app)
         .put('/trips/2')
         .send({
           id: 1,
-          origin: tripData.origin,
-          destination: tripData.destination,
+          origin: data.tripData.origin,
+          destination: data.tripData.destination,
         });
 
       chai.assert.strictEqual(
@@ -196,7 +150,7 @@ describe('Trip Routes Test', () => {
     it('should return both correct coordinates when ' +
         'trip is in "En camino" state', async() => {
 
-      Trip.findByPk.returns(confirmedTripData);
+      Trip.findByPk.returns(data.confirmedTripData);
 
       var res = await chai.request(app).get('/trips/1/location');
 
@@ -207,15 +161,15 @@ describe('Trip Routes Test', () => {
       );
       chai.assert.deepEqual(
         res.body,
-        expectedEnCaminoLocationdata,
+        data.expectedEnCaminoLocationdata,
         'Response was not what was expected'
       );
     });
 
-    it('should return both 0 coordinates when ' +
+    it('should return null coordinates when ' +
         'trip is in "Buscando" state', async() => {
 
-      Trip.findByPk.returns(tripData);
+      Trip.findByPk.returns(data.tripData);
 
       var res = await chai.request(app).get('/trips/1/location');
 
@@ -226,7 +180,7 @@ describe('Trip Routes Test', () => {
       );
       chai.assert.deepEqual(
         res.body,
-        expectedBuscandoLocationdata,
+        data.expectedBuscandoLocationdata,
         'Response was not what was expected'
       );
     });
@@ -234,15 +188,16 @@ describe('Trip Routes Test', () => {
 
   describe('POST /trips/simulated', () => {
     it('should return ok when trip is valid', async() => {
-      Trip.create.returns(tripData);
-      Driver.create.returns(driverData);
-      Trip.update.returns([0, [confirmedTripData]]);
+      Trip.create.returns(data.tripData);
+      Driver.create.returns(data.driverData);
+      Trip.update.returns([0, [data.confirmedTripData]]);
+      MapsService.getDirections.returns(null);
 
       var res = await chai.request(app)
         .post('/trips/simulated')
         .send({
-          origin: tripData.origin,
-          destination: tripData.destination,
+          origin: data.tripData.origin,
+          destination: data.tripData.destination,
         });
 
       chai.assert.strictEqual(
@@ -252,7 +207,53 @@ describe('Trip Routes Test', () => {
       );
       chai.assert.deepEqual(
         res.body,
-        confirmedTripData,
+        data.confirmedTripData,
+        'Response was not what was expected'
+      );
+    });
+
+    it('should update position after trip is created', async() => {
+      Trip.create.returns(data.tripData);
+      Driver.create.returns(data.driverData);
+      Trip.update.returns([0, [data.confirmedTripData]]);
+      var updatedDriver = data.driverData;
+      Trip.findByPk.callsFake(() => {
+        var { ... udpatedData } = data.confirmedTripData;
+        udpatedData.driver = updatedDriver;
+        return udpatedData;
+      });
+      Driver.update.callsFake((arg) => {
+        updatedDriver = arg;
+        return [1, [arg]];
+      });
+      MapsService.getDirections.returns(data.directionData);
+
+      clock.tick(10000);
+      await chai.request(app)
+        .post('/trips/simulated')
+        .send({
+          origin: data.tripData.origin,
+          destination: data.tripData.destination,
+        });
+
+      var res = await chai.request(app)
+        .get('/trips/1/location');
+
+      chai.assert.strictEqual(
+        res.status,
+        200,
+        'Status was not 200'
+      );
+
+      chai.assert.strictEqual(
+        res.body.status,
+        'En camino',
+        'Response was not what was expected'
+      );
+
+      chai.assert.isFalse(
+        res.body.currentLocation ===
+        data.expectedEnCaminoLocationdata.currentLocation,
         'Response was not what was expected'
       );
     });
