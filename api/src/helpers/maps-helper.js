@@ -1,29 +1,24 @@
 'use strict';
 
-/**
-* Generates number of random geolocation points given a center and a radius.
-* Reference URL: http://goo.gl/KWcPE.
-* @param  {Object} center A JS object with lat and lng attributes.
-* @param  {number} radius Radius in meters.
-* @return {Object} The generated random points as JS object with
-* lat and lng attributes.
-*/
-module.exports.generateRandomPoint = (center, radius) => {
-  var x0 = center.lng;
-  var y0 = center.lat;
-  // Convert Radius from meters to degrees.
-  var rd = radius / 111300;
+var { geolocationUtils } = require('../config/dependencies');
 
-  var u = Math.random();
-  var v = Math.random();
+module.exports.generateRandomPoint = (center, maxDist, minDist = 0) => {
+  var heading = Math.random() * 360;
+  var distance = minDist + Math.random() * (maxDist - minDist);
+  var result = geolocationUtils.moveTo(center, {heading, distance});
+  return result;
+};
 
-  var w = rd * Math.sqrt(u);
-  var t = 2 * Math.PI * v;
-  var x = w * Math.cos(t);
-  var y = w * Math.sin(t);
+module.exports.moveTowards = (current, target, maxDelta) => {
+  var headingDistance = geolocationUtils.headingDistanceTo(
+    current,
+    target
+  );
 
-  var xp = x / Math.cos(y0);
+  headingDistance.distance = Math.min(headingDistance.distance, maxDelta);
+  return geolocationUtils.moveTo(current, headingDistance);
+};
 
-  // Resulting point.
-  return {lat: y + y0, lng: xp + x0};
+module.exports.isSimilar = (first, second, delta = 1e-12) => {
+  return geolocationUtils.isEqual(first, second, delta);
 };

@@ -1,22 +1,15 @@
 'use strict';
 
 var { Sequelize } = require('../config/dependencies');
-var mapsHelper = require('../helpers/maps-helper');
 var { Driver } = require('../models');
 
 var DriverService = {};
 
 DriverService.name = 'DriverService';
 
-DriverService.createFake = async(nearLocation) => {
-  var driver = await Driver.create({
-    userId: null,
-    // TODO: add random offset
-    currentLocation: mapsHelper.generateRandomPoint({
-      lat: nearLocation.lat,
-      lng: nearLocation.lng,
-    }, 1500),
-  });
+DriverService.create = async(driverData) => {
+  delete driverData.id;
+  var driver = await Driver.create(driverData);
   return driver && driver.toJSON ? driver.toJSON() : driver;
 };
 

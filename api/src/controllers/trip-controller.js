@@ -2,8 +2,6 @@
 
 var {
   TripService,
-  DriverService,
-  MapsService,
   SimulationService,
 } = require('../services');
 
@@ -22,16 +20,7 @@ TripController.create = async(req, res, next) => {
 
 TripController.createSimulated = async(req, res, next) => {
   try {
-    var trip = await TripService.create(req.body);
-    var driver = await DriverService.createFake(trip.origin);
-    trip.status = 'En camino';
-    trip.driverId = driver.id;
-    var route = await MapsService.getDirections([
-      driver.currentLocation,
-      trip.origin,
-    ]);
-    SimulationService.startSimulation(trip, route);
-    trip = await TripService.update(trip.id, trip);
+    var trip = await SimulationService.createSimulatedTrip(req.body);
     trip ? res.json(trip) : res.status(500).send();
   } catch (err) {
     next(err);
