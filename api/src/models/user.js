@@ -26,14 +26,20 @@ module.exports = (sequelize, type) => {
     birthDate: {
       type: type.DATE,
       allowNull: false,
+      // TODO remove this after implementing real registration.
+      defaultValue: '2019-04-05T17:05:10.939Z',
     },
     address: {
       type: type.STRING,
       allowNull: false,
+      // TODO remove this after implementing real registration.
+      defaultValue: 'Fake adress 123',
     },
     phone: {
       type: type.STRING,
       allowNull: false,
+      // TODO remove this after implementing real registration.
+      defaultValue: '4444-4444',
     },
   });
 

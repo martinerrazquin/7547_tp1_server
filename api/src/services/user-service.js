@@ -14,4 +14,8 @@ UserService.getById = async(userId) => {
   return await User.findByPk(userId);
 };
 
+UserService.getByFacebookId = async(facebookId) => {
+  return await User.findOne({ where: { facebookId: facebookId } });
+};
+
 module.exports = UserService;

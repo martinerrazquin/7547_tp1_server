@@ -2,9 +2,7 @@
 'use strict';
 
 var { debug, passport } = require('../config/dependencies');
-
-// Initialize DB.
-var models = require('../models');
+var { UserService } = require('../services');
 
 // Initialize passport.
 passport.use(new passport.facebookStrategy({
@@ -12,7 +10,14 @@ passport.use(new passport.facebookStrategy({
   clientSecret: process.env.FACEBOOK_CLIENT_SECRET
 }, async(accessToken, refreshToken, profile, done) => {
   try {
-    var user = await models.User.findOne({ where: { facebookId: profile.id } });
+    var user = await UserService.getByFacebookId(profile.id);
+    if (!user) {
+      user = {
+        facebookId: profile.id,
+        facebookToken: accessToken,
+        email: profile.emails[0].value,
+      };
+    }
     done(null, user);
   } catch (err) {
     done(err);
