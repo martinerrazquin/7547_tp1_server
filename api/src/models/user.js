@@ -8,13 +8,13 @@ module.exports = (sequelize, type) => {
       primaryKey: true,
       type: type.INTEGER,
     },
-    firstName: {
-      allowNull: false,
+    facebookId: {
       type: type.STRING,
+      allowNull: false,
     },
-    lastName: {
-      allowNull: false,
+    facebookToken: {
       type: type.STRING,
+      allowNull: false,
     },
     email: {
       type: type.STRING,
@@ -23,12 +23,17 @@ module.exports = (sequelize, type) => {
         isEmail: true,
       },
     },
-    password: {
+    birthDate: {
+      type: type.DATE,
+      allowNull: false,
+    },
+    address: {
       type: type.STRING,
       allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
+    },
+    phone: {
+      type: type.STRING,
+      allowNull: false,
     },
   });
 
