@@ -40,6 +40,8 @@ describe('Trip Routes Test', () => {
       big: 0,
     },
     bringsEscort: false,
+    paymentMethod: 'cash',
+    comments: '',
     status: 'Buscando',
     driverId: null,
   };
@@ -71,6 +73,8 @@ describe('Trip Routes Test', () => {
       big: 0,
     },
     bringsEscort: false,
+    paymentMethod: 'cash',
+    comments: '',
     status: 'En camino',
     driverId: 1,
     driver: driverData,

@@ -19,6 +19,7 @@ ErrorHandler.default = (err, req, res, next) => {
     // response.json.raw = err;
 
     err.errors.forEach((error) => {
+      console.log(error.type); // DEBUG
       switch (error.type) {
         case 'notNull Violation':
           response.json.validationErrors.push({

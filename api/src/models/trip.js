@@ -37,6 +37,20 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.BOOLEAN,
       allowNull: false,
     },
+    paymentMethod: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      validate: {
+        isIn: [['cash', 'card', 'mp']],
+      },
+    },
+    comments: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      validate: {
+        len: [0, 250],
+      },
+    },
   }, {});
 
   Trip.associate = function(models) {
