@@ -34,6 +34,11 @@ describe('Trip Routes Test', () => {
       lat: 0,
       lng: 0,
     },
+    petQuantities: {
+      small: 0,
+      medium: 1,
+      big: 0,
+    },
     status: 'Buscando',
     driverId: null,
   };
@@ -58,6 +63,11 @@ describe('Trip Routes Test', () => {
     destination: {
       lat: 0,
       lng: 0,
+    },
+    petQuantities: {
+      small: 0,
+      medium: 1,
+      big: 0,
     },
     status: 'En camino',
     driverId: 1,

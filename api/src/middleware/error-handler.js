@@ -26,6 +26,12 @@ ErrorHandler.default = (err, req, res, next) => {
             path: error.path,
           });
           break;
+        case 'Validation error':
+          response.json.validationErrors.push({
+            error: error.message,
+            path: error.path,
+          });
+          break;
       }
     });
   } else {

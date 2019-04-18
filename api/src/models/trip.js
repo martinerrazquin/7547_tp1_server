@@ -17,6 +17,22 @@ module.exports = (sequelize, Sequelize) => {
     driverId: {
       type: Sequelize.INTEGER,
     },
+    petQuantities: {
+      type: Sequelize.JSONB,
+      allowNull: false,
+      validate: {
+        nonNegativeFields(value){
+          if (!(value.small >= 0 && value.medium >= 0 && value.big >= 0)){
+            throw new Error('PetQuantitiesAreNegative');
+          }
+        },
+        sumNotAbove3(value){
+          if (value.small + value.medium + value.big > 3){
+            throw new Error('PetQuantitiesAbove3');
+          }
+        },
+      },
+    },
   }, {});
 
   Trip.associate = function(models) {

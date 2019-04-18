@@ -3,8 +3,8 @@
 module.exports = {
   up: async(queryInterface, Sequelize) => {
     return [
-        await queryInterface.dropTable('Users'),
-        await queryInterface.createTable('Users', {
+      await queryInterface.dropTable('Users'),
+      await queryInterface.createTable('Users', {
         id: {
           allowNull: false,
           autoIncrement: true,
@@ -52,8 +52,8 @@ module.exports = {
 
   down: async(queryInterface, Sequelize) => {
     return [
-        await queryInterface.dropTable('Users'),
-        await queryInterface.createTable('Users', {
+      await queryInterface.dropTable('Users'),
+      await queryInterface.createTable('Users', {
         id: {
           allowNull: false,
           autoIncrement: true,
