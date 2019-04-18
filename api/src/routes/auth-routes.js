@@ -28,10 +28,9 @@ module.exports = (app) => {
       }
 
       try {
-        req.user.birthDate = req.body.birthDate;
-        req.user.address = req.body.address;
-        req.user.phone = req.body.phone;
-        var user = await UserService.create(req.user);
+        req.body.facebookId = req.user.facebookId;
+        req.body.facebookToken = req.user.facebookToken;
+        var user = await UserService.create(req.body);
 
         res.json(user);
       } catch (err) {

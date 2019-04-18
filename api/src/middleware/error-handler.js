@@ -26,6 +26,9 @@ ErrorHandler.default = (err, req, res, next) => {
             path: error.path,
           });
           break;
+        default:
+          console.log(error);
+          break;
       }
     });
   } else {
