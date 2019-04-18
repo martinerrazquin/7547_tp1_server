@@ -33,6 +33,10 @@ module.exports = (sequelize, Sequelize) => {
         },
       },
     },
+    bringsEscort: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+    },
   }, {});
 
   Trip.associate = function(models) {

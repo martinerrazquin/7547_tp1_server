@@ -39,6 +39,7 @@ describe('Trip Routes Test', () => {
       medium: 1,
       big: 0,
     },
+    bringsEscort: false,
     status: 'Buscando',
     driverId: null,
   };
@@ -69,6 +70,7 @@ describe('Trip Routes Test', () => {
       medium: 1,
       big: 0,
     },
+    bringsEscort: false,
     status: 'En camino',
     driverId: 1,
     driver: driverData,
