@@ -8,7 +8,7 @@ module.exports = (app) => {
   app.route('/auth/facebook/login')
     .post(auth.facebookAuthenticate, (req, res) => {
       if (!req.user || !req.user.id) {
-        return res.send(401, 'User Not Authenticated');
+        return res.send(403, 'User not Registered');
       }
 
       var token = jwt.sign({
