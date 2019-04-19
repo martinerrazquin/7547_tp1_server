@@ -2,7 +2,6 @@
 
 var MapsService = require('../services/maps-service');
 
-
 var CoordinatesService = {};
 
 CoordinatesService.name = 'CoordinatesService';

@@ -4,10 +4,18 @@ module.exports = (sequelize, Sequelize) => {
     origin: {
       type: Sequelize.JSONB,
       allowNull: false,
+      get() {
+        const value = this.getDataValue('origin');
+        return (typeof value === 'string') ? JSON.parse(value) : value;
+      },
     },
     destination: {
       type: Sequelize.JSONB,
       allowNull: false,
+      get() {
+        const value = this.getDataValue('destination');
+        return (typeof value === 'string') ? JSON.parse(value) : value;
+      },
     },
     status: {
       type: Sequelize.STRING,

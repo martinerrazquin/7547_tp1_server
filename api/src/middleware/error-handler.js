@@ -38,6 +38,7 @@ ErrorHandler.default = (err, req, res, next) => {
       }
     });
   } else {
+    console.error('ERROR: Don\'t know how to handle: ');
     console.error(err);
   }
 
