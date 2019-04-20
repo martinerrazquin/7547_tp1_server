@@ -37,6 +37,25 @@ ErrorHandler.default = (err, req, res, next) => {
           break;
       }
     });
+  } else if (err.name === 'SequelizeUniqueConstraintError') {
+    response.status = 403;
+    response.json.type = 'constraintError';
+    response.json.validationErrors = [];
+    // response.json.raw = err;
+
+    err.errors.forEach((error) => {
+      switch (error.type) {
+        case 'unique violation':
+          response.json.validationErrors.push({
+            error: 'alreadyExists',
+            path: error.path,
+          });
+          break;
+        default:
+          console.log(error);
+          break;
+      }
+    });
   } else {
     console.error('ERROR: Don\'t know how to handle: ');
     console.error(err);
