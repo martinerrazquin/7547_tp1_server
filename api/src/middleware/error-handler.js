@@ -15,16 +15,44 @@ ErrorHandler.default = (err, req, res, next) => {
   if (err.name === 'SequelizeValidationError') {
     response.status = 400;
     response.json.type = 'validationError';
-    response.json.validationErrors = [];
+    response.json.errors = [];
     // response.json.raw = err;
 
     err.errors.forEach((error) => {
       switch (error.type) {
         case 'notNull Violation':
-          response.json.validationErrors.push({
+          response.json.errors.push({
             error: 'isBlank',
             path: error.path,
           });
+          break;
+        case 'Validation error':
+          response.json.errors.push({
+            error: error.message,
+            path: error.path,
+          });
+          break;
+        default:
+          console.log(error);
+          break;
+      }
+    });
+  } else if (err.name === 'SequelizeUniqueConstraintError') {
+    response.status = 403;
+    response.json.type = 'constraintError';
+    response.json.errors = [];
+    // response.json.raw = err;
+
+    err.errors.forEach((error) => {
+      switch (error.type) {
+        case 'unique violation':
+          response.json.errors.push({
+            error: 'alreadyExists',
+            path: error.path,
+          });
+          break;
+        default:
+          console.log(error);
           break;
       }
     });
