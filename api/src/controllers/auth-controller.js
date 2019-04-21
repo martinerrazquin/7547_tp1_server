@@ -20,22 +20,47 @@ AuthController.login = async(req, res) => {
 
   res.setHeader('x-auth-token', token);
   res.json(req.user);
-}
+};
 
-AuthController.register = async(req, res, next) => {
-  if (!req.user) {
-    return res.send(401, 'User Not Authenticated');
-  }
+var invalidBodyForType = (body, type) => {
+  var invalidClientBody = type === 'client' && body.driverData;
+  var invalidDriverBody = type === 'driver' && !body.driverData;
+  return invalidClientBody || invalidDriverBody;
+};
 
-  try {
-    req.body.facebookId = req.user.facebookId;
-    req.body.facebookToken = req.user.facebookToken;
-    var user = await UserService.create(req.body);
+AuthController.register = (type) => {
+  return async(req, res, next) => {
+    if (!req.user) {
+      return res.send(401, 'User Not Authenticated');
+    }
 
-    res.json(user);
-  } catch (err) {
-    next(err);
-  }
+    if (invalidBodyForType(req.body, type)) {
+      return res.status(400).json({
+        type: 'validationError',
+        errors: [
+          {
+            error: type === 'driver' ?
+              'isBlank' : 'shouldNotExist', path: 'driverData',
+          },
+        ],
+      });
+    }
+
+    try {
+      req.body.facebookId = req.user.facebookId;
+      req.body.facebookToken = req.user.facebookToken;
+      var user;
+      if (type === 'driver') {
+        user = await UserService.createDriver(req.body);
+      } else {
+        user = await UserService.createClient(req.body);
+      }
+
+      res.json(user);
+    } catch (err) {
+      next(err);
+    }
+  };
 };
 
 AuthController.getProfile = async(req, res, next) => {

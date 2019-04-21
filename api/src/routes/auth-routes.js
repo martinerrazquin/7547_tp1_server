@@ -8,10 +8,10 @@ module.exports = (app) => {
     .post(auth.facebookAuthenticate, AuthController.login);
 
   app.route('/auth/client/facebook/register')
-    .post(auth.facebookAuthenticate, AuthController.register);
+    .post(auth.facebookAuthenticate, AuthController.register('client'));
 
-  app.route('/auth/client/facebook/register')
-    .post(auth.facebookAuthenticate, AuthController.register);
+  app.route('/auth/driver/facebook/register')
+    .post(auth.facebookAuthenticate, AuthController.register('driver'));
 
   app.route('/auth/me')
     .get(AuthController.getProfile);
