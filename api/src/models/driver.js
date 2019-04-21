@@ -16,10 +16,24 @@ module.exports = (sequelize, Sequelize) => {
         return (typeof value === 'string') ? JSON.parse(value) : value;
       },
     },
+    drivingRecordImage: {
+      type: Sequelize.TEXT,
+      allowNull: false
+    },
+    policyImage: {
+      type: Sequelize.TEXT,
+      allowNull: false
+    },
+    transportImage: {
+      type: Sequelize.TEXT,
+      allowNull: false
+    }
   }, {});
 
   Driver.associate = function(models) {
     // associations can be defined here
+    models.User.hasOne(Driver, { foreignKey: 'userId', as: 'driverData' });
+    Driver.belongsTo(models.User, { foreignKey: 'userId', as: 'userData' });
   };
 
   return Driver;

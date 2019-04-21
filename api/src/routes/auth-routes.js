@@ -5,7 +5,7 @@ var { jwt } = require('../config/dependencies');
 var { auth } = require('../middleware');
 
 module.exports = (app) => {
-  app.route('/auth/facebook/login')
+  app.route('/auth/client/facebook/login')
     .post(auth.facebookAuthenticate, (req, res) => {
       if (!req.user || !req.user.id) {
         return res.send(403, 'User not Registered');
@@ -21,7 +21,7 @@ module.exports = (app) => {
       res.json(req.user);
     });
 
-  app.route('/auth/facebook/register')
+  app.route('/auth/client/facebook/register')
     .post(auth.facebookAuthenticate, async(req, res, next) => {
       if (!req.user) {
         return res.send(401, 'User Not Authenticated');
