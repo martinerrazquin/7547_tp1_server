@@ -59,16 +59,18 @@ module.exports = (sequelize, type) => {
     // Add any relations (foreign keys) here.
   };
 
-  User.prototype.hasRole = (role) => {
+  User.prototype.hasRole = function(role) {
     if (!['driver', 'client'].includes(role)) {
       var e = new Error();
       e.name = 'InvalidUserRole';
       throw e;
     }
 
-    var clientMissmatch = this.userData && role === 'client';
-    var driverMissmatch = !this.userData && role === 'driver';
-    return clientMissmatch || driverMissmatch;
+    if (role === 'client') {
+      return !this.driverData;
+    } else {
+      return this.driverData;
+    }
   };
 
   return User;
