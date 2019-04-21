@@ -18,16 +18,16 @@ module.exports = (sequelize, Sequelize) => {
     },
     drivingRecordImage: {
       type: Sequelize.TEXT,
-      allowNull: false
+      allowNull: false,
     },
     policyImage: {
       type: Sequelize.TEXT,
-      allowNull: false
+      allowNull: false,
     },
     transportImage: {
       type: Sequelize.TEXT,
-      allowNull: false
-    }
+      allowNull: false,
+    },
   }, {});
 
   Driver.associate = function(models) {

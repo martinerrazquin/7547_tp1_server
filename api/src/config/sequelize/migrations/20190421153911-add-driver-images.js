@@ -6,15 +6,15 @@ module.exports = {
       await queryInterface.bulkDelete('Drivers', {}),
       await queryInterface.addColumn('Drivers', 'drivingRecordImage', {
         type: Sequelize.TEXT,
-        allowNull: false
+        allowNull: false,
       }),
       await queryInterface.addColumn('Drivers', 'policyImage', {
         type: Sequelize.TEXT,
-        allowNull: false
+        allowNull: false,
       }),
       await queryInterface.addColumn('Drivers', 'transportImage', {
         type: Sequelize.TEXT,
-        allowNull: false
+        allowNull: false,
       }),
     ];
   },
@@ -25,5 +25,5 @@ module.exports = {
       await queryInterface.removeColumn('Drivers', 'policyImage'),
       await queryInterface.removeColumn('Drivers', 'transportImage'),
     ];
-  }
+  },
 };

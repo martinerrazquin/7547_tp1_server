@@ -6,15 +6,6 @@ var UserController = {};
 
 UserController.name = 'UserController';
 
-UserController.create = async(req, res, next) => {
-  try {
-    var user = await UserService.create(req.body);
-    res.json(user);
-  } catch (err) {
-    next(err);
-  }
-};
-
 UserController.retrieve = async(req, res, next) => {
   try {
     var user = await UserService.getById(req.params.userId);
