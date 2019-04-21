@@ -7,25 +7,31 @@ var AuthController = {};
 
 AuthController.name = 'AuthController';
 
-AuthController.login = async(req, res) => {
-  if (!req.user || !req.user.id) {
-    return res.send(403, 'User not Registered');
-  }
-
-  var token = jwt.sign({
-    id: req.user.id,
-  }, 'my-secret', {
-    expiresIn: 60 * 120,
-  });
-
-  res.setHeader('x-auth-token', token);
-  res.json(req.user);
+var invalidUserForType = (user, type) => {
+  var invalidClient = type === 'client' && user.driverData;
+  var invalidDriver = type === 'driver' && !user.driverData;
+  return invalidClient || invalidDriver;
 };
 
-var invalidBodyForType = (body, type) => {
-  var invalidClientBody = type === 'client' && body.driverData;
-  var invalidDriverBody = type === 'driver' && !body.driverData;
-  return invalidClientBody || invalidDriverBody;
+AuthController.login = (type) => {
+  return async(req, res) => {
+    if (!req.user || !req.user.id) {
+      return res.send(403, 'User not Registered');
+    }
+
+    if (invalidUserForType(req.user, type)) {
+      return res.send(401, 'Invalid Credentials');
+    }
+
+    var token = jwt.sign({
+      id: req.user.id,
+    }, 'my-secret', {
+      expiresIn: 60 * 120,
+    });
+
+    res.setHeader('x-auth-token', token);
+    res.json(req.user);
+  };
 };
 
 AuthController.register = (type) => {
@@ -34,7 +40,7 @@ AuthController.register = (type) => {
       return res.send(401, 'User Not Authenticated');
     }
 
-    if (invalidBodyForType(req.body, type)) {
+    if (invalidUserForType(req.body, type)) {
       return res.status(400).json({
         type: 'validationError',
         errors: [

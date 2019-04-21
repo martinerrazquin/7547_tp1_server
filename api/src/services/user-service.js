@@ -21,7 +21,10 @@ UserService.getById = async(userId) => {
 };
 
 UserService.getByFacebookId = async(facebookId) => {
-  return await User.findOne({ where: { facebookId: facebookId } });
+  return await User.findOne({
+    where: { facebookId: facebookId },
+    include: [ {model: Driver, as: 'driverData', required: false} ],
+  });
 };
 
 UserService.delete = async(userId) => {
