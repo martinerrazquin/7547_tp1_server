@@ -15,14 +15,6 @@ var invalidUserForType = (user, type) => {
 
 AuthController.login = (type) => {
   return async(req, res) => {
-    if (!req.user || !req.user.id) {
-      return res.send(403, 'User not Registered');
-    }
-
-    if (invalidUserForType(req.user, type)) {
-      return res.send(401, 'Invalid Credentials');
-    }
-
     var token = jwt.sign({
       id: req.user.id,
     }, 'my-secret', {

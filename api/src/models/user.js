@@ -36,10 +36,39 @@ module.exports = (sequelize, type) => {
       type: type.STRING,
       allowNull: false,
     },
+  }, {
+    defaultScope: {
+      include: [{
+        association: 'driverData',
+        required: false,
+        attributes: {
+          exclude: [
+            'id', 'userId', 'drivingRecordImage',
+            'policyImage', 'transportImage',
+            'createdAt', 'updatedAt',
+          ],
+        },
+      }],
+      attributes: {
+        exclude: ['facebookToken'],
+      },
+    },
   });
 
   User.associate = (models) => {
     // Add any relations (foreign keys) here.
+  };
+
+  User.prototype.hasRole = (role) => {
+    if (!['driver', 'client'].includes(role)) {
+      var e = new Error();
+      e.name = 'InvalidUserRole';
+      throw e;
+    }
+
+    var clientMissmatch = this.userData && role === 'client';
+    var driverMissmatch = !this.userData && role === 'driver';
+    return clientMissmatch || driverMissmatch;
   };
 
   return User;

@@ -7,9 +7,10 @@ var UserService = {};
 UserService.name = 'UserService';
 
 UserService.createDriver = async(userData) => {
-  return await User.create(userData, {
+  var user = await User.create(userData, {
     include: [ {model: Driver, as: 'driverData'} ],
   });
+  return UserService.getById(user.id);
 };
 
 UserService.createClient = async(userData) => {
@@ -17,13 +18,14 @@ UserService.createClient = async(userData) => {
 };
 
 UserService.getById = async(userId) => {
-  return await User.findByPk(userId);
+  return await User.findOne({
+    where: { id: userId },
+  });
 };
 
 UserService.getByFacebookId = async(facebookId) => {
   return await User.findOne({
     where: { facebookId: facebookId },
-    include: [ {model: Driver, as: 'driverData', required: false} ],
   });
 };
 
