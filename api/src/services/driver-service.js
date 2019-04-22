@@ -35,6 +35,7 @@ DriverService.update = async(driverId, driverData) => {
 // TODO: this will be later used to get drivers close
 // to where a trip is requested.
 // Region = { lat: { max, min }, lng: { max, min } }
+// TODO: add filter status: 'libre'
 DriverService.getInsideRegion = async(region) => {
   var results = await Driver.findAll({
     where: {
