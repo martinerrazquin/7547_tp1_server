@@ -14,3 +14,4 @@ deploy:
   api_key: $HEROKU_API_KEY
   app:
     master: server7547
+    staging: stagingserver7547
