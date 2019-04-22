@@ -6,15 +6,6 @@ var UserController = {};
 
 UserController.name = 'UserController';
 
-UserController.create = async(req, res, next) => {
-  try {
-    var user = await UserService.create(req.body);
-    res.json(user);
-  } catch (err) {
-    next(err);
-  }
-};
-
 UserController.retrieve = async(req, res, next) => {
   try {
     var user = await UserService.getById(req.params.userId);
@@ -28,8 +19,13 @@ UserController.update = (req, res) => {
   res.send('User updated');
 };
 
-UserController.delete = (req, res) => {
-  res.send('User deleted');
+UserController.delete = async(req, res, next) => {
+  try {
+    var deleted = await UserService.delete(req.params.userId);
+    deleted ? res.send() : res.status(404).send();
+  } catch (err) {
+    next(err);
+  }
 };
 
 module.exports = UserController;

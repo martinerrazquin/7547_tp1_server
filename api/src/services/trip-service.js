@@ -23,6 +23,7 @@ TripService.create = async(tripData) => {
   }
   //
   var trip = await Trip.create(tripData);
+  console.log(trip); // debug
   return trip && trip.toJSON ? trip.toJSON() : trip;
 };
 

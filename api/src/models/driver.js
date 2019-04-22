@@ -24,18 +24,32 @@ module.exports = (sequelize, Sequelize) => {
         return (typeof value === 'string') ? JSON.parse(value) : value;
       },
       validate: {
-        nonNegativeFields(value){
+        nonNegativeFields(value) {
           if (!(value.one >= 0 && value.two >= 0 && value.three >= 0 &&
-              value.four >= 0 && value.five >= 0 && value.rejections >= 0)){
+              value.four >= 0 && value.five >= 0 && value.rejections >= 0)) {
             throw new Error('RatingsAreNegative');
           }
         },
       },
     },
+    drivingRecordImage: {
+      type: Sequelize.TEXT,
+      allowNull: false,
+    },
+    policyImage: {
+      type: Sequelize.TEXT,
+      allowNull: false,
+    },
+    transportImage: {
+      type: Sequelize.TEXT,
+      allowNull: false,
+    },
   }, {});
 
   Driver.associate = function(models) {
     // associations can be defined here
+    models.User.hasOne(Driver, { foreignKey: 'userId', as: 'driverData' });
+    Driver.belongsTo(models.User, { foreignKey: 'userId', as: 'userData' });
   };
 
   return Driver;

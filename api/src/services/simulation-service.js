@@ -22,6 +22,9 @@ SimulationService.createSimulatedDriver = async(nearLocation) => {
       lat: nearLocation.lat,
       lng: nearLocation.lng,
     }, 1500, 300),
+    drivingRecordImage: 'NONE',
+    policyImage: 'NONE',
+    transportImage: 'NONE',
   });
 };
 

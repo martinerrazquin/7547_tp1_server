@@ -1,48 +1,29 @@
 'use strict';
 
-var { UserService } = require('../services');
-var { jwt } = require('../config/dependencies');
 var { auth } = require('../middleware');
+var { AuthController } = require('../controllers');
 
 module.exports = (app) => {
-  app.route('/auth/facebook/login')
-    .post(auth.facebookAuthenticate, (req, res) => {
-      if (!req.user || !req.user.id) {
-        return res.send(403, 'User not Registered');
-      }
+  app.route('/auth/client/facebook/login')
+    .post(
+      auth.facebookAuthenticate,
+      auth.authorizeAs('client'),
+      AuthController.login('client')
+    );
 
-      var token = jwt.sign({
-        id: req.user.id,
-      }, 'my-secret', {
-        expiresIn: 60 * 120,
-      });
+  app.route('/auth/driver/facebook/login')
+    .post(
+      auth.facebookAuthenticate,
+      auth.authorizeAs('driver'),
+      AuthController.login('driver')
+    );
 
-      res.setHeader('x-auth-token', token);
-      res.json(req.user);
-    });
+  app.route('/auth/client/facebook/register')
+    .post(auth.facebookAuthenticate, AuthController.register('client'));
 
-  app.route('/auth/facebook/register')
-    .post(auth.facebookAuthenticate, async(req, res, next) => {
-      if (!req.user) {
-        return res.send(401, 'User Not Authenticated');
-      }
-
-      try {
-        req.body.facebookId = req.user.facebookId;
-        req.body.facebookToken = req.user.facebookToken;
-        var user = await UserService.create(req.body);
-
-        res.json(user);
-      } catch (err) {
-        next(err);
-      }
-    });
+  app.route('/auth/driver/facebook/register')
+    .post(auth.facebookAuthenticate, AuthController.register('driver'));
 
   app.route('/auth/me')
-    .get(async(req, res) => {
-      if (!req.user) {
-        return res.status(401).send();
-      }
-      res.json(req.user);
-    });
+    .get(AuthController.getProfile);
 };

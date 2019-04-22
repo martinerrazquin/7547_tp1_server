@@ -70,6 +70,8 @@ DriverSelectionService.getDriver = async(tripData) => {
 
   var possibleDrivers = await DriverService.getInsideRegion(region);
 
+  console.log(possibleDrivers.length);
+  console.log('drivers: ' + toString(possibleDrivers.length)); // debug
   possibleDrivers = possibleDrivers.map((driver) => {
     driver.ring = distanceRingByDistance(driver.currentLocation, t);
     return driver;
