@@ -105,6 +105,30 @@ describe('Driver Selection Service Test', () => {
           data.near_origin_best_ratings_good_nor_driverData, result,
           'Nearest driver is not selected');
       });
+
+    it('should return one of two given two best options',
+      async() => {
+
+        var bestOptions = [
+          data.close_to_origin_best_ratings_good_nor_driverData2,
+          data.close_to_origin_best_ratings_good_nor_driverData,
+        ];
+
+        var driversPack = bestOptions.concat(
+          data.far_from_origin_best_ratings_good_nor_driverData,
+          data.unreachable_from_origin_best_ratings_best_nor_driverData
+        );
+        DriverService.getInsideRegion.resolves(driversPack);
+
+
+        var result = await DriverSelectionService.getDriver(data.tripData);
+
+
+        chai.assert.include(
+          bestOptions, result,
+          'Driver selected is not one of the best options');
+      });
+
   });
 
 });

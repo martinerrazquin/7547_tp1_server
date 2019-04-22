@@ -21,8 +21,8 @@ module.exports = {
     id: 1,
     userId: null,
     currentLocation: {
-      lng: -58.54814270000001,
-      lat: -34.5318136,
+      lng: -58.55,
+      lat: -34.54010633,
     },
     ratings: {
       one: 0,
@@ -149,6 +149,26 @@ module.exports = {
       three: 0,
       four: 0,
       five: 10,
+      rejections: 0,
+    },
+    createdAt: '2019-04-05T17:05:10.939Z',
+    updatedAt: '2019-04-05T17:05:10.939Z',
+  },
+
+  // 1.44 km from origin at tripData
+  close_to_origin_best_ratings_good_nor_driverData2: {
+    id: 8,
+    userId: null,
+    currentLocation: {
+      lng: -58.55814270000001,
+      lat: -34.5418136,
+    },
+    ratings: {
+      one: 0,
+      two: 0,
+      three: 0,
+      four: 0,
+      five: 5,
       rejections: 0,
     },
     createdAt: '2019-04-05T17:05:10.939Z',
