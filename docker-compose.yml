@@ -25,9 +25,9 @@ services:
     ports:
     - 5432:5432
     environment:
-    - POSTGRES_USER=tp1_server_test
-    - POSTGRES_PASSWORD=tp1_server_test
-    - POSTGRES_DB=tp1_server_test
+    - POSTGRES_USER=tp1_server
+    - POSTGRES_PASSWORD=tp1_server
+    - POSTGRES_DB=tp1_server
 
   migrations:
     image: 7547_tp1_server_app:latest

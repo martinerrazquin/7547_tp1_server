@@ -1,8 +1,8 @@
 {
   "development": {
-    "username": "tp1_server_test",
-    "password": "tp1_server_test",
-    "database": "tp1_server_test",
+    "username": "tp1_server",
+    "password": "tp1_server",
+    "database": "tp1_server",
     "host": "postgres",
     "dialect": "postgres"
   },
