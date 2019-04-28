@@ -15,7 +15,6 @@ TripService.create = async(tripData) => {
   // automatically assign trip to first driver
   var driverData = await DriverSelectionService.getDriver(tripData);
   if (!driverData) { // no driver found
-
     tripData.status = 'Cancelado';
   } else { // driver accepted trip
     tripData.status = 'En camino';
@@ -23,7 +22,6 @@ TripService.create = async(tripData) => {
   }
   //
   var trip = await Trip.create(tripData);
-  console.log(trip); // debug
   return trip && trip.toJSON ? trip.toJSON() : trip;
 };
 
