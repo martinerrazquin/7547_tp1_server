@@ -37,8 +37,8 @@ AuthController.register = (type) => {
         type: 'validationError',
         errors: [
           {
-            error: type === 'driver' ?
-              'isBlank' : 'shouldNotExist', path: 'driverData',
+            error: type === 'driver' ? 'isBlank' : 'shouldNotExist',
+            path: 'driverData',
           },
         ],
       });

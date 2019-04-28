@@ -44,12 +44,17 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.TEXT,
       allowNull: false,
     },
+    status: {
+      type: Sequelize.ENUM('Disponible', 'No disponible'),
+      defaultValue: 'No disponible',
+      allowNull: false,
+    },
   }, {});
 
   Driver.associate = function(models) {
     // associations can be defined here
-    models.User.hasOne(Driver, { foreignKey: 'userId', as: 'driverData' });
     Driver.belongsTo(models.User, { foreignKey: 'userId', as: 'userData' });
+    Driver.hasOne(models.Trip, { foreignKey: 'driverId', as: 'tripData' });
   };
 
   return Driver;

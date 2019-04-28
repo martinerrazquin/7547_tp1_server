@@ -1,6 +1,5 @@
 'use strict';
 
-
 module.exports.getNumberOfRatings = (driverData) => {
   var ratings = driverData.ratings;
   var total = ratings.one + ratings.two + ratings.three + ratings.four

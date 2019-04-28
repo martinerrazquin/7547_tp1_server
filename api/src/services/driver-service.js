@@ -1,6 +1,6 @@
 'use strict';
 
-var { Sequelize } = require('../config/dependencies');
+var { Sequelize, moment } = require('../config/dependencies');
 var { Driver } = require('../models');
 
 var DriverService = {};
@@ -10,11 +10,6 @@ DriverService.name = 'DriverService';
 DriverService.create = async(driverData) => {
   delete driverData.id;
   var driver = await Driver.create(driverData);
-  return driver && driver.toJSON ? driver.toJSON() : driver;
-};
-
-DriverService.getById = async(driverId) => {
-  var driver = await Driver.findByPk(driverId);
   return driver && driver.toJSON ? driver.toJSON() : driver;
 };
 
@@ -39,6 +34,7 @@ DriverService.update = async(driverId, driverData) => {
 DriverService.getInsideRegion = async(region) => {
   var results = await Driver.findAll({
     where: {
+      status: 'Disponible',
       currentLocation: {
         lat: {
           [Sequelize.Op.between]: [
@@ -52,6 +48,9 @@ DriverService.getInsideRegion = async(region) => {
             region.lng.max,
           ],
         },
+      },
+      updatedAt: {
+        [Sequelize.Op.gt]: moment().subtract(1, 'minutes').format(),
       },
     },
   });
