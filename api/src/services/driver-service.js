@@ -27,13 +27,24 @@ DriverService.update = async(driverId, driverData) => {
   }
 };
 
-// TODO: this will be later used to get drivers close
-// to where a trip is requested.
+DriverService.offerTrip = async(driverId, tripData) => {
+  var driver = await Driver.findOne({ where: { id: driverId } });
+  await driver.addTrip(tripData.id);
+};
+
+DriverService.cancelTripOffer = async(driverId, tripData) => {
+  var driver = await Driver.findOne({ where: { id: driverId } });
+  await driver.addTrip(tripData.id, { through: { status: 'Rechazado' } });
+};
+
 // Region = { lat: { max, min }, lng: { max, min } }
 // TODO: add filter status: 'libre'
-DriverService.getInsideRegion = async(region) => {
+DriverService.getInsideRegion = async(region, exclude = []) => {
   var results = await Driver.findAll({
     where: {
+      id: {
+        [Sequelize.Op.notIn]: exclude,
+      },
       status: 'Disponible',
       currentLocation: {
         lat: {

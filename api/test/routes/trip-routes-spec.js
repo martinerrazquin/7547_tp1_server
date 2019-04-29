@@ -19,8 +19,8 @@ describe('Trip Routes Test', () => {
     sinon.stub(Driver, 'create');
     sinon.stub(Driver, 'update');
     sinon.stub(MapsService, 'getDirections');
-    sinon.stub(DriverSelectionService, 'getDriver');
-    DriverSelectionService.getDriver.resolves(data.driverData);
+    sinon.stub(DriverSelectionService, 'startDriverSearch');
+    DriverSelectionService.startDriverSearch.resolves();
   });
 
   var clock;

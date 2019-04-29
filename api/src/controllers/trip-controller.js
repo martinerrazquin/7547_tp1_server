@@ -3,6 +3,7 @@
 var {
   TripService,
   SimulationService,
+  DriverSelectionService,
 } = require('../services');
 
 var TripController = {};
@@ -12,6 +13,7 @@ TripController.name = 'TripController';
 TripController.create = async(req, res, next) => {
   try {
     var trip = await TripService.create(req.body);
+    DriverSelectionService.startDriverSearch(trip);
     trip ? res.json(trip) : res.status(500).send();
   } catch (err) {
     next(err);

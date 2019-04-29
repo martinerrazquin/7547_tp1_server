@@ -3,8 +3,10 @@
 var haversine = require('haversine');
 
 var DriverService = require('./driver-service');
+var TripService = require('./trip-service');
 
 var ratingsHelper = require('../helpers/ratings-helper');
+var asyncHelper = require('../helpers/async-helper');
 
 var DriverSelectionService = {};
 
@@ -49,7 +51,7 @@ function comparePossibleDrivers(driver1, driver2){
 }
 
 
-DriverSelectionService.getDriver = async(tripData) => {
+DriverSelectionService.getDriver = async(tripData, exclude = []) => {
 
   // max distance is 100 km, convert it to degrees of lat and lng
   // rule of thumb is:
@@ -74,7 +76,7 @@ DriverSelectionService.getDriver = async(tripData) => {
     },
   };
 
-  var possibleDrivers = await DriverService.getInsideRegion(region);
+  var possibleDrivers = await DriverService.getInsideRegion(region, exclude);
 
   possibleDrivers = possibleDrivers.map((driver) => {
     driver.ring = distanceRingByDistance(driver.currentLocation, t);
@@ -109,6 +111,34 @@ DriverSelectionService.getDriver = async(tripData) => {
   var driver = drivers[0];
   delete driver.ring;
   return driver;
+};
+
+DriverSelectionService.startDriverSearch = async(trip) => {
+  // automatically assign trip to first driver
+  var exclude = [];
+  var driver = await DriverSelectionService.getDriver(trip, exclude);
+  while (driver) {
+    trip.driverId = driver.id;
+    trip = await TripService.update(trip.id, trip);
+    await DriverService.offerTrip(driver.id, trip);
+    var retries = 0;
+    while (retries < 8) {
+      await asyncHelper.sleep(5000);
+      trip = await TripService.getById(trip.id);
+      retries++;
+    }
+
+    await DriverService.cancelTripOffer(driver.id, trip);
+    exclude.push(driver.id);
+    driver = await DriverSelectionService.getDriver(trip, exclude);
+  }
+
+  if (!driver) { // no driver found
+    trip.status = 'Cancelado';
+  } else { // driver accepted trip
+    trip.status = 'En camino';
+  }
+  await TripService.update(trip.id, trip);
 };
 
 

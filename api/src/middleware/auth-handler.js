@@ -25,11 +25,11 @@ Auth.facebookAuthenticate = passport.authenticate(
 Auth.authorizeAs = (role) => {
   return async(req, res, next) => {
     if (!req.user || !req.user.id) {
-      return res.send(403, 'User not Registered');
+      return res.status(403).send('User not Registered');
     }
 
     if (!req.user.hasRole(role)) {
-      return res.send(401, 'Missing Permissions');
+      return res.status(401).send('Missing Permissions');
     }
 
     next();

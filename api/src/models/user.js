@@ -70,6 +70,37 @@ module.exports = (sequelize, type) => {
           exclude: ['facebookToken'],
         },
       },
+      driverStatusUpdate: {
+        include: [{
+          association: 'driverData',
+          required: false,
+          attributes: {
+            exclude: [
+              'id', 'userId', 'drivingRecordImage',
+              'policyImage', 'transportImage', 'ratings',
+              'createdAt', 'updatedAt',
+            ],
+          },
+          include: [{
+            association: 'trips',
+            attributes: {
+              exclude: [
+                'id', 'driverId', 'createdAt', 'updatedAt',
+              ],
+            },
+            through: {
+              where: {
+                status: 'Pendiente',
+              },
+              attributes: [],
+            },
+            required: false,
+          }],
+        }],
+        attributes: {
+          exclude: ['facebookToken'],
+        },
+      },
     },
   });
 

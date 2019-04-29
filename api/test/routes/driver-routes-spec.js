@@ -11,7 +11,7 @@ var data = require('./driver-routes-spec-data');
 
 chai.use(chaiHttp);
 
-describe('Trip Routes Test', () => {
+describe('Driver Routes Test', () => {
   before(() => {
     // sinon.stub(auth, 'authenticate');
     sinon.stub(jwt, 'verify');
