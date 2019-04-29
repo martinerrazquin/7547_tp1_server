@@ -18,7 +18,7 @@ TripService.create = async(tripData) => {
     tripData.status = 'Cancelado';
   } else { // driver accepted trip
     tripData.status = 'En camino';
-    tripData.driverId = driverData.userId;
+    tripData.driverId = driverData.id;
   }
   //
   var trip = await Trip.create(tripData);

@@ -47,8 +47,8 @@ module.exports = {
       {// c4
         userId: 104,
         currentLocation: JSON.stringify({
-          lat: -33.005,
-          lng: -60.8,
+          lat: -32.96,
+          lng: -60.69,
         }),
         ratings: JSON.stringify({
           one: 0,
@@ -67,8 +67,8 @@ module.exports = {
       {// c5
         userId: 105,
         currentLocation: JSON.stringify({
-          lat: -33.005,
-          lng: -60.8001,
+          lat: -32.95,
+          lng: -60.68,
         }),
         ratings: JSON.stringify({
           one: 0,
@@ -87,8 +87,8 @@ module.exports = {
       {// c6
         userId: 106,
         currentLocation: JSON.stringify({
-          lat: -33,
-          lng: -60.81,
+          lat: -32.95,
+          lng: -60.681,
         }),
         ratings: JSON.stringify({
           one: 0,
