@@ -2,6 +2,8 @@
 
 var { Trip, Driver } = require('../models');
 
+var DriverSelectionService = require('./driver-selection-service');
+
 var TripService = {};
 
 TripService.name = 'TripService';
@@ -10,6 +12,15 @@ TripService.create = async(tripData) => {
   delete tripData.id;
   delete tripData.status;
   delete tripData.driverId;
+  // automatically assign trip to first driver
+  var driverData = await DriverSelectionService.getDriver(tripData);
+  if (!driverData) { // no driver found
+    tripData.status = 'Cancelado';
+  } else { // driver accepted trip
+    tripData.status = 'En camino';
+    tripData.driverId = driverData.id;
+  }
+  //
   var trip = await Trip.create(tripData);
   return trip && trip.toJSON ? trip.toJSON() : trip;
 };

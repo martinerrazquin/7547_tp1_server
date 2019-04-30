@@ -16,6 +16,22 @@ module.exports = (sequelize, Sequelize) => {
         return (typeof value === 'string') ? JSON.parse(value) : value;
       },
     },
+    ratings: {
+      type: Sequelize.JSONB,
+      allowNull: false,
+      get() {
+        const value = this.getDataValue('ratings');
+        return (typeof value === 'string') ? JSON.parse(value) : value;
+      },
+      validate: {
+        nonNegativeFields(value) {
+          if (!(value.one >= 0 && value.two >= 0 && value.three >= 0 &&
+              value.four >= 0 && value.five >= 0 && value.rejections >= 0)) {
+            throw new Error('RatingsAreNegative');
+          }
+        },
+      },
+    },
     drivingRecordImage: {
       type: Sequelize.TEXT,
       allowNull: false,
