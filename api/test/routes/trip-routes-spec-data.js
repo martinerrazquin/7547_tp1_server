@@ -1,6 +1,16 @@
 'use strict';
 
 module.exports = {
+  userData: {
+    id: 999,
+    facebookId: 'asd',
+    facebookToken: 'dsa',
+    email: 'a@a.a',
+    birthDate: new Date(),
+    address: 'asd street',
+    phone: '0800-122-2225',
+  },
+
   tripData: {
     id: 1,
     origin: {

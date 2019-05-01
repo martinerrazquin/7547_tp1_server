@@ -7,12 +7,22 @@ var Auth = {};
 
 Auth.name = 'auth';
 
-Auth.authenticate = async(req, res, next) => {
+Auth._getFromRequest = async(req) => {
+  var user;
   try {
     var decoded = jwt.verify(req.headers['x-auth-token'], 'my-secret');
-    req.user = await UserService.getById(decoded.id);
+    user = await UserService.getById(decoded.id);
   } catch (err) {
-    req.user = null;
+    user = null;
+  }
+  return user;
+};
+
+Auth.authenticate = async(req, res, next) => {
+  try {
+    req.user = await Auth._getFromRequest(req);
+  } catch (e) {
+    console.log(e);
   }
   next();
 };
