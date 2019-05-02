@@ -17,10 +17,16 @@ UserService.createClient = async(userData) => {
   return await User.create(userData);
 };
 
-UserService.getById = async(userId) => {
-  return await User.findOne({
+UserService.getById = async(userId, scope = null) => {
+  var query = {
     where: { id: userId },
-  });
+  };
+
+  if (scope) {
+    return await User.scope(scope).findOne(query);
+  }
+
+  return await User.findOne(query);
 };
 
 UserService.getByFacebookId = async(facebookId) => {

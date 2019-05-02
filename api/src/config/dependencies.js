@@ -21,4 +21,5 @@ module.exports = {
   geolocationUtils: require('geolocation-utils'),
   passport: passport,
   jwt: require('jsonwebtoken'),
+  moment: require('moment'),
 };

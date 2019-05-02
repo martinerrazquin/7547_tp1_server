@@ -53,10 +53,29 @@ module.exports = (sequelize, type) => {
         exclude: ['facebookToken'],
       },
     },
+    scopes: {
+      withDriverId: {
+        include: [{
+          association: 'driverData',
+          required: false,
+          attributes: {
+            exclude: [
+              'userId', 'drivingRecordImage',
+              'policyImage', 'transportImage',
+              'createdAt', 'updatedAt',
+            ],
+          },
+        }],
+        attributes: {
+          exclude: ['facebookToken'],
+        },
+      },
+    },
   });
 
   User.associate = (models) => {
     // Add any relations (foreign keys) here.
+    User.hasOne(models.Driver, { foreignKey: 'userId', as: 'driverData' });
   };
 
   User.prototype.hasRole = function(role) {

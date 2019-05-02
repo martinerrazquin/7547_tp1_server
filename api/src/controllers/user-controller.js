@@ -1,6 +1,6 @@
 'use strict';
 
-var { UserService } = require('../services');
+var { UserService, DriverService } = require('../services');
 
 var UserController = {};
 
@@ -17,6 +17,20 @@ UserController.retrieve = async(req, res, next) => {
 
 UserController.update = (req, res) => {
   res.send('User updated');
+};
+
+UserController.updateDriverStatus = async(req, res, next) => {
+  try {
+    delete req.body.id;
+    req.user.driverData = await DriverService.update(
+      req.user.driverData.id,
+      req.body
+    );
+
+    res.json(req.user);
+  } catch (err) {
+    next(err);
+  }
 };
 
 UserController.delete = async(req, res, next) => {

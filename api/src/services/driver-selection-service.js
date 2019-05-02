@@ -63,10 +63,16 @@ DriverSelectionService.getDriver = async(tripData) => {
 
   // Region = { lat: { max, min }, lng: { max, min } }
   var t = tripData.origin;
-  var region = {lat: {max: t.lat + max_lat_delta,
-    min: t.lat - max_lat_delta},
-  lng: {max: t.lng + max_lng_delta,
-    min: t.lng - max_lng_delta}};
+  var region = {
+    lat: {
+      max: t.lat + max_lat_delta,
+      min: t.lat - max_lat_delta,
+    },
+    lng: {
+      max: t.lng + max_lng_delta,
+      min: t.lng - max_lng_delta,
+    },
+  };
 
   var possibleDrivers = await DriverService.getInsideRegion(region);
 
