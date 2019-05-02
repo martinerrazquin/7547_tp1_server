@@ -6,6 +6,15 @@ var UserController = {};
 
 UserController.name = 'UserController';
 
+UserController.list = async(req, res, next) => {
+  try {
+    var users = await UserService.list(req.query.page);
+    res.json(users);
+  } catch (err) {
+    next(err);
+  }
+};
+
 UserController.retrieve = async(req, res, next) => {
   try {
     var user = await UserService.getById(req.params.userId);

@@ -30,6 +30,8 @@ AuthController.register = (type) => {
   return async(req, res, next) => {
     if (!req.user) {
       return res.send(401, 'User Not Authenticated');
+    } else if (req.user.id) {
+      return res.send(403, 'User Already Registered');
     }
 
     if (invalidUserForType(req.body, type)) {
@@ -46,7 +48,6 @@ AuthController.register = (type) => {
 
     try {
       req.body.facebookId = req.user.facebookId;
-      req.body.facebookToken = req.user.facebookToken;
       var user;
       if (type === 'driver') {
         user = await UserService.createDriver(req.body);

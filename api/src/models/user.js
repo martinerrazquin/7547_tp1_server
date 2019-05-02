@@ -13,10 +13,6 @@ module.exports = (sequelize, type) => {
       allowNull: false,
       unique: true,
     },
-    facebookToken: {
-      type: type.STRING,
-      allowNull: false,
-    },
     email: {
       type: type.STRING,
       allowNull: false,
@@ -49,9 +45,6 @@ module.exports = (sequelize, type) => {
           ],
         },
       }],
-      attributes: {
-        exclude: ['facebookToken'],
-      },
     },
   });
 
