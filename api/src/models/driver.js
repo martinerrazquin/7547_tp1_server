@@ -37,8 +37,8 @@ module.exports = (sequelize, Sequelize) => {
         three: 0,
         four: 0,
         five: 0,
-        rejections: 0
-      }
+        rejections: 0,
+      },
     },
     drivingRecordImage: {
       type: Sequelize.TEXT,

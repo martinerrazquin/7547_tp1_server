@@ -11,7 +11,11 @@ TripController.name = 'TripController';
 
 TripController.create = async(req, res, next) => {
   try {
+    req.body.clientId = req.user.id;
+
+    // model won't allow null ids so it's fine
     var trip = await TripService.create(req.body);
+
     trip ? res.json(trip) : res.status(500).send();
   } catch (err) {
     next(err);
