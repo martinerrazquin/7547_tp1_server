@@ -11,7 +11,7 @@ Auth._getFromRequest = async(req) => {
   var user;
   try {
     var decoded = jwt.verify(req.headers['x-auth-token'], 'my-secret');
-    user = await UserService.getById(decoded.id);
+    user = await UserService.getById(decoded.id, 'withDriverId');
   } catch (err) {
     user = null;
   }

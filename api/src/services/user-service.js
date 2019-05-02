@@ -26,10 +26,12 @@ UserService.list = async(page = 0) => {
   });
 };
 
-UserService.getById = async(userId) => {
-  return await User.findOne({
+UserService.getById = async(userId, scope = 'defaultScope') => {
+  var query = {
     where: { id: userId },
-  });
+  };
+
+  return await User.scope(scope).findOne(query);
 };
 
 UserService.getByFacebookId = async(facebookId) => {
