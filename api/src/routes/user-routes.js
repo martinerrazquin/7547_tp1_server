@@ -9,5 +9,5 @@ module.exports = (app) => {
     .delete(UserController.delete);
 
   app.route('/users')
-    .get(UserController.list)
+    .get(UserController.list);
 };

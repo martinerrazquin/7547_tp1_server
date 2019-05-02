@@ -11,9 +11,6 @@ TripController.name = 'TripController';
 
 TripController.create = async(req, res, next) => {
   try {
-    if (!req.user) {
-      return res.status(401).send();
-    }
     req.body.clientId = req.user.id;
 
     // model won't allow null ids so it's fine

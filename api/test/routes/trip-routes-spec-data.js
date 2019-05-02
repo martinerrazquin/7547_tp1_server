@@ -9,6 +9,9 @@ module.exports = {
     birthDate: new Date(),
     address: 'asd street',
     phone: '0800-122-2225',
+    hasRole: (role) => {
+      return role === 'client';
+    },
   },
 
   tripData: {

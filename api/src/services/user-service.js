@@ -22,7 +22,7 @@ UserService.createClient = async(userData) => {
 UserService.list = async(page = 0) => {
   return await User.findAll({
     offset: page * PAGE_SIZE,
-    limit: PAGE_SIZE
+    limit: PAGE_SIZE,
   });
 };
 
