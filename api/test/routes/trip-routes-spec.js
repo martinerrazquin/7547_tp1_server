@@ -16,7 +16,7 @@ chai.use(chaiHttp);
 describe('Trip Routes Test', () => {
   before(() => {
     sinon.stub(Trip, 'create');
-    sinon.stub(Trip, 'findByPk');
+    sinon.stub(Trip, 'findOne');
     sinon.stub(Trip, 'update');
     sinon.stub(Driver, 'create');
     sinon.stub(Driver, 'update');
@@ -45,7 +45,7 @@ describe('Trip Routes Test', () => {
 
   describe('GET /trips/:tripId', () => {
     it('should return invalid when trip does not exist', async() => {
-      Trip.findByPk.returns(null);
+      Trip.findOne.returns(null);
 
       var res = await chai.request(app).get('/trips/10');
 
@@ -57,7 +57,7 @@ describe('Trip Routes Test', () => {
     });
 
     it('should return trip data when trip exists', async() => {
-      Trip.findByPk.returns(data.tripData);
+      Trip.findOne.returns(data.tripData);
 
       var res = await chai.request(app).get('/trips/1');
 
@@ -147,7 +147,7 @@ describe('Trip Routes Test', () => {
 
   describe('GET /trips/:tripId/location', () => {
     it('should return 404 when trip does not exist', async() => {
-      Trip.findByPk.returns(null);
+      Trip.findOne.returns(null);
 
 
       var res = await chai.request(app).get('/trips/1/location');
@@ -161,7 +161,7 @@ describe('Trip Routes Test', () => {
     it('should return both correct coordinates when ' +
         'trip is in "En camino" state', async() => {
 
-      Trip.findByPk.returns(data.confirmedTripData);
+      Trip.findOne.returns(data.confirmedTripData);
 
       var res = await chai.request(app).get('/trips/1/location');
 
@@ -180,7 +180,7 @@ describe('Trip Routes Test', () => {
     it('should return null coordinates when ' +
         'trip is in "Buscando" state', async() => {
 
-      Trip.findByPk.returns(data.tripData);
+      Trip.findOne.returns(data.tripData);
 
       var res = await chai.request(app).get('/trips/1/location');
 
@@ -228,7 +228,7 @@ describe('Trip Routes Test', () => {
       Driver.create.returns(data.driverData);
       Trip.update.returns([0, [data.confirmedTripData]]);
       var updatedDriver = data.driverData;
-      Trip.findByPk.callsFake(() => {
+      Trip.findOne.callsFake(() => {
         var { ... udpatedData } = data.confirmedTripData;
         udpatedData.driver = updatedDriver;
         return udpatedData;

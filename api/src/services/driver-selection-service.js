@@ -116,23 +116,32 @@ DriverSelectionService.getDriver = async(tripData, exclude = []) => {
 DriverSelectionService.startDriverSearch = async(trip) => {
   var exclude = [];
   var driver = await DriverSelectionService.getDriver(trip, exclude);
-  while (driver) {
+  var offerStatus = null;
+  while (driver && offerStatus !== 'Aceptado') {
     trip.driverId = driver.id;
     trip = await TripService.update(trip.id, trip);
-    await DriverService.offerTrip(driver.id, trip.id);
+    await DriverService.updateTripOffer(driver.id, trip.id, 'Pendiente');
     var retries = 0;
     while (retries < 8) {
       await asyncHelper.sleep(5000);
-      trip = await TripService.getById(trip.id);
+      trip = await TripService.getById(trip.id, driver.id);
+
+      offerStatus = trip.drivers[0].DriverTripOffer.status;
+      if (offerStatus === 'Aceptado') {
+        break;
+      } else if (offerStatus === 'Rechazado') {
+        retries = 8;
+      }
+
       retries++;
     }
 
-    await DriverService.cancelTripOffer(driver.id, trip.id);
+    await DriverService.updateTripOffer(driver.id, trip.id, 'Rechazado');
     exclude.push(driver.id);
     driver = await DriverSelectionService.getDriver(trip, exclude);
   }
 
-  if (!driver) { // no driver found
+  if (offerStatus !== 'Aceptado') { // no driver found
     trip.status = 'Cancelado';
   } else { // driver accepted trip
     trip.status = 'En camino';

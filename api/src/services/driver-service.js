@@ -27,19 +27,9 @@ DriverService.update = async(driverId, driverData) => {
   }
 };
 
-DriverService.offerTrip = async(driverId, tripId) => {
+DriverService.updateTripOffer = async(driverId, tripId, status) => {
   var driver = await Driver.findOne({ where: { id: driverId } });
-  await driver.addTrip(tripId);
-};
-
-DriverService.acceptTripOffer = async(driverId, tripId) => {
-  var driver = await Driver.findOne({ where: { id: driverId } });
-  await driver.addTrip(tripId, { through: { status: 'Aceptado' } });
-};
-
-DriverService.cancelTripOffer = async(driverId, tripId) => {
-  var driver = await Driver.findOne({ where: { id: driverId } });
-  await driver.addTrip(tripId, { through: { status: 'Rechazado' } });
+  await driver.addTrip(tripId, { through: { status: status } });
 };
 
 // Region = { lat: { max, min }, lng: { max, min } }

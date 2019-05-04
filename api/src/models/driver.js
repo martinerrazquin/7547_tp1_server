@@ -57,7 +57,15 @@ module.exports = (sequelize, Sequelize) => {
       defaultValue: 'No disponible',
       allowNull: false,
     },
-  }, {});
+  }, {
+    defaultScope: {
+      attributes: {
+        exclude: [
+          'drivingRecordImage', 'policyImage', 'transportImage',
+        ],
+      },
+    },
+  });
 
   Driver.associate = function(models) {
     // associations can be defined here

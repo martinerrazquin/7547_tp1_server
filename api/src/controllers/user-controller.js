@@ -36,10 +36,11 @@ UserController.updateDriverStatus = async(req, res, next) => {
       req.body
     );
 
-    if (req.body.tripOffer && req.body.tripOffer.accepted === true) {
-      DriverService.acceptTripOffer(
+    if (req.body.tripOffer) {
+      await DriverService.updateTripOffer(
         req.user.driverData.id,
-        req.body.tripOffer.id
+        req.body.tripOffer.id,
+        req.body.tripOffer.status
       );
     }
 
@@ -52,6 +53,8 @@ UserController.updateDriverStatus = async(req, res, next) => {
     var result = updated.driverData;
     if (result.trips.length === 1) {
       result.tripOffer = result.trips[0];
+      result.tripOffer.status = result.tripOffer.DriverTripOffer.status;
+      delete result.tripOffer.DriverTripOffer;
     } else if (result.trips.length > 1) {
       // If we get here, we're in violation of the business rules.
       var e = new Error();

@@ -83,9 +83,9 @@ module.exports = (sequelize, type) => {
             },
             through: {
               where: {
-                status: 'Pendiente',
+                status: ['Pendiente', 'Aceptado'],
               },
-              attributes: [],
+              // attributes: [],
             },
             required: false,
           }],

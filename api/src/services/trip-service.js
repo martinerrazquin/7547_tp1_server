@@ -13,8 +13,21 @@ TripService.create = async(tripData) => {
   return trip && trip.toJSON ? trip.toJSON() : trip;
 };
 
-TripService.getById = async(tripId) => {
-  var trip = await Trip.findByPk(tripId);
+TripService.getById = async(tripId, driverId = null) => {
+  var query = {
+    where: { id: tripId },
+  };
+
+  if (driverId) {
+    query.include = [{
+      association: 'drivers',
+      where: {
+        id: driverId,
+      },
+    }];
+  }
+
+  var trip = await Trip.findOne(query);
   return trip && trip.toJSON ? trip.toJSON() : trip;
 };
 
