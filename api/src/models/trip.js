@@ -18,9 +18,17 @@ module.exports = (sequelize, Sequelize) => {
       },
     },
     status: {
-      type: Sequelize.STRING,
-      allowNull: false,
+      type: Sequelize.ENUM(
+        'Buscando',
+        'En camino',
+        'En origen',
+        'En viaje',
+        'Llegamos',
+        'Finalizado',
+        'Cancelado'
+      ),
       defaultValue: 'Buscando',
+      allowNull: false,
     },
     driverId: {
       type: Sequelize.INTEGER,
@@ -67,7 +75,11 @@ module.exports = (sequelize, Sequelize) => {
 
   Trip.associate = function(models) {
     // associations can be defined here
-    Trip.belongsTo(models.Driver, { foreignKey: 'driverId', as: 'driver' });
+    Trip.belongsToMany(models.Driver, {
+      foreignKey: 'tripId',
+      as: 'drivers',
+      through: models.DriverTripOffer,
+    });
   };
 
   return Trip;

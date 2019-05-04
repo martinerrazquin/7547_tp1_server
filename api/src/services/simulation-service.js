@@ -4,16 +4,11 @@ var DriverService = require('./driver-service');
 var TripService = require('./trip-service');
 var MapsService = require('./maps-service');
 var mapsHelper = require('../helpers/maps-helper');
+var asyncHelper = require('../helpers/async-helper');
 
 var SimulationService = {};
 
 SimulationService.name = 'SimulationService';
-
-var sleep = (ms) => {
-  return new Promise(resolve => {
-    setTimeout(resolve, ms);
-  });
-};
 
 SimulationService.createSimulatedDriver = async(nearLocation) => {
   return await DriverService.create({
@@ -29,6 +24,9 @@ SimulationService.createSimulatedDriver = async(nearLocation) => {
 };
 
 SimulationService.createSimulatedTrip = async(tripData) => {
+  delete tripData.id;
+  delete tripData.status;
+  delete tripData.driverId;
   var trip = await TripService.create(tripData);
   var driver = await SimulationService.createSimulatedDriver(trip.origin);
   trip.status = 'En camino';
@@ -65,7 +63,7 @@ SimulationService.startSimulation = async(trip, driver) => {
     }
 
     driver = await DriverService.update(driver.id, driver);
-    await sleep(1000);
+    await asyncHelper.sleep(1000);
   }
   trip.status = 'En origen';
   await TripService.update(trip.id, trip);

@@ -13,9 +13,11 @@ chai.use(chaiHttp);
 
 describe('Driver Routes Test', () => {
   var user = null;
+
   before(() => {
     sinon.stub(User, 'findOne');
     sinon.stub(User, 'scope');
+    User.scope.returnsThis();
     sinon.stub(auth, '_facebookAuth');
     auth._facebookAuth.callsFake((req, res, next) => {
       req.user = user;
@@ -43,6 +45,7 @@ describe('Driver Routes Test', () => {
     it('should return ok when new data is valid and user is authenticated',
       async() => {
         user = data.driverUser;
+        User.findOne.resolves(data.driverUser);
         var newData = {
           currentLocation: {
             lat: 34.01,

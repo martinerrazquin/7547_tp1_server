@@ -31,12 +31,39 @@ UserController.update = (req, res) => {
 UserController.updateDriverStatus = async(req, res, next) => {
   try {
     delete req.body.id;
-    req.user.driverData = await DriverService.update(
+    await DriverService.update(
       req.user.driverData.id,
       req.body
     );
 
-    res.json(req.user);
+    if (req.body.tripOffer) {
+      await DriverService.updateTripOffer(
+        req.user.driverData.id,
+        req.body.tripOffer.id,
+        req.body.tripOffer.status
+      );
+    }
+
+    var updated = await UserService.getById(
+      req.user.id,
+      'driverStatusUpdate'
+    );
+
+    updated = updated.toJSON ? updated.toJSON() : updated;
+    var result = updated.driverData;
+    if (result.trips.length === 1) {
+      result.tripOffer = result.trips[0];
+      result.tripOffer.status = result.tripOffer.DriverTripOffer.status;
+      delete result.tripOffer.DriverTripOffer;
+    } else if (result.trips.length > 1) {
+      // If we get here, we're in violation of the business rules.
+      var e = new Error();
+      e.name = 'MultipleTripOffers';
+      throw e;
+    }
+
+    delete result.trips;
+    res.json(result);
   } catch (err) {
     next(err);
   }

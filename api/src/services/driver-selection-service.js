@@ -3,8 +3,10 @@
 var haversine = require('haversine');
 
 var DriverService = require('./driver-service');
+var TripService = require('./trip-service');
 
 var ratingsHelper = require('../helpers/ratings-helper');
+var asyncHelper = require('../helpers/async-helper');
 
 var DriverSelectionService = {};
 
@@ -49,7 +51,7 @@ function comparePossibleDrivers(driver1, driver2){
 }
 
 
-DriverSelectionService.getDriver = async(tripData) => {
+DriverSelectionService.getDriver = async(tripData, exclude = []) => {
 
   // max distance is 100 km, convert it to degrees of lat and lng
   // rule of thumb is:
@@ -74,7 +76,7 @@ DriverSelectionService.getDriver = async(tripData) => {
     },
   };
 
-  var possibleDrivers = await DriverService.getInsideRegion(region);
+  var possibleDrivers = await DriverService.getInsideRegion(region, exclude);
 
   possibleDrivers = possibleDrivers.map((driver) => {
     driver.ring = distanceRingByDistance(driver.currentLocation, t);
@@ -109,6 +111,42 @@ DriverSelectionService.getDriver = async(tripData) => {
   var driver = drivers[0];
   delete driver.ring;
   return driver;
+};
+
+DriverSelectionService.startDriverSearch = async(trip) => {
+  var exclude = [];
+  var driver = await DriverSelectionService.getDriver(trip, exclude);
+  var offerStatus = null;
+  while (driver && offerStatus !== 'Aceptado') {
+    trip.driverId = driver.id;
+    trip = await TripService.update(trip.id, trip);
+    await DriverService.updateTripOffer(driver.id, trip.id, 'Pendiente');
+    var retries = 0;
+    while (retries < 8) {
+      await asyncHelper.sleep(5000);
+      trip = await TripService.getById(trip.id, driver.id);
+
+      offerStatus = trip.drivers[0].DriverTripOffer.status;
+      if (offerStatus === 'Aceptado') {
+        break;
+      } else if (offerStatus === 'Rechazado') {
+        retries = 8;
+      }
+
+      retries++;
+    }
+
+    await DriverService.updateTripOffer(driver.id, trip.id, 'Rechazado');
+    exclude.push(driver.id);
+    driver = await DriverSelectionService.getDriver(trip, exclude);
+  }
+
+  if (offerStatus !== 'Aceptado') { // no driver found
+    trip.status = 'Cancelado';
+  } else { // driver accepted trip
+    trip.status = 'En camino';
+  }
+  await TripService.update(trip.id, trip);
 };
 
 

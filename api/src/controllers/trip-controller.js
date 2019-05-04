@@ -3,6 +3,7 @@
 var {
   TripService,
   SimulationService,
+  DriverSelectionService,
 } = require('../services');
 
 var TripController = {};
@@ -15,6 +16,7 @@ TripController.create = async(req, res, next) => {
 
     // model won't allow null ids so it's fine
     var trip = await TripService.create(req.body);
+    DriverSelectionService.startDriverSearch(trip);
 
     trip ? res.json(trip) : res.status(500).send();
   } catch (err) {

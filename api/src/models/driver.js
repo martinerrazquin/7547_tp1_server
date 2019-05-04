@@ -57,12 +57,24 @@ module.exports = (sequelize, Sequelize) => {
       defaultValue: 'No disponible',
       allowNull: false,
     },
-  }, {});
+  }, {
+    defaultScope: {
+      attributes: {
+        exclude: [
+          'drivingRecordImage', 'policyImage', 'transportImage',
+        ],
+      },
+    },
+  });
 
   Driver.associate = function(models) {
     // associations can be defined here
     Driver.belongsTo(models.User, { foreignKey: 'userId', as: 'userData' });
-    Driver.hasOne(models.Trip, { foreignKey: 'driverId', as: 'tripData' });
+    Driver.belongsToMany(models.Trip, {
+      foreignKey: 'driverId',
+      as: 'trips',
+      through: models.DriverTripOffer,
+    });
   };
 
   return Driver;
