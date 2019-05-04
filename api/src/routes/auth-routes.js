@@ -4,6 +4,25 @@ var { auth } = require('../middleware');
 var { AuthController } = require('../controllers');
 
 module.exports = (app) => {
+
+  app.route('/auth/client/facebook/login')
+    .post(
+      auth.facebookAuthenticate,
+      auth.authorize('client'),
+      (req, res, next) => {
+        res.json(req.user);
+      }
+    );
+
+  app.route('/auth/driver/facebook/login')
+    .post(
+      auth.facebookAuthenticate,
+      auth.authorize('driver'),
+      (req, res, next) => {
+        res.json(req.user);
+      }
+    );
+
   app.route('/auth/client/facebook/register')
     .post(
       auth.facebookAuthenticate,
