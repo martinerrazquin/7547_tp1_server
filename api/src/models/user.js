@@ -85,7 +85,7 @@ module.exports = (sequelize, type) => {
             association: 'trips',
             attributes: {
               exclude: [
-                'id', 'driverId', 'createdAt', 'updatedAt',
+                'driverId', 'createdAt', 'updatedAt',
               ],
             },
             through: {

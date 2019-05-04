@@ -114,13 +114,12 @@ DriverSelectionService.getDriver = async(tripData, exclude = []) => {
 };
 
 DriverSelectionService.startDriverSearch = async(trip) => {
-  // automatically assign trip to first driver
   var exclude = [];
   var driver = await DriverSelectionService.getDriver(trip, exclude);
   while (driver) {
     trip.driverId = driver.id;
     trip = await TripService.update(trip.id, trip);
-    await DriverService.offerTrip(driver.id, trip);
+    await DriverService.offerTrip(driver.id, trip.id);
     var retries = 0;
     while (retries < 8) {
       await asyncHelper.sleep(5000);
@@ -128,7 +127,7 @@ DriverSelectionService.startDriverSearch = async(trip) => {
       retries++;
     }
 
-    await DriverService.cancelTripOffer(driver.id, trip);
+    await DriverService.cancelTripOffer(driver.id, trip.id);
     exclude.push(driver.id);
     driver = await DriverSelectionService.getDriver(trip, exclude);
   }

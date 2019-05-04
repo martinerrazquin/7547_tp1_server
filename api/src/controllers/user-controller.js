@@ -27,6 +27,10 @@ UserController.updateDriverStatus = async(req, res, next) => {
       req.body
     );
 
+    if (req.body.tripOffer.accepted === true) {
+      DriverService.acceptTripOffer(req.user.driverData.id, req.body.tripOffer.id);
+    }
+
     var updated = await UserService.getById(
       req.user.id,
       'driverStatusUpdate'
@@ -37,6 +41,7 @@ UserController.updateDriverStatus = async(req, res, next) => {
     if (result.trips.length === 1) {
       result.tripOffer = result.trips[0];
     } else if (result.trips.length > 1) {
+      // If we get here, we're in violation of the business rules.
       var e = new Error();
       e.name = 'MultipleTripOffers';
       throw e;
