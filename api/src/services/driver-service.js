@@ -28,8 +28,12 @@ DriverService.update = async(driverId, driverData) => {
 };
 
 DriverService.updateTripOffer = async(driverId, tripId, status) => {
-  var driver = await Driver.findOne({ where: { id: driverId } });
-  await driver.addTrip(tripId, { through: { status: status } });
+  try {
+    var driver = await Driver.findOne({ where: { id: driverId } });
+    await driver.addTrip(tripId, { through: { status: status } });
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 // Region = { lat: { max, min }, lng: { max, min } }
@@ -58,6 +62,27 @@ DriverService.getInsideRegion = async(region, exclude = []) => {
         [Sequelize.Op.gt]: moment().subtract(1, 'minutes').format(),
       },
     },
+    include: [{
+      association: 'trips',
+      attributes: ['id'],
+      where: {
+        status: {
+          [Sequelize.Op.notIn]: ['Cancelado', 'Finalizado'],
+        },
+      },
+      through: {
+        where: {
+          status: ['Pendiente', 'Aceptado'],
+        },
+        // attributes: [],
+      },
+      required: false,
+    }],
+  });
+
+  results = results.filter((driver) => {
+    console.log(driver);
+    return !driver.trips || driver.trips.length === 0;
   });
 
   return results;

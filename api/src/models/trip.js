@@ -18,9 +18,15 @@ module.exports = (sequelize, Sequelize) => {
       },
     },
     status: {
-      type: Sequelize.STRING,
-      allowNull: false,
+      type: Sequelize.ENUM(
+        'Buscando',
+        'En camino',
+        'En origen',
+        'Finalizado',
+        'Cancelado'
+      ),
       defaultValue: 'Buscando',
+      allowNull: false,
     },
     driverId: {
       type: Sequelize.INTEGER,
