@@ -22,6 +22,8 @@ module.exports = (sequelize, Sequelize) => {
         'Buscando',
         'En camino',
         'En origen',
+        'En viaje',
+        'Llegamos',
         'Finalizado',
         'Cancelado'
       ),
