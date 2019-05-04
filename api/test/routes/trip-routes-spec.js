@@ -6,10 +6,12 @@ var sinon = require('sinon');
 var app = require('../../src/app');
 var { Trip, Driver } = require('../../src/models');
 var { MapsService, DriverSelectionService } = require('../../src/services');
+var { auth } = require('../../src/middleware');
 
 var data = require('./trip-routes-spec-data');
 
 chai.use(chaiHttp);
+
 
 describe('Trip Routes Test', () => {
   before(() => {
@@ -21,6 +23,10 @@ describe('Trip Routes Test', () => {
     sinon.stub(MapsService, 'getDirections');
     sinon.stub(DriverSelectionService, 'startDriverSearch');
     DriverSelectionService.startDriverSearch.resolves();
+    sinon.stub(DriverSelectionService, 'getDriver');
+    DriverSelectionService.getDriver.resolves(data.driverData);
+    sinon.stub(auth, '_getFromRequest');
+    auth._getFromRequest.resolves(data.userData);
   });
 
   var clock;

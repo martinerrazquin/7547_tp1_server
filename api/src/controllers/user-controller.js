@@ -6,6 +6,15 @@ var UserController = {};
 
 UserController.name = 'UserController';
 
+UserController.list = async(req, res, next) => {
+  try {
+    var users = await UserService.list(req.query.page);
+    res.json(users);
+  } catch (err) {
+    next(err);
+  }
+};
+
 UserController.retrieve = async(req, res, next) => {
   try {
     var user = await UserService.getById(req.params.userId);
@@ -27,8 +36,11 @@ UserController.updateDriverStatus = async(req, res, next) => {
       req.body
     );
 
-    if (req.body.tripOffer.accepted === true) {
-      DriverService.acceptTripOffer(req.user.driverData.id, req.body.tripOffer.id);
+    if (req.body.tripOffer && req.body.tripOffer.accepted === true) {
+      DriverService.acceptTripOffer(
+        req.user.driverData.id,
+        req.body.tripOffer.id
+      );
     }
 
     var updated = await UserService.getById(

@@ -59,6 +59,10 @@ module.exports = (sequelize, Sequelize) => {
         len: [0, 250],
       },
     },
+    clientId: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    },
   }, {});
 
   Trip.associate = function(models) {

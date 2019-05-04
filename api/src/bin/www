@@ -10,12 +10,10 @@ passport.use(new passport.facebookStrategy({
   clientSecret: process.env.FACEBOOK_CLIENT_SECRET
 }, async(accessToken, refreshToken, profile, done) => {
   try {
+    console.log(accessToken);
     var user = await UserService.getByFacebookId(profile.id);
     if (!user) {
-      user = {
-        facebookId: profile.id,
-        facebookToken: accessToken,
-      };
+      user = { facebookId: profile.id };
     }
     done(null, user);
   } catch (err) {

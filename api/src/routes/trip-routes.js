@@ -1,10 +1,12 @@
 'use strict';
 
+var { auth } = require('../middleware');
 var { TripController } = require('../controllers');
 
 module.exports = (app) => {
   app.route('/trips')
-    .post(TripController.create);
+    .post(auth.authorizeAs('client'),
+      TripController.create);
 
   app.route('/trips/simulated')
     .post(TripController.createSimulated);

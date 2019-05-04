@@ -14,5 +14,5 @@ module.exports.getScore = (driverData) => {
 
   var total = this.getNumberOfRatings(driverData);
 
-  return totalScore / total;
+  return total > 0 ? totalScore / total : 3;
 };

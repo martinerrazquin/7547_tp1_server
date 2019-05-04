@@ -31,6 +31,14 @@ module.exports = (sequelize, Sequelize) => {
           }
         },
       },
+      defaultValue: {
+        one: 0,
+        two: 0,
+        three: 0,
+        four: 0,
+        five: 0,
+        rejections: 0,
+      },
     },
     drivingRecordImage: {
       type: Sequelize.TEXT,

@@ -67,7 +67,7 @@ DriverService.getInsideRegion = async(region, exclude = []) => {
       updatedAt: {
         [Sequelize.Op.gt]: moment().subtract(1, 'minutes').format(),
       },
-    }
+    },
   });
 
   return results;

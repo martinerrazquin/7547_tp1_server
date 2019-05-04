@@ -2,6 +2,8 @@
 
 var { User, Driver } = require('../models');
 
+const PAGE_SIZE = 10;
+
 var UserService = {};
 
 UserService.name = 'UserService';
@@ -17,16 +19,19 @@ UserService.createClient = async(userData) => {
   return await User.create(userData);
 };
 
-UserService.getById = async(userId, scope = null) => {
+UserService.list = async(page = 0) => {
+  return await User.findAll({
+    offset: page * PAGE_SIZE,
+    limit: PAGE_SIZE,
+  });
+};
+
+UserService.getById = async(userId, scope = 'defaultScope') => {
   var query = {
     where: { id: userId },
   };
 
-  if (scope) {
-    return await User.scope(scope).findOne(query);
-  }
-
-  return await User.findOne(query);
+  return await User.scope(scope).findOne(query);
 };
 
 UserService.getByFacebookId = async(facebookId) => {
