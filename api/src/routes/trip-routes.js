@@ -5,11 +5,18 @@ var { TripController } = require('../controllers');
 
 module.exports = (app) => {
   app.route('/trips')
-    .post(auth.authorizeAs('client'),
-      TripController.create);
+    .post(
+      auth.facebookAuthenticate,
+      auth.authorize('client'),
+      TripController.create
+    );
 
   app.route('/trips/simulated')
-    .post(TripController.createSimulated);
+    .post(
+      auth.facebookAuthenticate,
+      auth.authorize('client'),
+      TripController.createSimulated
+    );
 
   app.route('/trips/:tripId')
     .get(TripController.retrieve)

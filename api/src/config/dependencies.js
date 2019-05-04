@@ -4,9 +4,6 @@ var Sequelize = require('sequelize');
 var env = process.env.NODE_ENV || 'development';
 Sequelize.config = require('./sequelize/config.json')[env];
 
-var passport = require('passport');
-passport.facebookStrategy = require('passport-facebook-token');
-
 module.exports = {
   debug: require('debug')('hypechat:server'),
   fs: require('fs'),
@@ -19,7 +16,8 @@ module.exports = {
     Promise: Promise,
   }),
   geolocationUtils: require('geolocation-utils'),
-  passport: passport,
+  passport: require('passport'),
+  FacebookStrategy: require('passport-facebook-token'),
   jwt: require('jsonwebtoken'),
   moment: require('moment'),
 };

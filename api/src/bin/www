@@ -1,25 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 
-var { debug, passport } = require('../config/dependencies');
-var { UserService } = require('../services');
-
-// Initialize passport.
-passport.use(new passport.facebookStrategy({
-  clientID: process.env.FACEBOOK_CLIENT_ID, 
-  clientSecret: process.env.FACEBOOK_CLIENT_SECRET
-}, async(accessToken, refreshToken, profile, done) => {
-  try {
-    console.log(accessToken);
-    var user = await UserService.getByFacebookId(profile.id);
-    if (!user) {
-      user = { facebookId: profile.id };
-    }
-    done(null, user);
-  } catch (err) {
-    done(err);
-  }  
-}));
+var { debug } = require('../config/dependencies');
 
 var app = require('../app');
 var port = process.env.PORT || '3000';

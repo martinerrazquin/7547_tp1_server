@@ -1,45 +1,28 @@
 'use strict';
 
-var { passport, jwt } = require('../config/dependencies');
-var { UserService } = require('../services');
+var { passport } = require('../config/dependencies');
 
 var Auth = {};
 
 Auth.name = 'auth';
 
-Auth._getFromRequest = async(req) => {
-  var user;
-  try {
-    var decoded = jwt.verify(req.headers['x-auth-token'], 'my-secret');
-    user = await UserService.getById(decoded.id, 'withDriverId');
-  } catch (err) {
-    user = null;
-  }
-  return user;
-};
-
-Auth.authenticate = async(req, res, next) => {
-  try {
-    req.user = await Auth._getFromRequest(req);
-  } catch (e) {
-    console.log(e);
-  }
-  next();
-};
-
-Auth.facebookAuthenticate = passport.authenticate(
+Auth._facebookAuth = passport.authenticate(
   'facebook-token',
   {session: false}
 );
 
-Auth.authorizeAs = (role) => {
+Auth.facebookAuthenticate = (req, res, next) => {
+  Auth._facebookAuth(req, res, next);
+};
+
+Auth.authorize = (role) => {
   return async(req, res, next) => {
     if (!req.user || !req.user.id) {
-      return res.send(403, 'User not Registered');
+      return res.status(403).send('User not Registered');
     }
 
-    if (!req.user.hasRole(role)) {
-      return res.send(401, 'Missing Permissions');
+    if (role && !req.user.hasRole(role)) {
+      return res.status(401).send('Missing Permissions');
     }
 
     next();

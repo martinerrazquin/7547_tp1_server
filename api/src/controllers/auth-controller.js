@@ -1,7 +1,6 @@
 'use strict';
 
 var { UserService } = require('../services');
-var { jwt } = require('../config/dependencies');
 
 var AuthController = {};
 
@@ -11,19 +10,6 @@ var invalidUserForType = (user, type) => {
   var invalidClient = type === 'client' && user.driverData;
   var invalidDriver = type === 'driver' && !user.driverData;
   return invalidClient || invalidDriver;
-};
-
-AuthController.login = (type) => {
-  return async(req, res) => {
-    var token = jwt.sign({
-      id: req.user.id,
-    }, 'my-secret', {
-      expiresIn: 60 * 120,
-    });
-
-    res.setHeader('x-auth-token', token);
-    res.json(req.user);
-  };
 };
 
 AuthController.register = (type) => {
@@ -63,9 +49,6 @@ AuthController.register = (type) => {
 };
 
 AuthController.getProfile = async(req, res, next) => {
-  if (!req.user) {
-    return res.status(401).send();
-  }
   res.json(req.user);
 };
 
