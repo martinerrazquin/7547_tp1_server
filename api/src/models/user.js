@@ -1,5 +1,7 @@
 'use strict';
 
+var { Sequelize } = require('../config/dependencies');
+
 module.exports = (sequelize, type) => {
   var User = sequelize.define('User', {
     id: {
@@ -80,6 +82,11 @@ module.exports = (sequelize, type) => {
               exclude: [
                 'driverId', 'createdAt', 'updatedAt',
               ],
+            },
+            where: {
+              status: {
+                [Sequelize.Op.notIn]: ['Cancelado', 'Finalizado'],
+              },
             },
             through: {
               where: {
