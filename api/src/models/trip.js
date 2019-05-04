@@ -71,6 +71,10 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
+    driverRating: {
+      type: Sequelize.JSONB,
+      allowNull: true,
+    },
   }, {});
 
   Trip.associate = function(models) {
