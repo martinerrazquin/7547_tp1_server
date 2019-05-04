@@ -27,15 +27,13 @@ UserService.list = async(page = 0) => {
 };
 
 UserService.getById = async(userId, scope = 'defaultScope') => {
-  var query = {
+  return await User.scope(scope).findOne({
     where: { id: userId },
-  };
-
-  return await User.scope(scope).findOne(query);
+  });
 };
 
-UserService.getByFacebookId = async(facebookId) => {
-  return await User.findOne({
+UserService.getByFacebookId = async(facebookId, scope = 'defaultScope') => {
+  return await User.scope(scope).findOne({
     where: { facebookId: facebookId },
   });
 };

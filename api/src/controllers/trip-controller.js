@@ -24,6 +24,7 @@ TripController.create = async(req, res, next) => {
 
 TripController.createSimulated = async(req, res, next) => {
   try {
+    req.body.clientId = req.user.id;
     var trip = await SimulationService.createSimulatedTrip(req.body);
     trip ? res.json(trip) : res.status(500).send();
   } catch (err) {
