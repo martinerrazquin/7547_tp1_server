@@ -5,19 +5,24 @@ var chaiHttp = require('chai-http');
 var sinon = require('sinon');
 var app = require('../../src/app');
 var { User, Driver } = require('../../src/models');
-var { jwt } = require('../../src/config/dependencies');
+var { auth } = require('../../src/middleware');
 
 var data = require('./driver-routes-spec-data');
 
 chai.use(chaiHttp);
 
 describe('Driver Routes Test', () => {
+  var user = null;
+
   before(() => {
-    // sinon.stub(auth, 'authenticate');
-    sinon.stub(jwt, 'verify');
     sinon.stub(User, 'findOne');
     sinon.stub(User, 'scope');
     User.scope.returnsThis();
+    sinon.stub(auth, '_facebookAuth');
+    auth._facebookAuth.callsFake((req, res, next) => {
+      req.user = user;
+      next();
+    });
     sinon.stub(Driver, 'update');
     Driver.update.callsFake((newData) => {
       return [1, [Object.assign({}, data.driverUser.driverData, newData)]];
@@ -27,6 +32,7 @@ describe('Driver Routes Test', () => {
   // var clock;
 
   beforeEach(() => {
+    user = null;
     sinon.resetHistory();
     // clock = sinon.useFakeTimers();
   });
@@ -38,7 +44,7 @@ describe('Driver Routes Test', () => {
   describe('PUT /drivers/status', () => {
     it('should return ok when new data is valid and user is authenticated',
       async() => {
-        jwt.verify.returns({id: 1});
+        user = data.driverUser;
         User.findOne.resolves(data.driverUser);
         var newData = {
           currentLocation: {
@@ -61,7 +67,7 @@ describe('Driver Routes Test', () => {
 
     it('should return invalid when user is not authenticated',
       async() => {
-        jwt.verify.throws();
+        user = null;
         var newData = {
           currentLocation: {
             lat: 34.01,

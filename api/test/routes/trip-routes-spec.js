@@ -25,8 +25,11 @@ describe('Trip Routes Test', () => {
     DriverSelectionService.startDriverSearch.resolves();
     sinon.stub(DriverSelectionService, 'getDriver');
     DriverSelectionService.getDriver.resolves(data.driverData);
-    sinon.stub(auth, '_getFromRequest');
-    auth._getFromRequest.resolves(data.userData);
+    sinon.stub(auth, '_facebookAuth');
+    auth._facebookAuth.callsFake((req, res, next) => {
+      req.user = data.userData;
+      next();
+    });
   });
 
   var clock;

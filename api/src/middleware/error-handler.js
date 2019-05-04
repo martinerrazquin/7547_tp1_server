@@ -56,6 +56,8 @@ ErrorHandler.default = (err, req, res, next) => {
           break;
       }
     });
+  } else if (err.name === 'InternalOAuthError') {
+    return res.status(401).send('Session expired');
   } else {
     console.error('ERROR: Don\'t know how to handle: ');
     console.error(err);
