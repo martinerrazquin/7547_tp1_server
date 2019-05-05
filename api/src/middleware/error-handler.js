@@ -63,6 +63,8 @@ ErrorHandler.default = (err, req, res, next) => {
   } else if (err.name === 'DriverAlreadyRated' ||
              err.name === 'ClientAlreadyRated'){
     return res.status(403).send('Trip already rated');
+  } else if (err.name === 'WrongUserId'){
+    return res.status(403).send('Trip is not own');
   } else {
     console.error('ERROR: Don\'t know how to handle: ');
     console.error(err);

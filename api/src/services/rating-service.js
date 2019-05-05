@@ -47,8 +47,7 @@ RatingService.addRateToDriver = async(driverId, value, suggestions) => {
   return await DriverService.update(driverId, driver);
 };
 
-RatingService.rateDriver = async(tripId, rating, suggestions) => {
-
+RatingService.rateDriver = async(clientId, tripId, rating, suggestions) => {
   if (![1, 2, 3, 4, 5].includes(rating) || (rating <= 3 && !suggestions)){
     var e = Error();
     e.name = 'RatingsFormatNotMet';
@@ -56,7 +55,11 @@ RatingService.rateDriver = async(tripId, rating, suggestions) => {
   }
   // prepare trip data for update
   var trip = await TripService.getById(tripId);
-
+  if (trip.clientId !== clientId){
+    e = Error();
+    e.name = 'WrongUserId';
+    throw e;
+  }
   if (trip.driverRating && trip.driverRating.rating !== 0){
     e = Error();
     e.name = 'DriverAlreadyRated';
@@ -77,7 +80,7 @@ RatingService.rateDriver = async(tripId, rating, suggestions) => {
   return res;
 };
 
-RatingService.rateClient = async(tripId, rating, comments) => {
+RatingService.rateClient = async(driverId, tripId, rating, comments) => {
 
   if (![1, 2, 3, 4, 5].includes(rating)){
     var e = Error();
@@ -86,6 +89,11 @@ RatingService.rateClient = async(tripId, rating, comments) => {
   }
   var trip = await TripService.getById(tripId);
 
+  if (trip.driverId !== driverId){
+    e = Error();
+    e.name = 'WrongUserId';
+    throw e;
+  }
   if (trip.clientRating && trip.clientRating.rating !== 0){
     e = Error();
     e.name = 'ClientAlreadyRated';

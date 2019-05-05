@@ -15,8 +15,9 @@ RatingController.rateDriver = async(req, res, next) => {
   }
 
   try {
+    var clientId = req.user.id;
     var suggestions = req.body.suggestions ? req.body.suggestions : null;
-    var xd = await RatingService.rateDriver(req.params.tripId,
+    var xd = await RatingService.rateDriver(clientId, req.params.tripId,
       req.body.rating, suggestions);
     xd ? res.json(xd) : res.status(404).send();
   } catch (err) {
@@ -32,7 +33,8 @@ RatingController.rateClient = async(req, res, next) => {
     });
   }
   try {
-    var xd = await RatingService.rateClient(req.params.tripId,
+    var driverId = req.user.driverData.id;
+    var xd = await RatingService.rateClient(driverId, req.params.tripId,
       req.body.rating, req.body.comments);
     xd ? res.json(xd) : res.status(404).send();
   } catch (err) {

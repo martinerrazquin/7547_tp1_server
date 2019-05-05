@@ -35,9 +35,10 @@ describe('Rating Service Test', () => {
     it('should raise AlreadyRated Error when already rated on that trip',
       async() => {
         TripService.getById.resolves(c(data.driverAlreadyRatedTripData));
+        var cid = c(data.driverAlreadyRatedTripData.clientId);
 
         try {
-          await RatingService.rateDriver(1, 5);
+          await RatingService.rateDriver(cid, 1, 5);
         } catch (e) {
           chai.assert.equal(e.name, 'DriverAlreadyRated');
         }
@@ -47,9 +48,10 @@ describe('Rating Service Test', () => {
       async() => {
 
         TripService.getById.resolves(c(data.driverAlreadyRatedTripData));
+        var cid = c(data.driverAlreadyRatedTripData.clientId);
 
         try {
-          await RatingService.rateDriver(1, 2.5);
+          await RatingService.rateDriver(cid, 1, 2.5);
         } catch (e) {
           chai.assert.equal(e.name, 'RatingsFormatNotMet');
         }
@@ -61,12 +63,25 @@ describe('Rating Service Test', () => {
 
       TripService.getById.resolves(c(data.notRatedTripData));
       Driver.findByPk.resolves(c(data.existentDriver));
-
+      var cid = c(data.notRatedTripData.clientId);
       try {
-        await RatingService.rateDriver(1, 2,
+        await RatingService.rateDriver(cid, 1, 2,
           {app: true, driver: false});
       } catch (e) {
         chai.assert.equal(e.name, 'RatingsFormatNotMet');
+      }
+
+    });
+
+    it('should raise WrongUserId Error when client IDs dont match', async() => {
+
+      TripService.getById.resolves(c(data.notRatedTripData));
+      Driver.findByPk.resolves(c(data.existentDriver));
+      var cid = c(data.notRatedTripData.clientId) + 1;
+      try {
+        await RatingService.rateDriver(cid, 1, 4);
+      } catch (e) {
+        chai.assert.equal(e.name, 'WrongUserId');
       }
 
     });
@@ -80,10 +95,11 @@ describe('Rating Service Test', () => {
         DriverService.update.resolves(c(data.existentDriver));
         TripService.update.callsFake(async(tripId, trip) => { return trip; });
 
+        var cid = c(data.notRatedTripData.clientId);
         var suggs = data.driverAlreadyRatedTripData.driverRating.suggestions;
         var rat = data.driverAlreadyRatedTripData.driverRating.rating;
 
-        var res = await RatingService.rateDriver(2, rat,
+        var res = await RatingService.rateDriver(cid, 2, rat,
           suggs);
         chai.assert.deepEqual(res, data.driverAlreadyRatedTripData,
           'not updating trip');
@@ -98,9 +114,10 @@ describe('Rating Service Test', () => {
       DriverService.update.resolves(c(data.existentDriver));
       TripService.update.callsFake(async(tripId, trip) => { return trip; });
 
+      var cid = c(data.notRatedTripData.clientId);
       var rat = data.driverRated4TripData.driverRating.rating;
 
-      var res = await RatingService.rateDriver(1, rat,
+      var res = await RatingService.rateDriver(cid, 1, rat,
         {app: true, driver: false});
       chai.assert.deepEqual(res, data.driverRated4TripData,
         'not updating trip');
@@ -132,9 +149,10 @@ describe('Rating Service Test', () => {
       it('should raise AlreadyRated Error when already rated on that trip',
         async() => {
           TripService.getById.resolves(c(data.clientAlreadyRatedTripData));
+          var rid = c(data.clientAlreadyRatedTripData.driverId);
 
           try {
-            await RatingService.rateClient(1, 5);
+            await RatingService.rateClient(rid, 1, 5);
           } catch (e) {
             chai.assert.equal(e.name, 'ClientAlreadyRated');
           }
@@ -143,9 +161,10 @@ describe('Rating Service Test', () => {
       it('should raise Format Error when rating is not integer',
         async() => {
           TripService.getById.resolves(c(data.clientAlreadyRatedTripData));
+          var rid = c(data.clientAlreadyRatedTripData.driverId);
 
           try {
-            await RatingService.rateClient(1, 2.5);
+            await RatingService.rateClient(rid, 1, 2.5);
           } catch (e) {
             chai.assert.equal(e.name, 'RatingsFormatNotMet');
           }
@@ -155,12 +174,16 @@ describe('Rating Service Test', () => {
         async() => {
 
           TripService.getById.resolves(c(data.notRatedTripData));
-          TripService.update.callsFake(async(tripId, trip) => { return trip; });
+          TripService.update.callsFake(async(tripId, trip) => {
+            return trip;
+          });
 
-          var comments = data.clientAlreadyRatedTripData.clientRating.comments;
-          var rat = data.clientAlreadyRatedTripData.clientRating.rating;
+          var rid = c(data.notRatedTripData.driverId);
+          var comments = c(data.clientAlreadyRatedTripData
+            .clientRating.comments);
+          var rat = c(data.clientAlreadyRatedTripData.clientRating.rating);
 
-          var res = await RatingService.rateClient(2, rat, comments);
+          var res = await RatingService.rateClient(rid, 1, rat, comments);
           chai.assert.deepEqual(res, data.clientAlreadyRatedTripData,
             'not updating trip');
 
