@@ -136,4 +136,34 @@ module.exports = {
     status: 'Disponible',
   },
 
+  clientAlreadyRatedTripData: {
+    origin: {
+      lat: 34.023,
+      lng: 30.001,
+      address: 'lo de pepe',
+    },
+    destination: {
+      lat: 15,
+      lng: 20,
+      address: 'lo de juan',
+    },
+    id: 76,
+    status: 'Finalizado',
+    driverId: 37,
+    petQuantities: {
+      big: 1,
+      small: 0,
+      medium: 0,
+    },
+    bringsEscort: true,
+    paymentMethod: 'mp',
+    comments: '',
+    clientId: 6,
+    clientRating: {
+      rating: 3,
+      comments: 'miraba feo',
+    },
+    createdAt: '2019-05-04T19:48:13.503Z',
+    updatedAt: '2019-05-05T00:15:53.577Z',
+  },
 };

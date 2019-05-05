@@ -24,5 +24,21 @@ RatingController.rateDriver = async(req, res, next) => {
   }
 };
 
+RatingController.rateClient = async(req, res, next) => {
+  if (!req.body.rating || !req.body.comments){
+    return res.status(400).json({
+      status: 'error',
+      type: 'missingParams',
+    });
+  }
+  try {
+    var xd = await RatingService.rateClient(req.params.tripId,
+      req.body.rating, req.body.comments);
+    xd ? res.json(xd) : res.status(404).send();
+  } catch (err) {
+    next(err);
+  }
+};
+
 
 module.exports = RatingController;

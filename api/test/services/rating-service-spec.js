@@ -127,6 +127,47 @@ describe('Rating Service Test', () => {
       });
     });
 
+    describe('rateClient', () => {
+
+      it('should raise AlreadyRated Error when already rated on that trip',
+        async() => {
+          TripService.getById.resolves(c(data.clientAlreadyRatedTripData));
+
+          try {
+            await RatingService.rateClient(1, 5);
+          } catch (e) {
+            chai.assert.equal(e.name, 'ClientAlreadyRated');
+          }
+        });
+
+      it('should raise Format Error when rating is not integer',
+        async() => {
+          TripService.getById.resolves(c(data.clientAlreadyRatedTripData));
+
+          try {
+            await RatingService.rateClient(1, 2.5);
+          } catch (e) {
+            chai.assert.equal(e.name, 'RatingsFormatNotMet');
+          }
+        });
+
+      it('should return updated trip data when ratings and comments are ok',
+        async() => {
+
+          TripService.getById.resolves(c(data.notRatedTripData));
+          TripService.update.callsFake(async(tripId, trip) => { return trip; });
+
+          var comments = data.clientAlreadyRatedTripData.clientRating.comments;
+          var rat = data.clientAlreadyRatedTripData.clientRating.rating;
+
+          var res = await RatingService.rateClient(2, rat, comments);
+          chai.assert.deepEqual(res, data.clientAlreadyRatedTripData,
+            'not updating trip');
+
+        });
+
+    });
+
 
   });
 });

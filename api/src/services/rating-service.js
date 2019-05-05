@@ -77,4 +77,26 @@ RatingService.rateDriver = async(tripId, rating, suggestions) => {
   return res;
 };
 
+RatingService.rateClient = async(tripId, rating, comments) => {
+
+  if (![1, 2, 3, 4, 5].includes(rating)){
+    var e = Error();
+    e.name = 'RatingsFormatNotMet';
+    throw e;
+  }
+  var trip = await TripService.getById(tripId);
+
+  if (trip.clientRating && trip.clientRating.rating !== 0){
+    e = Error();
+    e.name = 'ClientAlreadyRated';
+    throw e;
+  }
+  trip.clientRating = {};
+  trip.clientRating.rating = rating;
+  trip.clientRating.comments = comments;
+
+  var res = await TripService.update(tripId, trip);
+  return res;
+};
+
 module.exports = RatingService;

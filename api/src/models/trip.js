@@ -75,6 +75,17 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.JSONB,
       allowNull: true,
     },
+    clientRating: {
+      type: Sequelize.JSONB,
+      allowNull: true,
+      validate: {
+        commentNotLongerThan500(value){
+          if (value.comments.length >= 500){
+            throw new Error('CommentsLongerThan500Chars');
+          }
+        },
+      },
+    },
   }, {});
 
   Trip.associate = function(models) {

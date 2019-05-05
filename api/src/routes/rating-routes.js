@@ -10,4 +10,11 @@ module.exports = (app) => {
       auth.authorize('client'),
       RatingController.rateDriver
     );
+
+  app.route('/trips/:tripId/rate/client')
+    .post(
+      auth.facebookAuthenticate,
+      auth.authorize('driver'),
+      RatingController.rateClient
+    );
 };
