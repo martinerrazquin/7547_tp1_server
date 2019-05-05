@@ -56,13 +56,12 @@ RatingService.rateDriver = async(tripId, rating, suggestions) => {
   }
   // prepare trip data for update
   var trip = await TripService.getById(tripId);
-  /* FIXME: add back
+
   if (trip.driverRating && trip.driverRating.rating !== 0){
     e = Error();
     e.name = 'DriverAlreadyRated';
     throw e;
   }
-  */
   trip.driverRating = {};
   trip.driverRating.rating = rating;
   if (rating <= 3){
