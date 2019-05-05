@@ -80,7 +80,7 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: true,
       validate: {
         commentNotLongerThan500(value){
-          if (value.comments.length >= 500){
+          if (value && value.comments && value.comments.length >= 500){
             throw new Error('CommentsLongerThan500Chars');
           }
         },
