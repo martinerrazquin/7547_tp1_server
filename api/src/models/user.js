@@ -71,7 +71,7 @@ module.exports = (sequelize, type) => {
           required: false,
           attributes: {
             exclude: [
-              'id', 'userId', 'drivingRecordImage',
+              'id', 'userId', 'drivingRecordImage', 'suggestions',
               'policyImage', 'transportImage', 'ratings',
               'createdAt', 'updatedAt',
             ],
@@ -85,7 +85,7 @@ module.exports = (sequelize, type) => {
             },
             where: {
               status: {
-                [Sequelize.Op.notIn]: ['Cancelado', 'Finalizado'],
+                [Sequelize.Op.notIn]: ['Cancelado', 'Finalizado', 'Reservado'],
               },
             },
             through: {

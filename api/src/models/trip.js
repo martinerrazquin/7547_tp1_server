@@ -25,7 +25,8 @@ module.exports = (sequelize, Sequelize) => {
         'En viaje',
         'Llegamos',
         'Finalizado',
-        'Cancelado'
+        'Cancelado',
+        'Reservado'
       ),
       defaultValue: 'Buscando',
       allowNull: false,
@@ -70,6 +71,11 @@ module.exports = (sequelize, Sequelize) => {
     clientId: {
       type: Sequelize.INTEGER,
       allowNull: false,
+    },
+    reservationDate: {
+      type: Sequelize.DATE,
+      allowNull: true,
+      defaultValue: null,
     },
     driverRating: {
       type: Sequelize.JSONB,
