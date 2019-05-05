@@ -78,13 +78,6 @@ module.exports = (sequelize, Sequelize) => {
     clientRating: {
       type: Sequelize.JSONB,
       allowNull: true,
-      validate: {
-        commentNotLongerThan500(value){
-          if (value.comments.length >= 500){
-            throw new Error('CommentsLongerThan500Chars');
-          }
-        },
-      },
     },
   }, {});
 
