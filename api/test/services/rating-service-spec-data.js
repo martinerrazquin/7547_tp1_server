@@ -115,4 +115,25 @@ module.exports = {
     updatedAt: '2019-05-05T00:15:53.577Z',
   },
 
+  noRejectionsDriver: {
+    currentLocation: {
+      lat: 34,
+      lng: 30,
+    },
+    ratings: {
+      one: 1,
+      two: 1,
+      five: 1,
+      four: 1,
+      three: 1,
+      rejections: 0,
+    },
+    suggestions: {
+      app: 1,
+      driver: 1,
+      vehicle: 1,
+    },
+    status: 'Disponible',
+  },
+
 };

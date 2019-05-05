@@ -9,6 +9,7 @@ var { Driver } = require('../../src/models');
 var _ = require('lodash');
 
 var data = require('./rating-service-spec-data');
+var { getScore } = require('../../src/helpers/ratings-helper');
 
 var c = data => _.cloneDeep(data);
 
@@ -104,6 +105,26 @@ describe('Rating Service Test', () => {
       chai.assert.deepEqual(res, data.driverRated4TripData,
         'not updating trip');
 
+    });
+
+    describe('addRateDriver', () => {
+
+      it('should make (1,1,1,1,1,0)-scored that declines Trip a ' +
+          '(1,1,1,1,1,1) one, and its score should now be 2.5', async() => {
+        Driver.findByPk.resolves(c(data.noRejectionsDriver));
+        DriverService.update.callsFake(async(driverId, driver) => {
+          return driver;
+        });
+
+        var expected = c(data.noRejectionsDriver);
+        expected.ratings.rejections += 1;
+
+        var res = await RatingService.addRateToDriver(1, 0);
+
+        chai.assert.deepEqual(res, expected, 'did not increase rejections');
+
+        chai.assert.equal(getScore(res), 2.5, 'score is not 2.5');
+      });
     });
 
 
