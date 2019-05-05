@@ -57,11 +57,24 @@ module.exports = (sequelize, Sequelize) => {
       defaultValue: 'No disponible',
       allowNull: false,
     },
+    suggestions: {
+      type: Sequelize.JSONB,
+      allowNull: false,
+      defaultValue: {
+        app: 0,
+        vehicle: 0,
+        driver: 0,
+      },
+      get() {
+        const value = this.getDataValue('suggestions');
+        return (typeof value === 'string') ? JSON.parse(value) : value;
+      },
+    },
   }, {
     defaultScope: {
       attributes: {
         exclude: [
-          'drivingRecordImage', 'policyImage', 'transportImage',
+          'drivingRecordImage', 'policyImage', 'transportImage', 'suggestions',
         ],
       },
     },

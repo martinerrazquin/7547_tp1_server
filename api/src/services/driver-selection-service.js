@@ -4,6 +4,7 @@ var haversine = require('haversine');
 
 var DriverService = require('./driver-service');
 var TripService = require('./trip-service');
+var RatingService = require('./rating-service');
 
 var ratingsHelper = require('../helpers/ratings-helper');
 var asyncHelper = require('../helpers/async-helper');
@@ -136,7 +137,16 @@ DriverSelectionService.startDriverSearch = async(trip) => {
       retries++;
     }
 
+    if (offerStatus === 'Aceptado') {
+      break;
+    }
+
     await DriverService.updateTripOffer(driver.id, trip.id, 'Rechazado');
+
+    // when Reservation is enabled, wrap in if(!reservation_date)
+    // add penalty
+    await RatingService.addRateToDriver(driver.id, 0);
+
     exclude.push(driver.id);
     driver = await DriverSelectionService.getDriver(trip, exclude);
   }

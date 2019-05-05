@@ -58,6 +58,13 @@ ErrorHandler.default = (err, req, res, next) => {
     });
   } else if (err.name === 'InternalOAuthError') {
     return res.status(401).send('Session expired');
+  } else if (err.name === 'RatingsFormatNotMet'){
+    return res.status(400).send('Bad Format');
+  } else if (err.name === 'DriverAlreadyRated' ||
+             err.name === 'ClientAlreadyRated'){
+    return res.status(403).send('Trip already rated');
+  } else if (err.name === 'WrongUserId'){
+    return res.status(403).send('Trip is not own');
   } else {
     console.error('ERROR: Don\'t know how to handle: ');
     console.error(err);
