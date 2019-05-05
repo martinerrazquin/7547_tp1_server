@@ -59,7 +59,7 @@ TripService.getLocationData = async(tripId) => {
   var resp = {};
   resp.status = trip.status;
   resp.currentLocation = {};
-  if (['Buscando', 'Finalizado'].includes(trip.status)) {
+  if (['Buscando', 'Finalizado', 'Cancelado'].includes(trip.status)) {
     resp.currentLocation = null;
   } else if (trip.driverId && !trip.driver) {
     // red flag: chofer no existente asignado
