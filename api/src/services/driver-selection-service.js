@@ -137,6 +137,10 @@ DriverSelectionService.startDriverSearch = async(trip) => {
       retries++;
     }
 
+    if (offerStatus === 'Aceptado') {
+      break;
+    }
+
     await DriverService.updateTripOffer(driver.id, trip.id, 'Rechazado');
 
     // when Reservation is enabled, wrap in if(!reservation_date)
