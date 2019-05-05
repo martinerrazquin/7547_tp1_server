@@ -10,7 +10,7 @@ module.exports = {
         k3: 1,
         k4: 1,
         k5: 1,
-        k6: 10
+        k6: 10,
       }),
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -18,6 +18,7 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('BusinessConstants', [{name: 'TripCosts'}], {});
-  }
+    return queryInterface.bulkDelete('BusinessConstants',
+      [{name: 'TripCosts'}], {});
+  },
 };

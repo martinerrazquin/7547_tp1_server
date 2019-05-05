@@ -22,7 +22,7 @@ BusinessConstantController.updateTripCosts = async(req, res, next) => {
   }
 };
 
-BusinessConstantController.listAll = async (req,res,next) => {
+BusinessConstantController.listAll = async(req, res, next) => {
   try {
     var xd = await BusinessConstantService.listAll();
     xd ? res.json(xd) : res.status(404).send();

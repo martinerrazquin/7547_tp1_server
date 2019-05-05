@@ -4,7 +4,7 @@ module.exports = (sequelize, Sequelize) => {
     name: {
       type: Sequelize.STRING,
       allowNull: false,
-      unique: true
+      unique: true,
     },
     value: {
       type: Sequelize.JSONB,
@@ -12,7 +12,7 @@ module.exports = (sequelize, Sequelize) => {
       get() {
         const value = this.getDataValue('value');
         return (typeof value === 'string') ? JSON.parse(value) : value;
-      }
+      },
     },
   }, {});
 
