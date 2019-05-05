@@ -21,6 +21,12 @@ it's timestamped)
 * Implement those changes in the Sequelize model.
 * Run migration (`docker-compose exec app npm run db:migrate`).
 
+## Adding seeds
+
+* Run `docker-compose exec app ./node_modules/.bin/sequelize seed:generate --name [YOUR_SEED_NAME]` to generate it.
+* Implement the seed.
+* Run seeds (`docker-compose exec app npm run db:seed:all`)
+
 ## Before pushing
 Make sure that all tests pass and there are no code style errors by running `docker-compose exec app npm test` 
 before pushing.

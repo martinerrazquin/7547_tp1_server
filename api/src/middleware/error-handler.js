@@ -65,6 +65,8 @@ ErrorHandler.default = (err, req, res, next) => {
     return res.status(403).send('Trip already rated');
   } else if (err.name === 'WrongUserId'){
     return res.status(403).send('Trip is not own');
+  } else if (err.name === 'TripCostsConstantIsNegative'){
+    return res.status(400).send('A trip cost constant is negative');
   } else {
     console.error('ERROR: Don\'t know how to handle: ');
     console.error(err);
