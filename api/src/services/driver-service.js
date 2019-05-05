@@ -67,7 +67,7 @@ DriverService.getInsideRegion = async(region, exclude = []) => {
       attributes: ['id'],
       where: {
         status: {
-          [Sequelize.Op.notIn]: ['Cancelado', 'Finalizado'],
+          [Sequelize.Op.notIn]: ['Cancelado', 'Finalizado', 'Reservado'],
         },
       },
       through: {
@@ -81,7 +81,6 @@ DriverService.getInsideRegion = async(region, exclude = []) => {
   });
 
   results = results.filter((driver) => {
-    console.log(driver);
     return !driver.trips || driver.trips.length === 0;
   });
 

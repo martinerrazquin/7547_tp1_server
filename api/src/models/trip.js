@@ -25,7 +25,8 @@ module.exports = (sequelize, Sequelize) => {
         'En viaje',
         'Llegamos',
         'Finalizado',
-        'Cancelado'
+        'Cancelado',
+        'Reservado'
       ),
       defaultValue: 'Buscando',
       allowNull: false,
@@ -71,6 +72,11 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
+    reservationDate: {
+      type: Sequelize.DATE,
+      allowNull: true,
+      defaultValue: null,
+    },
     driverRating: {
       type: Sequelize.JSONB,
       allowNull: true,
@@ -80,7 +86,7 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: true,
       validate: {
         commentNotLongerThan500(value){
-          if (value.comments.length >= 500){
+          if (value && value.comments.length >= 500){
             throw new Error('CommentsLongerThan500Chars');
           }
         },

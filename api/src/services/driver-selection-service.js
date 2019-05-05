@@ -141,11 +141,11 @@ DriverSelectionService.startDriverSearch = async(trip) => {
       break;
     }
 
+    // Reject trip offer and add penalty.
     await DriverService.updateTripOffer(driver.id, trip.id, 'Rechazado');
-
-    // when Reservation is enabled, wrap in if(!reservation_date)
-    // add penalty
-    await RatingService.addRateToDriver(driver.id, 0);
+    if (!trip.reservationDate) {
+      await RatingService.addRateToDriver(driver.id, 0);
+    }
 
     exclude.push(driver.id);
     driver = await DriverSelectionService.getDriver(trip, exclude);
@@ -153,9 +153,12 @@ DriverSelectionService.startDriverSearch = async(trip) => {
 
   if (offerStatus !== 'Aceptado') { // no driver found
     trip.status = 'Cancelado';
-  } else { // driver accepted trip
+  } else if (!trip.reservationDate) { // driver accepted trip
     trip.status = 'En camino';
+  } else { // driver accepted programmed trip
+    trip.status = 'Reservado';
   }
+
   await TripService.update(trip.id, trip);
 };
 
