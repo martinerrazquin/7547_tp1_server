@@ -75,6 +75,7 @@ module.exports = (sequelize, Sequelize) => {
 
   Trip.associate = function(models) {
     // associations can be defined here
+    Trip.belongsTo(models.Driver, { foreignKey: 'driverId', as: 'driver' });
     Trip.belongsToMany(models.Driver, {
       foreignKey: 'tripId',
       as: 'drivers',
