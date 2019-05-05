@@ -2,15 +2,34 @@
 
 var { BusinessConstant } = require('../models');
 
+var { jsonschema } = require('../config/dependencies');
+var schemas = require('./business-constant-schemas');
+
+
 var BusinessConstantService = {};
 
 BusinessConstantService.name = 'BusinessConstantService';
 
+BusinessConstantService.fitsSchema = (instance, schema, errMsg = null) => {
+
+  var result = jsonschema.validate(instance, schema);
+  if (errMsg && !result.valid){
+    console.log(result.errors); // DEBUG
+    var e = Error();
+    e.name = errMsg;
+    throw e;
+  }
+
+  return result.valid;
+};
+
+/*
 BusinessConstantService.create = async(bcData) => {
   var businessConstant = await BusinessConstant.create(bcData);
   return businessConstant && businessConstant.toJSON ?
     businessConstant.toJSON() : businessConstant;
 };
+*/
 
 BusinessConstantService.update = async(bcName, bcData) => {
   var updated = await BusinessConstant.update(bcData, {
@@ -35,17 +54,12 @@ BusinessConstantService.getByName = async(bcName) => {
 };
 
 BusinessConstantService.updateTripCosts = async(newValues) => {
-  ['k1', 'k2', 'k3', 'k4', 'k5', 'k6'].forEach(
-    (constant) => {
-      if (newValues[constant] < 0){
-        var e = Error();
-        e.name = 'TripCostsConstantIsNegative';
-        throw e;
-      }
-    }
-  );
-  console.log(newValues);// DEBUG
-  return await BusinessConstantService.update('TripCosts', {value: newValues});
+
+  BusinessConstantService.fitsSchema(newValues,
+    schemas.TripCostsSchema, 'BadFormat');
+
+  return await BusinessConstantService.update('TripCosts',
+    {value: newValues});
 };
 
 BusinessConstantService.listAll = async() => {

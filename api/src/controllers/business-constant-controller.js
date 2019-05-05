@@ -31,4 +31,13 @@ BusinessConstantController.listAll = async(req, res, next) => {
   }
 };
 
+BusinessConstantController.getTripCosts = async(req, res, next) => {
+  try {
+    var xd = await BusinessConstantService.getByName('TripCosts');
+    xd ? res.json(xd) : res.status(404).send();
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = BusinessConstantController;
