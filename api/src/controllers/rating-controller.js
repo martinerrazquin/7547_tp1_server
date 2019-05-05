@@ -16,9 +16,8 @@ RatingController.rateDriver = async(req, res, next) => {
 
   try {
     var clientId = req.user.id;
-    var suggestions = req.body.suggestions ? req.body.suggestions : null;
     var xd = await RatingService.rateDriver(clientId, req.params.tripId,
-      req.body.rating, suggestions);
+      req.body.rating, req.body.suggestions);
     xd ? res.json(xd) : res.status(404).send();
   } catch (err) {
     next(err);

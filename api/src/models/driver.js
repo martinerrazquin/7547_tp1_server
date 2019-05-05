@@ -70,11 +70,11 @@ module.exports = (sequelize, Sequelize) => {
         return (typeof value === 'string') ? JSON.parse(value) : value;
       },
     },
-  }, { // TODO: agregar 'suggestions' a exclude?
+  }, {
     defaultScope: {
       attributes: {
         exclude: [
-          'drivingRecordImage', 'policyImage', 'transportImage',
+          'drivingRecordImage', 'policyImage', 'transportImage', 'suggestions',
         ],
       },
     },
