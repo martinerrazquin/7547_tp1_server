@@ -2,6 +2,8 @@
 
 var haversine = require('haversine');
 
+var { schedule } = require('../config/dependencies');
+
 var DriverService = require('./driver-service');
 var TripService = require('./trip-service');
 var RatingService = require('./rating-service');
@@ -114,6 +116,21 @@ DriverSelectionService.getDriver = async(tripData, exclude = []) => {
   return driver;
 };
 
+DriverSelectionService._buildScheduledJob = (tripId, driverId) => {
+  return async() => {
+    console.log('executing scheduled job');
+
+    var status = 'En camino';
+
+    var isAvailable = await DriverService.isAvailable(driverId);
+    if (!isAvailable) {
+      status = 'Cancelado';
+    }
+
+    await TripService.update(tripId, { status });
+  };
+};
+
 DriverSelectionService.startDriverSearch = async(trip) => {
   var exclude = [];
   var driver = await DriverSelectionService.getDriver(trip, exclude);
@@ -157,6 +174,10 @@ DriverSelectionService.startDriverSearch = async(trip) => {
     trip.status = 'En camino';
   } else { // driver accepted programmed trip
     trip.status = 'Reservado';
+    schedule.scheduleJob(
+      trip.reservationDate,
+      DriverSelectionService._buildScheduledJob(trip.id, driver.id)
+    );
   }
 
   await TripService.update(trip.id, trip);
