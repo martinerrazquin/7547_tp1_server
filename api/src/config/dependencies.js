@@ -20,5 +20,7 @@ module.exports = {
   FacebookStrategy: require('passport-facebook-token'),
   jwt: require('jsonwebtoken'),
   moment: require('moment'),
+  jsonschema: require('jsonschema'),
+  cors: require('cors'),
   schedule: require('node-schedule'),
 };

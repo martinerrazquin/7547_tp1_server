@@ -8,14 +8,18 @@
     "test": "mocha api/test/**/*",
     "covered-test": "nyc mocha api/test/**/*",
     "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
-    "db:migrate": "./node_modules/.bin/sequelize db:migrate"
+    "db:migrate": "./node_modules/.bin/sequelize db:migrate",
+    "db:seed:all": "./node_modules/.bin/sequelize db:seed:all",
+    "db:seed:undo:all": "./node_modules/.bin/sequelize db:seed:undo:all"
   },
   "dependencies": {
     "@google/maps": "^0.5.5",
+    "cors": "^2.8.5",
     "debug": "~2.6.9",
     "express": "^4.16.4",
     "geolocation-utils": "^1.2.1",
     "haversine": "^1.1.1",
+    "jsonschema": "^1.2.4",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
     "morgan": "~1.9.0",
