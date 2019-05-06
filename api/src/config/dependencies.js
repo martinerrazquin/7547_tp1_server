@@ -21,4 +21,5 @@ module.exports = {
   jwt: require('jsonwebtoken'),
   moment: require('moment'),
   jsonschema: require('jsonschema'),
+  cors: require('cors'),
 };

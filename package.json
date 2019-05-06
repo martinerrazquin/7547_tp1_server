@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@google/maps": "^0.5.5",
+    "cors": "^2.8.5",
     "debug": "~2.6.9",
     "express": "^4.16.4",
     "geolocation-utils": "^1.2.1",
