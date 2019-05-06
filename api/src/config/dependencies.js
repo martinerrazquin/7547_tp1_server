@@ -22,4 +22,5 @@ module.exports = {
   moment: require('moment'),
   jsonschema: require('jsonschema'),
   cors: require('cors'),
+  schedule: require('node-schedule'),
 };
