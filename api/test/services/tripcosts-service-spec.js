@@ -4,7 +4,7 @@ var chai = require('chai');
 var sinon = require('sinon');
 var { TripCostsService } = require('../../src/services');
 
-// var { BusinessConstant } = require('../../src/models');
+var { TripCost } = require('../../src/models');
 var _ = require('lodash');
 
 var data = require('./tripcosts-service-spec-data');
@@ -14,7 +14,7 @@ var c = data => _.cloneDeep(data);
 describe('TripCosts Service Test', () => {
 
   before(() => {
-    sinon.stub(TripCostsService, 'newTripCosts').callsFake(
+    sinon.stub(TripCost, 'create').callsFake(
       async(bcData) => {
         bcData.createdAt = new Date();
         bcData.updatedAt = new Date();
