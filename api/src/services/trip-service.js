@@ -77,6 +77,30 @@ TripService.getLocationData = async(tripId) => {
   return resp;
 };
 
+const addDriverNameToTripData = async (tripData) => {
+  try{
+    var user = await User.findByPk(tripData.driver.userId);
+    var name = user.name;
+  }
+  catch (e) {
+    name = null;
+  }
+  tripData.driverName = name;
+  return tripData;
+};
+
+const addClientNameToTripData = async (tripData) => {
+  try{
+    var user = await User.findByPk(tripData.clientId);
+    var name = user.name;
+  }
+  catch (e) {
+    name = null;
+  }
+  tripData.clientName = name;
+  return tripData;
+};
+
 TripService.list = async(page = 0, options = {}) => {
   var trips = await Trip.findAll({
     offset: page * PAGE_SIZE,
@@ -85,35 +109,12 @@ TripService.list = async(page = 0, options = {}) => {
       { model: Driver, as: 'driver', required: false },
     ],
   });
-  console.log("trips JSON'd"); //DEBUG
   trips = trips.map( tripData => tripData.toJSON());
-  console.log(trips); //DEBUG
-
   if (options.driverName){
-    trips = await Promise.all(trips.map(
-        async(tripData) => {
-          var driverName = null;
-          if (tripData.driver){
-            driverName = await User.findByPk(tripData.driver.userId);
-            driverName = driverName ? driverName.name : null;
-          }
-          tripData.driverName = driverName;
-          return  tripData;
-        }
-    ));
+    trips = await Promise.all(trips.map(addDriverNameToTripData));
   }
   if (options.clientName){
-    trips = await Promise.all(trips.map(
-      async(tripData) => {
-        var clientName = null;
-        if (tripData.clientId){
-          clientName = await User.findByPk(tripData.clientId);
-          clientName = clientName ? clientName.name : null;
-        }
-        tripData.clientName = clientName;
-        return tripData;
-      }
-    ));
+    trips = await Promise.all(trips.map(addClientNameToTripData));
   }
   return trips;
 };
