@@ -69,4 +69,13 @@ TripController.getLocation = async(req, res, next) => {
   }
 };
 
+TripController.list = async(req, res, next) => {
+  try {
+    var tripsWithNames = await TripService.list(req.query.page,
+      {driverName: true, clientName: true});
+    res.json(tripsWithNames);
+  } catch (err) {
+    next(err);
+  }
+};
 module.exports = TripController;

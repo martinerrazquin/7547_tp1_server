@@ -1,8 +1,11 @@
 'use strict';
 
-var { Trip, Driver } = require('../models');
+var { Trip, Driver, User } = require('../models');
+
+const PAGE_SIZE = 10;
 
 var TripService = {};
+
 TripService.name = 'TripService';
 
 TripService.create = async(tripData) => {
@@ -72,6 +75,47 @@ TripService.getLocationData = async(tripId) => {
     resp.currentLocation = trip.driver.currentLocation;
   }
   return resp;
+};
+
+TripService.list = async(page = 0, options = {}) => {
+  var trips = await Trip.findAll({
+    offset: page * PAGE_SIZE,
+    limit: PAGE_SIZE,
+    include: [
+      { model: Driver, as: 'driver', required: false },
+    ],
+  });
+  console.log("trips JSON'd"); //DEBUG
+  trips = trips.map( tripData => tripData.toJSON());
+  console.log(trips); //DEBUG
+
+  if (options.driverName){
+    trips = await Promise.all(trips.map(
+        async(tripData) => {
+          var driverName = null;
+          if (tripData.driver){
+            driverName = await User.findByPk(tripData.driver.userId);
+            driverName = driverName ? driverName.name : null;
+          }
+          tripData.driverName = driverName;
+          return  tripData;
+        }
+    ));
+  }
+  if (options.clientName){
+    trips = await Promise.all(trips.map(
+      async(tripData) => {
+        var clientName = null;
+        if (tripData.clientId){
+          clientName = await User.findByPk(tripData.clientId);
+          clientName = clientName ? clientName.name : null;
+        }
+        tripData.clientName = clientName;
+        return tripData;
+      }
+    ));
+  }
+  return trips;
 };
 
 module.exports = TripService;
