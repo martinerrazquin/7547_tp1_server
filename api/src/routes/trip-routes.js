@@ -8,8 +8,8 @@ module.exports = (app) => {
     .post(
       auth.facebookAuthenticate,
       auth.authorize('client'),
-      TripController.create
-    );
+      TripController.create)
+    .get(TripController.list);
 
   app.route('/trips/simulated')
     .post(
