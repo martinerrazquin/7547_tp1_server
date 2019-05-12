@@ -34,6 +34,7 @@ AuthController.register = (type) => {
 
     try {
       req.body.facebookId = req.user.facebookId;
+      req.body.name = req.user.name;
       var user;
       if (type === 'driver') {
         user = await UserService.createDriver(req.body);

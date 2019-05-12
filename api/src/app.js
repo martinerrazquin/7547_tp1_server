@@ -20,7 +20,7 @@ passport.use(new FacebookStrategy({
   try {
     var user = await UserService.getByFacebookId(profile.id, 'withDriverId');
     if (!user) {
-      user = { facebookId: profile.id };
+      user = { facebookId: profile.id, name: profile.displayName };
     }
     done(null, user);
   } catch (err) {
