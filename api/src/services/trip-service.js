@@ -114,7 +114,8 @@ TripService.list = async(page = 0, options = {}) => {
   if (options.clientName){
     trips = await Promise.all(trips.map(addClientNameToTripData));
   }
-  return trips;
+  var tripCount = await Trip.count();
+  return { pageContents: trips, total: tripCount };
 };
 
 module.exports = TripService;

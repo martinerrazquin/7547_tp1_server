@@ -16,6 +16,7 @@ describe('Trip Service', () => {
   before(() => {
     sinon.stub(User, 'findByPk');
     sinon.stub(Trip, 'findAll');
+    sinon.stub(Trip, 'count');
   });
 
   after(() => {
@@ -30,8 +31,9 @@ describe('Trip Service', () => {
 
     it('should return empty array when no results were found', async() => {
       Trip.findAll.resolves([]);
+      Trip.count.resolves(0);
       var res = await tripList();
-      chai.assert.deepEqual(res, [], 'not empty');
+      chai.assert.deepEqual(res, { pageContents: [], total: 0 }, 'not empty');
 
     });
 
@@ -48,10 +50,15 @@ describe('Trip Service', () => {
 
       User.findByPk.resolves({name: mockedName});
       Trip.findAll.resolves(mockedTrips);
+      Trip.count.resolves(mockedTrips.length);
 
       var res = await tripList();
 
-      chai.assert.deepEqual(res, expected, 'not the same');
+      chai.assert.deepEqual(
+        res,
+        { pageContents: expected, total: expected.length },
+        'not the same'
+      );
     });
   });
 
