@@ -31,11 +31,13 @@ TripCostsService.newTripCosts = async(newValues) => {
 };
 
 TripCostsService.listAll = async(page = 0) => {
-  return await TripCost.findAll({
+  var tripCosts = await TripCost.findAll({
     offset: page * PAGE_SIZE,
     limit: PAGE_SIZE,
     order: [['createdAt', 'DESC']],
   });
+  var tripCostsCount = await TripCost.count();
+  return { pageContents: tripCosts, total: tripCostsCount };
 };
 
 module.exports = TripCostsService;
