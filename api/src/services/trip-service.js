@@ -77,24 +77,22 @@ TripService.getLocationData = async(tripId) => {
   return resp;
 };
 
-const addDriverNameToTripData = async (tripData) => {
-  try{
+const addDriverNameToTripData = async(tripData) => {
+  try {
     var user = await User.findByPk(tripData.driver.userId);
     var name = user.name;
-  }
-  catch (e) {
+  } catch (e) {
     name = null;
   }
   tripData.driverName = name;
   return tripData;
 };
 
-const addClientNameToTripData = async (tripData) => {
-  try{
+const addClientNameToTripData = async(tripData) => {
+  try {
     var user = await User.findByPk(tripData.clientId);
     var name = user.name;
-  }
-  catch (e) {
+  } catch (e) {
     name = null;
   }
   tripData.clientName = name;
@@ -109,7 +107,7 @@ TripService.list = async(page = 0, options = {}) => {
       { model: Driver, as: 'driver', required: false },
     ],
   });
-  trips = trips.map( tripData => tripData.toJSON());
+  trips = trips.map(tripData => tripData.toJSON());
   if (options.driverName){
     trips = await Promise.all(trips.map(addDriverNameToTripData));
   }
