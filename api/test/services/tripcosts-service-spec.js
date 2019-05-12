@@ -2,20 +2,24 @@
 
 var chai = require('chai');
 var sinon = require('sinon');
-var { BusinessConstantService } = require('../../src/services');
+var { TripCostsService } = require('../../src/services');
 
-// var { BusinessConstant } = require('../../src/models');
+var { TripCost } = require('../../src/models');
 var _ = require('lodash');
 
-var data = require('./business-constant-service-spec-data');
+var data = require('./tripcosts-service-spec-data');
 
 var c = data => _.cloneDeep(data);
 
-describe('BusinessConstant Service Test', () => {
+describe('TripCosts Service Test', () => {
 
   before(() => {
-    sinon.stub(BusinessConstantService, 'update').callsFake(
-      async(bcName, bcData) => { return bcData; });
+    sinon.stub(TripCost, 'create').callsFake(
+      async(bcData) => {
+        bcData.createdAt = new Date();
+        bcData.updatedAt = new Date();
+        return bcData;
+      });
   });
 
   after(() => {
@@ -26,13 +30,13 @@ describe('BusinessConstant Service Test', () => {
     sinon.resetHistory();
   });
 
-  describe('updateTripCosts', () => {
+  describe('newTripCosts', () => {
 
     it('should raise BadFormat error when req lacking a field',
       async() => {
 
         try {
-          await BusinessConstantService.updateTripCosts(
+          await TripCostsService.newTripCosts(
             c(data.tripCostsLackingFieldValues));
         } catch (err) {
           chai.assert.equal(err.name, 'BadFormat',
@@ -45,7 +49,7 @@ describe('BusinessConstant Service Test', () => {
       async() => {
 
         try {
-          await BusinessConstantService.updateTripCosts(
+          await TripCostsService.newTripCosts(
             c(data.tripCostsOneNegativeValues));
         } catch (err) {
           chai.assert.equal(err.name, 'BadFormat',
@@ -56,9 +60,13 @@ describe('BusinessConstant Service Test', () => {
     it('should return updated data when all fields are ok',
       async() => {
 
-        var res = await BusinessConstantService.updateTripCosts(
+        var res = await TripCostsService.newTripCosts(
           c(data.tripCostsOKValues));
-        var expected = {value: c(data.tripCostsOKValues)};
+        var expected = c(data.tripCostsOKValues);
+
+        // delete date values
+        delete res.createdAt;
+        delete res.updatedAt;
 
         chai.assert.deepEqual(res, expected,
           'tripcosts not updated correctly');
