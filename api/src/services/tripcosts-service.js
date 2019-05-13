@@ -16,8 +16,8 @@ TripCostsService.retrieve = async() => {
   var tripCosts = await TripCost.findAll(
     {limit: 1, order: [['createdAt', 'DESC']]});
 
-  return tripCosts && tripCosts.toJSON ?
-    tripCosts.toJSON() : tripCosts;
+  return tripCosts[0] && tripCosts[0].toJSON ?
+    tripCosts[0].toJSON() : tripCosts;
 };
 
 TripCostsService.newTripCosts = async(newValues) => {
