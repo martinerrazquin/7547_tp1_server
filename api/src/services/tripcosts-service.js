@@ -4,7 +4,7 @@ var { TripCost } = require('../models');
 
 var schema = require('./business-constant-schemas').TripCostsSchema;
 var BusinessConstantService = require('./business-constant-service');
-// var MapsService = require('./maps-service');
+var MapsService = require('./maps-service');
 
 const PAGE_SIZE = 10;
 
@@ -61,14 +61,21 @@ TripCostsService.listAll = async(page = 0) => {
 
 
 TripCostsService.calculateCost = async(tripData) => {
-  console.log(tripData);
   var tripCosts = await TripCostsService.retrieve();
-  console.log(tripCosts);
-  var distance = 10.0; // FIXME
-  tripData.distance = distance;
+
+
+  var directions = await MapsService.
+    getDirections([tripData.origin,tripData.destination]);
+  try{
+    var distance = directions.routes[0].legs[0].distance.value;
+    distance = distance / 1000.0; //IMPORTANT: distance was expressed in meters
+  } catch (e) {
+    distance = null;
+  }
+  console.log(distance);
+  tripData.distance = 10.0; // FIXME
 
   var cost = calculateTripCost(tripCosts, tripData);
-  console.log(cost);
   return cost;
 };
 

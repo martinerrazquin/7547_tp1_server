@@ -24,4 +24,22 @@ MapsService.getDirections = async(waypoints) => {
   return response.json;
 };
 
+MapsService.googleMapsDistance = async(origin, destination) => {
+  var route = await MapsService.getDirections([origin,destination]);
+
+  if (!route || !route.routes
+      || !route.routes[0]
+      || !route.routes[0].legs
+      || !route.routes[0].legs[0]) {
+    var e = Error();
+    e.name = 'NoRoutesFound';
+    throw e;
+  }
+  var distanceInMeters = route.routes[0].legs[0].distance.value;
+
+  var distanceInKm = distanceInMeters / 1000.0;
+
+  return distanceInKm;
+};
+
 module.exports = MapsService;
