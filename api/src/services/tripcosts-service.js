@@ -29,14 +29,10 @@ TripCostsService.name = 'TripCostsService';
 TripCostsService.retrieve = async() => {
   // find highest createdAt one
   var tripCosts = await TripCost.findAll(
-    {limit: 1, order: [['createdAt', 'DESC']]});
+      {limit: 1, order: [['createdAt', 'DESC']]});
 
-  try{
-    return tripCosts[0].toJSON();
-  }
-  catch (e) {
-    return null;
-  }
+  return tripCosts[0] && tripCosts[0].toJSON ?
+      tripCosts[0].toJSON() : tripCosts;
 };
 
 TripCostsService.newTripCosts = async(newValues) => {
