@@ -25,7 +25,7 @@ MapsService.getDirections = async(waypoints) => {
 };
 
 MapsService.googleMapsDistance = async(origin, destination) => {
-  var route = await MapsService.getDirections([origin,destination]);
+  var route = await MapsService.getDirections([origin, destination]);
 
   if (!route || !route.routes
       || !route.routes[0]

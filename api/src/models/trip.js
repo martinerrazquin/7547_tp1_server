@@ -81,6 +81,10 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.JSONB,
       allowNull: true,
     },
+    cost: {
+      type: Sequelize.FLOAT,
+      allowNull: false,
+    },
     clientRating: {
       type: Sequelize.JSONB,
       allowNull: true,

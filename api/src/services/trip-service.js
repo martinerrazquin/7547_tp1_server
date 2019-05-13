@@ -1,6 +1,7 @@
 'use strict';
 
 var { Trip, Driver, User } = require('../models');
+var TripCostsService = require('./tripcosts-service');
 
 const PAGE_SIZE = 10;
 
@@ -12,6 +13,10 @@ TripService.create = async(tripData) => {
   delete tripData.id;
   delete tripData.status;
   delete tripData.driverId;
+  // add cost
+  tripData.cost = await TripCostsService.calculateCost(tripData.origin,
+    tripData.destination);
+
   var trip = await Trip.create(tripData);
   return trip && trip.toJSON ? trip.toJSON() : trip;
 };

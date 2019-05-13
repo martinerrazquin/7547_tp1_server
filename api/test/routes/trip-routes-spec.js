@@ -5,13 +5,18 @@ var chaiHttp = require('chai-http');
 var sinon = require('sinon');
 var app = require('../../src/app');
 var { Trip, Driver } = require('../../src/models');
-var { MapsService, DriverSelectionService } = require('../../src/services');
+var { MapsService, DriverSelectionService,
+  TripCostsService } = require('../../src/services');
 var { auth } = require('../../src/middleware');
+var _ = require('lodash');
 
 var data = require('./trip-routes-spec-data');
 
+var c = data => _.cloneDeep(data);
+
 chai.use(chaiHttp);
 
+const EXPECTED_COST = 10.2;
 
 describe('Trip Routes Test', () => {
   before(() => {
@@ -30,6 +35,8 @@ describe('Trip Routes Test', () => {
       req.user = data.userData;
       next();
     });
+    sinon.stub(TripCostsService, 'calculateCost');
+    TripCostsService.calculateCost.resolves(EXPECTED_COST);
   });
 
   var clock;
@@ -76,7 +83,10 @@ describe('Trip Routes Test', () => {
 
   describe('POST /trips', () => {
     it('should return ok when trip is valid', async() => {
-      Trip.create.returns(data.tripData);
+      var expected = c(data.tripData);
+      expected.cost = EXPECTED_COST;
+
+      Trip.create.returns(expected);
 
       var res = await chai.request(app)
         .post('/trips')
@@ -92,7 +102,7 @@ describe('Trip Routes Test', () => {
       );
       chai.assert.deepEqual(
         res.body,
-        data.tripData,
+        expected,
         'Response was not what was expected'
       );
     });
@@ -210,6 +220,9 @@ describe('Trip Routes Test', () => {
           origin: data.tripData.origin,
           destination: data.tripData.destination,
         });
+
+      var expected = c(data.confirmedTripData);
+      expected.cost = EXPECTED_COST;
 
       chai.assert.strictEqual(
         res.status,

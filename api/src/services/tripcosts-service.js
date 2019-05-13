@@ -29,10 +29,10 @@ TripCostsService.name = 'TripCostsService';
 TripCostsService.retrieve = async() => {
   // find highest createdAt one
   var tripCosts = await TripCost.findAll(
-      {limit: 1, order: [['createdAt', 'DESC']]});
+    {limit: 1, order: [['createdAt', 'DESC']]});
 
   return tripCosts[0] && tripCosts[0].toJSON ?
-      tripCosts[0].toJSON() : tripCosts;
+    tripCosts[0].toJSON() : tripCosts;
 };
 
 TripCostsService.newTripCosts = async(newValues) => {
@@ -59,20 +59,14 @@ TripCostsService.listAll = async(page = 0) => {
 TripCostsService.calculateCost = async(tripData) => {
   var tripCosts = await TripCostsService.retrieve();
 
+  var distance = await MapsService.googleMapsDistance(tripData.origin,
+    tripData.destination);
 
-  var directions = await MapsService.
-    getDirections([tripData.origin,tripData.destination]);
-  try{
-    var distance = directions.routes[0].legs[0].distance.value;
-    distance = distance / 1000.0; //IMPORTANT: distance was expressed in meters
-  } catch (e) {
-    distance = null;
-  }
-  console.log(distance);
-  tripData.distance = 10.0; // FIXME
+  tripData.distance = distance;
 
   var cost = calculateTripCost(tripCosts, tripData);
-  return cost;
+
+  return Number.parseFloat(cost.toFixed(2)); // round 2 decimals
 };
 
 module.exports = TripCostsService;
