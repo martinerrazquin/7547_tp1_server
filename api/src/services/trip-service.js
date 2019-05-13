@@ -14,8 +14,7 @@ TripService.create = async(tripData) => {
   delete tripData.status;
   delete tripData.driverId;
   // add cost
-  tripData.cost = await TripCostsService.calculateCost(tripData.origin,
-    tripData.destination);
+  tripData.cost = await TripCostsService.calculateCost(tripData);
 
   var trip = await Trip.create(tripData);
   return trip && trip.toJSON ? trip.toJSON() : trip;

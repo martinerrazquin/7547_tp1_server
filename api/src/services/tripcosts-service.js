@@ -59,6 +59,9 @@ TripCostsService.listAll = async(page = 0) => {
 TripCostsService.calculateCost = async(tripData) => {
   var tripCosts = await TripCostsService.retrieve();
 
+  //hotfix for bringsEscort
+  tripData.bringsEscort = tripData.bringsEscort ? 1 : 0;
+
   var distance = await MapsService.googleMapsDistance(tripData.origin,
     tripData.destination);
 
