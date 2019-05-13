@@ -11,4 +11,7 @@ module.exports = (app) => {
 
   app.route('/manage/constants/tripcosts/history')
     .get(TripCostsController.listAll);
+
+  app.route('/info/costs')
+    .post(TripCostsController.calculateCost);
 };

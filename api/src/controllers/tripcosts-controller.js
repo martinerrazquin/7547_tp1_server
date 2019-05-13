@@ -33,4 +33,13 @@ TripCostsController.retrieve = async(req, res, next) => {
   }
 };
 
+TripCostsController.calculateCost = async(req, res, next) => {
+  try {
+    var xd = await TripCostsService.calculateCost(req.body);
+    xd ? res.json(xd) : res.status(500).send();
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = TripCostsController;
