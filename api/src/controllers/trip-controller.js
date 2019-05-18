@@ -4,6 +4,7 @@ var {
   TripService,
   SimulationService,
   DriverSelectionService,
+  MapsService
 } = require('../services');
 
 var TripController = {};
@@ -88,6 +89,22 @@ TripController.list = async(req, res, next) => {
     var tripsWithNames = await TripService.list(req.query.page,
       {driverName: true, clientName: true});
     res.json(tripsWithNames);
+  } catch (err) {
+    next(err);
+  }
+};
+
+TripController.calculateRoute = async(req, res, next) => {
+  try {
+    if (!(req.body.origin && req.body.destination &&
+      req.body.origin.lat && req.body.destination.lat &&
+      req.body.origin.lng && req.body.destination.lng)){
+      res.status(400).send();
+    }
+    var origin = req.body.origin;
+    var destination = req.body.destination;
+    var waypoints = await MapsService.getWaypoints(origin, destination);
+    res.json({waypoints: waypoints});
   } catch (err) {
     next(err);
   }

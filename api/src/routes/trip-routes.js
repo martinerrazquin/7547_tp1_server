@@ -39,4 +39,7 @@ module.exports = (app) => {
 
   app.route('/trips/:tripId/status/cancelled')
     .put(TripController.updateStatus('Cancelado'));
+
+  app.route('/info/route')
+    .post(TripController.calculateRoute);
 };
