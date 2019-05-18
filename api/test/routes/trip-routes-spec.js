@@ -30,6 +30,12 @@ describe('Trip Routes Test', () => {
       req.user = data.userData;
       next();
     });
+
+    sinon.stub(auth, '_authenticate');
+    auth._authenticate.callsFake((req, res, next) => {
+      req.user = data.userData;
+      next();
+    });
   });
 
   var clock;

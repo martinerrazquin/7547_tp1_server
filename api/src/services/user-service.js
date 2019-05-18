@@ -38,9 +38,9 @@ UserService.getByFacebookId = async(facebookId, scope = 'defaultScope') => {
   });
 };
 
-UserService.getByFacebookToken = async(facebookToken, scope = 'defaultScope') => {
+UserService.getByFacebookToken = async(fbToken, scope = 'defaultScope') => {
   return await User.scope(scope).findOne({
-    where: { facebookToken: facebookToken },
+    where: { facebookToken: fbToken },
   });
 };
 

@@ -23,6 +23,11 @@ describe('Driver Routes Test', () => {
       req.user = user;
       next();
     });
+    sinon.stub(auth, '_authenticate');
+    auth._authenticate.callsFake((req, res, next) => {
+      req.user = user;
+      next();
+    });
     sinon.stub(Driver, 'update');
     Driver.update.callsFake((newData) => {
       return [1, [Object.assign({}, data.driverUser.driverData, newData)]];
