@@ -19,7 +19,9 @@ passport.use(new FacebookStrategy({
 }, async(accessToken, refreshToken, profile, done) => {
   try {
     var user = await UserService.getByFacebookId(profile.id, 'withDriverId');
-    if (!user) {
+    if (user) {
+      await UserService.update(user.id, { facebookToken: accessToken });
+    } else {
       user = { facebookId: profile.id, name: profile.displayName };
     }
     done(null, user);
