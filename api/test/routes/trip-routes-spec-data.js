@@ -455,4 +455,125 @@ module.exports = {
     ],
     status: 'OK',
   },
+  mockRouteData: {
+    geocoded_waypoints: [
+      {
+        geocoder_status: 'OK',
+        place_id: 'ChIJJRvFAqSwvJURV3WLE561pQo',
+        types: [
+          'street_address',
+        ],
+      },
+      {
+        geocoder_status: 'OK',
+        place_id: 'ChIJ93ClWdQ0o5URm9A8FLINDuI',
+        types: [
+          'street_address',
+        ],
+      },
+    ],
+    routes: [
+      {
+        bounds: {
+          northeast: {
+            lat: -34.5300926,
+            lng: -58.3659322,
+          },
+          southwest: {
+            lat: -34.64951320000001,
+            lng: -58.5486117,
+          },
+        },
+        copyrights: 'Map data ©2019 Google',
+        legs: [
+          {
+            distance: {
+              text: '31.4 km',
+              value: 31381,
+            },
+            duration: {
+              text: '41 mins',
+              value: 2463,
+            },
+            end_address: 'Av. Paseo Colón 800, C1063ACU CABA, Argentina',
+            end_location: {
+              lat: 4,
+              lng: 4,
+            },
+            start_address: 'Rafael Obligado 6692, B1606AOP Villa' +
+              'Adelina, Buenos Aires, Argentina',
+            start_location: {
+              lat: 1,
+              lng: 1,
+            },
+            steps: [
+              {
+                distance: {
+                  text: '0.2 km',
+                  value: 159,
+                },
+                duration: {
+                  text: '1 min',
+                  value: 34,
+                },
+                end_location: {
+                  lat: 2,
+                  lng: 2,
+                },
+                start_location: {
+                  lat: 1,
+                  lng: 1,
+                },
+                travel_mode: 'DRIVING',
+              },
+              {
+                distance: {
+                  text: '0.2 km',
+                  value: 159,
+                },
+                duration: {
+                  text: '1 min',
+                  value: 34,
+                },
+                end_location: {
+                  lat: 3,
+                  lng: 3,
+                },
+                start_location: {
+                  lat: 2,
+                  lng: 2,
+                },
+                travel_mode: 'DRIVING',
+              },
+              {
+                distance: {
+                  text: '0.2 km',
+                  value: 159,
+                },
+                duration: {
+                  text: '1 min',
+                  value: 34,
+                },
+                end_location: {
+                  lat: 4,
+                  lng: 4,
+                },
+                start_location: {
+                  lat: 3,
+                  lng: 3,
+                },
+                travel_mode: 'DRIVING',
+              },
+            ],
+            traffic_speed_entry: [],
+            via_waypoint: [],
+          },
+        ],
+        summary: 'Au 25 de Mayo',
+        warnings: [],
+        waypoint_order: [],
+      },
+    ],
+    status: 'OK',
+  },
 };
