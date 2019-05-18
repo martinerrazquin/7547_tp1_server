@@ -26,4 +26,31 @@ module.exports = {
     k5: 1,
     k6: 1,
   },
+
+  tripData: {
+    origin: {
+      lat: 34.023,
+      lng: 30.001,
+      address: 'lo de pepe',
+    },
+    destination: {
+      lat: 15,
+      lng: 20,
+      address: 'lo de juan',
+    },
+    id: 76,
+    status: 'Buscando',
+    driverId: null,
+    petQuantities: {
+      big: 1,
+      small: 0,
+      medium: 0,
+    },
+    bringsEscort: true,
+    paymentMethod: 'mp',
+    comments: '',
+    clientId: 6,
+    createdAt: '2019-05-04T19:48:13.503Z',
+    updatedAt: '2019-05-05T00:15:53.577Z',
+  },
 };

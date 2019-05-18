@@ -2,7 +2,7 @@
 
 var chai = require('chai');
 var sinon = require('sinon');
-var { TripCostsService } = require('../../src/services');
+var { TripCostsService, MapsService } = require('../../src/services');
 
 var { TripCost } = require('../../src/models');
 var _ = require('lodash');
@@ -20,6 +20,8 @@ describe('TripCosts Service Test', () => {
         bcData.updatedAt = new Date();
         return bcData;
       });
+    sinon.stub(MapsService, 'googleMapsDistance');
+    sinon.stub(TripCostsService, 'retrieve');
   });
 
   after(() => {
@@ -73,5 +75,32 @@ describe('TripCosts Service Test', () => {
 
       });
   });
+
+  describe('calculateCost', () => {
+
+    it('should return expected cost value',
+      async() => {
+        var fakeDist = 10;
+        var d = c(data.tripCostsOKValues);
+        var trip = c(data.tripData);
+
+        TripCostsService.retrieve.returns(d);
+        MapsService.googleMapsDistance.returns(fakeDist);
+
+        var res = await TripCostsService.calculateCost(
+          trip);
+        var expected = (d.k1 * trip.petQuantities.small +
+          d.k2 * trip.petQuantities.medium +
+          d.k3 * trip.petQuantities.big +
+          d.k4 * (trip.bringsEscort ? 1 : 0)) *
+          fakeDist * d.k5 + d.k6;
+
+
+        chai.assert.deepEqual(res, expected,
+          'trip costs not calculated correctly');
+
+      });
+  });
+
 
 });
