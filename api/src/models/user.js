@@ -106,6 +106,10 @@ module.exports = (sequelize, type) => {
               },
               // attributes: [],
             },
+            include: [{
+              association: 'client',
+              attributes: [ 'name' ]
+            }],
             required: false,
           }],
         }],
