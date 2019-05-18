@@ -4,7 +4,7 @@ var {
   TripService,
   SimulationService,
   DriverSelectionService,
-  MapsService
+  MapsService,
 } = require('../services');
 
 var TripController = {};

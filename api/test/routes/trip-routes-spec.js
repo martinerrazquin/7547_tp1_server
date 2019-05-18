@@ -287,4 +287,52 @@ describe('Trip Routes Test', () => {
       );
     });
   });
+
+  describe('POST /info/route', () => {
+
+    it('should return 400 when no routes found', async() => {
+      MapsService.getDirections.resolves({});
+
+      var res = await chai.request(app)
+        .post('/info/route')
+        .send({
+          origin: data.tripData.origin,
+          destination: data.tripData.destination,
+        });
+
+      chai.assert.strictEqual(
+        res.status,
+        400,
+        'Status was not 400'
+      );
+
+    });
+
+    it('should return list of waypoints when route is found', async() => {
+      MapsService.getDirections.resolves(data.mockRouteData);
+
+      var res = await chai.request(app)
+        .post('/info/route')
+        .send({
+          origin: data.tripData.origin,
+          destination: data.tripData.destination,
+        });
+
+      chai.assert.strictEqual(
+        res.status,
+        200,
+        'Status was not 200'
+      );
+
+      chai.assert.deepEqual(
+        res.body.waypoints,
+        [{lat: 1, lng: 1},
+          {lat: 2, lng: 2},
+          {lat: 3, lng: 3},
+          {lat: 4, lng: 4 }],
+        'Response was not what was expected'
+      );
+
+    });
+  });
 });
