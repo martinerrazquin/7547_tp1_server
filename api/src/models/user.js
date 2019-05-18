@@ -15,6 +15,11 @@ module.exports = (sequelize, type) => {
       allowNull: false,
       unique: true,
     },
+    facebookToken: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: 'invalid',
+    },
     email: {
       type: type.STRING,
       allowNull: false,
@@ -47,6 +52,9 @@ module.exports = (sequelize, type) => {
           ],
         },
       }],
+      attributes: {
+        exclude: ['facebookToken'],
+      },
     },
     scopes: {
       withDriverId: {

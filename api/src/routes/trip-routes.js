@@ -6,14 +6,14 @@ var { TripController } = require('../controllers');
 module.exports = (app) => {
   app.route('/trips')
     .post(
-      auth.facebookAuthenticate,
+      auth.authenticate,
       auth.authorize('client'),
       TripController.create
     );
 
   app.route('/trips/simulated')
     .post(
-      auth.facebookAuthenticate,
+      auth.authenticate,
       auth.authorize('client'),
       TripController.createSimulated
     );

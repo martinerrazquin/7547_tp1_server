@@ -38,6 +38,26 @@ UserService.getByFacebookId = async(facebookId, scope = 'defaultScope') => {
   });
 };
 
+UserService.getByFacebookToken = async(facebookToken, scope = 'defaultScope') => {
+  return await User.scope(scope).findOne({
+    where: { facebookToken: facebookToken },
+  });
+};
+
+UserService.update = async(userId, userData) => {
+  var updated = await User.update(userData, {
+    returning: true,
+    where: { id: userId },
+  });
+
+  if (updated.length === 1) {
+    return null;
+  } else {
+    var user = updated[1][0];
+    return user.toJSON ? user.toJSON() : user;
+  }
+};
+
 UserService.delete = async(userId) => {
   return await User.destroy({ where: { id: userId } });
 };

@@ -6,7 +6,7 @@ var { UserController } = require('../controllers');
 module.exports = (app) => {
   app.route('/drivers/status')
     .put(
-      auth.facebookAuthenticate,
+      auth.authenticate,
       auth.authorize('driver'),
       UserController.updateDriverStatus
     );
