@@ -24,4 +24,19 @@ module.exports = (app) => {
 
   app.route('/trips/:tripId/location')
     .get(TripController.getLocation);
+
+  app.route('/trips/:tripId/status/atorigin')
+    .put(TripController.updateStatus('En origen'));
+
+  app.route('/trips/:tripId/status/travelling')
+    .put(TripController.updateStatus('En viaje'));
+
+  app.route('/trips/:tripId/status/atdestination')
+    .put(TripController.updateStatus('Llegamos'));
+
+  app.route('/trips/:tripId/status/finished')
+    .put(TripController.updateStatus('Finalizado'));
+
+  app.route('/trips/:tripId/status/cancelled')
+    .put(TripController.updateStatus('Cancelado'));
 };
