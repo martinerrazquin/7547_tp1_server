@@ -60,6 +60,20 @@ TripController.update = async(req, res, next) => {
   }
 };
 
+TripController.updateStatus = (newStatus) => {
+  return async(req, res, next) => {
+    try {
+      var trip = await TripService.update(
+        req.params.tripId,
+        {status: newStatus}
+      );
+      trip ? res.json(trip) : res.status(404).send();
+    } catch (err) {
+      next(err);
+    }
+  };
+};
+
 TripController.getLocation = async(req, res, next) => {
   try {
     var locationData = await TripService.getLocationData(req.params.tripId);

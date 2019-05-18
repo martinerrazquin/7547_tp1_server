@@ -96,7 +96,30 @@ module.exports = (sequelize, Sequelize) => {
         },
       },
     },
-  }, {});
+  }, {
+    validate: {
+      isValidTransition() {
+        var oldStatus = this._previousDataValues.status;
+        var newStatus = this.dataValues.status;
+
+        var validTransitions = {
+          Buscando: [ 'En camino', 'Reservado', 'Cancelado' ],
+          'En camino': ['En origen', 'Cancelado'],
+          'En origen': ['En viaje', 'Cancelado'],
+          'En viaje': ['Llegamos', 'Cancelado'],
+          Llegamos: ['Finalizado', 'Cancelado'],
+          Finalizado: [],
+          Cancelado: [],
+          Reservado: ['En camino', 'Cancelado'],
+        };
+
+        if (oldStatus && oldStatus !== newStatus
+          && !validTransitions[oldStatus].includes(newStatus)){
+          throw new Error('InvalidStateTransition');
+        }
+      },
+    },
+  });
 
   Trip.associate = function(models) {
     // associations can be defined here

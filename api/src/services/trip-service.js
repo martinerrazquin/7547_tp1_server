@@ -42,6 +42,7 @@ TripService.update = async(tripId, tripData) => {
   var updated = await Trip.update(tripData, {
     returning: true,
     where: { id: tripId },
+    validate: true,
   });
 
   if (updated.length === 1) {
