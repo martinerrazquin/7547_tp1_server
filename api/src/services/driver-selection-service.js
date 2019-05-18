@@ -2,7 +2,7 @@
 
 var haversine = require('haversine');
 
-var { schedule } = require('../config/dependencies');
+var { schedule, moment } = require('../config/dependencies');
 
 var DriverService = require('./driver-service');
 var TripService = require('./trip-service');
@@ -175,7 +175,7 @@ DriverSelectionService.startDriverSearch = async(trip) => {
   } else { // driver accepted programmed trip
     trip.status = 'Reservado';
     schedule.scheduleJob(
-      trip.reservationDate,
+      moment(trip.reservationDate).add(3, 'hours').format(),
       DriverSelectionService._buildScheduledJob(trip.id, driver.id)
     );
   }
