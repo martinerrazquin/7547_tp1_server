@@ -115,7 +115,7 @@ TripService.list = async(page = 0, options = {}) => {
     include: [
       { model: Driver, as: 'driver', required: false },
     ],
-    order: [['id', 'DESC']]
+    order: [['id', 'DESC']],
   });
   trips = trips.map(tripData => tripData.toJSON());
   if (options.driverName){

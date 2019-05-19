@@ -74,7 +74,7 @@ module.exports = (sequelize, Sequelize) => {
     defaultScope: {
       attributes: {
         exclude: [
-          'drivingRecordImage', 'policyImage', 'transportImage', 'suggestions',
+          'drivingRecordImage', 'policyImage', 'transportImage',
         ],
       },
     },
