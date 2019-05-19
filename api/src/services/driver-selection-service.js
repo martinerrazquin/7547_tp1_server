@@ -175,7 +175,7 @@ DriverSelectionService.startDriverSearch = async(trip) => {
   } else { // driver accepted programmed trip
     trip.status = 'Reservado';
     schedule.scheduleJob(
-      trip.reservationDate + "-03:00",
+      trip.reservationDate,
       DriverSelectionService._buildScheduledJob(trip.id, driver.id)
     );
   }

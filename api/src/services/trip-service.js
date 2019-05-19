@@ -13,6 +13,10 @@ TripService.create = async(tripData) => {
   delete tripData.id;
   delete tripData.status;
   delete tripData.driverId;
+  if (tripData.reservationDate) {
+    tripData.reservationDate = tripData.reservationDate + '-03:00';
+  }
+
   // add cost
   tripData.cost = await TripCostsService.calculateCost(tripData);
 
