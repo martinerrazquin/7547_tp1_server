@@ -1,14 +1,17 @@
 'use strict';
 
 // var { auth } = require('../middleware');
-var { BusinessConstantController } = require('../controllers');
+var { TripCostsController } = require('../controllers');
 
 module.exports = (app) => {
 
   app.route('/manage/constants/tripcosts')
-    .put(BusinessConstantController.updateTripCosts)
-    .get(BusinessConstantController.getTripCosts);
+    .post(TripCostsController.newTripCosts)
+    .get(TripCostsController.retrieve);
 
-  app.route('/manage/constants/')
-    .get(BusinessConstantController.listAll);
+  app.route('/manage/constants/tripcosts/history')
+    .get(TripCostsController.listAll);
+
+  app.route('/info/costs')
+    .post(TripCostsController.calculateCost);
 };

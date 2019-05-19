@@ -4,7 +4,7 @@ var chai = require('chai');
 var chaiHttp = require('chai-http');
 var sinon = require('sinon');
 var app = require('../../src/app');
-var { BusinessConstantService } = require('../../src/services');
+var { TripCostsService } = require('../../src/services');
 
 
 chai.use(chaiHttp);
@@ -12,7 +12,7 @@ chai.use(chaiHttp);
 describe('BusinessConstant Routes Test', () => {
 
   before(() => {
-    sinon.stub(BusinessConstantService, 'getByName');
+    sinon.stub(TripCostsService, 'retrieve');
   });
 
   // var clock;
@@ -28,7 +28,7 @@ describe('BusinessConstant Routes Test', () => {
   describe('GET /manage/constants/tripcosts', () => {
 
     it('should return 404 if not found', async() => {
-      BusinessConstantService.getByName.returns(null);
+      TripCostsService.retrieve.returns(null);
 
       var res = await chai.request(app)
         .get('/manage/constants/tripcosts');

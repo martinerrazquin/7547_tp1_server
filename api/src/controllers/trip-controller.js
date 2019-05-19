@@ -4,6 +4,7 @@ var {
   TripService,
   SimulationService,
   DriverSelectionService,
+  MapsService,
 } = require('../services');
 
 var TripController = {};
@@ -60,6 +61,20 @@ TripController.update = async(req, res, next) => {
   }
 };
 
+TripController.updateStatus = (newStatus) => {
+  return async(req, res, next) => {
+    try {
+      var trip = await TripService.update(
+        req.params.tripId,
+        {status: newStatus}
+      );
+      trip ? res.json(trip) : res.status(404).send();
+    } catch (err) {
+      next(err);
+    }
+  };
+};
+
 TripController.getLocation = async(req, res, next) => {
   try {
     var locationData = await TripService.getLocationData(req.params.tripId);
@@ -69,4 +84,29 @@ TripController.getLocation = async(req, res, next) => {
   }
 };
 
+TripController.list = async(req, res, next) => {
+  try {
+    var tripsWithNames = await TripService.list(req.query.page,
+      {driverName: true, clientName: true});
+    res.json(tripsWithNames);
+  } catch (err) {
+    next(err);
+  }
+};
+
+TripController.calculateRoute = async(req, res, next) => {
+  try {
+    if (!(req.body.origin && req.body.destination &&
+      req.body.origin.lat && req.body.destination.lat &&
+      req.body.origin.lng && req.body.destination.lng)){
+      res.status(400).send();
+    }
+    var origin = req.body.origin;
+    var destination = req.body.destination;
+    var waypoints = await MapsService.getWaypoints(origin, destination);
+    res.json({waypoints: waypoints});
+  } catch (err) {
+    next(err);
+  }
+};
 module.exports = TripController;

@@ -39,6 +39,10 @@ module.exports = (sequelize, type) => {
       type: type.STRING,
       allowNull: false,
     },
+    name: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
   }, {
     defaultScope: {
       include: [{
@@ -102,6 +106,10 @@ module.exports = (sequelize, type) => {
               },
               // attributes: [],
             },
+            include: [{
+              association: 'client',
+              attributes: [ 'name' ],
+            }],
             required: false,
           }],
         }],

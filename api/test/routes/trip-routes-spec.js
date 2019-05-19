@@ -5,13 +5,18 @@ var chaiHttp = require('chai-http');
 var sinon = require('sinon');
 var app = require('../../src/app');
 var { Trip, Driver } = require('../../src/models');
-var { MapsService, DriverSelectionService } = require('../../src/services');
+var { MapsService, DriverSelectionService,
+  TripCostsService } = require('../../src/services');
 var { auth } = require('../../src/middleware');
+var _ = require('lodash');
 
 var data = require('./trip-routes-spec-data');
 
+var c = data => _.cloneDeep(data);
+
 chai.use(chaiHttp);
 
+const EXPECTED_COST = 10.2;
 
 describe('Trip Routes Test', () => {
   before(() => {
@@ -30,12 +35,13 @@ describe('Trip Routes Test', () => {
       req.user = data.userData;
       next();
     });
-
     sinon.stub(auth, '_authenticate');
     auth._authenticate.callsFake((req, res, next) => {
       req.user = data.userData;
       next();
     });
+    sinon.stub(TripCostsService, 'calculateCost');
+    TripCostsService.calculateCost.resolves(EXPECTED_COST);
   });
 
   var clock;
@@ -82,7 +88,10 @@ describe('Trip Routes Test', () => {
 
   describe('POST /trips', () => {
     it('should return ok when trip is valid', async() => {
-      Trip.create.returns(data.tripData);
+      var expected = c(data.tripData);
+      expected.cost = EXPECTED_COST;
+
+      Trip.create.returns(expected);
 
       var res = await chai.request(app)
         .post('/trips')
@@ -98,7 +107,7 @@ describe('Trip Routes Test', () => {
       );
       chai.assert.deepEqual(
         res.body,
-        data.tripData,
+        expected,
         'Response was not what was expected'
       );
     });
@@ -217,6 +226,9 @@ describe('Trip Routes Test', () => {
           destination: data.tripData.destination,
         });
 
+      var expected = c(data.confirmedTripData);
+      expected.cost = EXPECTED_COST;
+
       chai.assert.strictEqual(
         res.status,
         200,
@@ -273,6 +285,54 @@ describe('Trip Routes Test', () => {
         data.expectedEnCaminoLocationdata.currentLocation,
         'Response was not what was expected'
       );
+    });
+  });
+
+  describe('POST /info/route', () => {
+
+    it('should return 400 when no routes found', async() => {
+      MapsService.getDirections.resolves({});
+
+      var res = await chai.request(app)
+        .post('/info/route')
+        .send({
+          origin: data.tripData.origin,
+          destination: data.tripData.destination,
+        });
+
+      chai.assert.strictEqual(
+        res.status,
+        400,
+        'Status was not 400'
+      );
+
+    });
+
+    it('should return list of waypoints when route is found', async() => {
+      MapsService.getDirections.resolves(data.mockRouteData);
+
+      var res = await chai.request(app)
+        .post('/info/route')
+        .send({
+          origin: data.tripData.origin,
+          destination: data.tripData.destination,
+        });
+
+      chai.assert.strictEqual(
+        res.status,
+        200,
+        'Status was not 200'
+      );
+
+      chai.assert.deepEqual(
+        res.body.waypoints,
+        [{lat: 1, lng: 1},
+          {lat: 2, lng: 2},
+          {lat: 3, lng: 3},
+          {lat: 4, lng: 4 }],
+        'Response was not what was expected'
+      );
+
     });
   });
 });

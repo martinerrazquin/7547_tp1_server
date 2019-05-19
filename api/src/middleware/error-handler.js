@@ -68,6 +68,8 @@ ErrorHandler.default = (err, req, res, next) => {
   } else if (err.name === 'BadFormat'){
     return res.status(400).send('Business Constant does not ' +
         'match expected format');
+  } else if (err.name === 'NoRoutesFound'){
+    return res.status(400).send('No route found');
   } else {
     console.error('ERROR: Don\'t know how to handle: ');
     console.error(err);

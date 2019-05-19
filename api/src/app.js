@@ -22,7 +22,7 @@ passport.use(new FacebookStrategy({
     if (user) {
       await UserService.update(user.id, { facebookToken: accessToken });
     } else {
-      user = { facebookId: profile.id };
+      user = { facebookId: profile.id, name: profile.displayName };
     }
     done(null, user);
   } catch (err) {
