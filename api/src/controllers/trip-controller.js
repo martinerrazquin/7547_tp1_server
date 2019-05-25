@@ -5,7 +5,7 @@ var {
   SimulationService,
   DriverSelectionService,
   MapsService,
-  DriverService
+  DriverService,
 } = require('../services');
 
 var TripController = {};
@@ -40,14 +40,14 @@ TripController.retrieve = async(req, res, next) => {
   try {
     var trip = await TripService.getById(req.params.tripId);
 
-    if (trip.driverId){
+    if (trip && trip.driverId){
       var driver = await DriverService.getById(trip.driverId);
       trip.driver = {
         id: driver.id,
         userId: driver.userData.id,
         name: driver.userData.name,
         phone: driver.userData.phone,
-      }
+      };
     }
 
     trip ? res.json(trip) : res.status(404).send();

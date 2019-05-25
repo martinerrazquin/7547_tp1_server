@@ -14,16 +14,16 @@ DriverService.create = async(driverData) => {
 };
 
 DriverService.getById = async(driverId) => {
-    var query = {
-        where: { id: driverId },
-    };
+  var query = {
+    where: { id: driverId },
+  };
 
-    query.include = [{
-        association: 'userData',
-    }];
+  query.include = [{
+    association: 'userData',
+  }];
 
-    var driver = await Driver.findOne(query);
-    return driver.toJSON ? driver.toJSON() : driver;
+  var driver = await Driver.findOne(query);
+  return driver.toJSON ? driver.toJSON() : driver;
 };
 
 DriverService.update = async(driverId, driverData) => {
