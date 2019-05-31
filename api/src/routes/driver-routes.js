@@ -1,7 +1,7 @@
 'use strict';
 
 var { auth } = require('../middleware');
-var { UserController } = require('../controllers');
+var { UserController, DriverController } = require('../controllers');
 
 module.exports = (app) => {
   app.route('/drivers/status')
@@ -9,5 +9,10 @@ module.exports = (app) => {
       auth.authenticate,
       auth.authorize('driver'),
       UserController.updateDriverStatus
+    );
+
+  app.route('/drivers/summary')
+    .get(
+      DriverController.summary
     );
 };
