@@ -13,6 +13,8 @@ module.exports = (app) => {
 
   app.route('/drivers/summary')
     .get(
+      auth.authenticate,
+      auth.authorize('driver'),
       DriverController.summary
     );
 };

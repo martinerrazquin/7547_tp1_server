@@ -9,7 +9,8 @@ DriverController.name = 'DriverController';
 
 DriverController.summary = async(req, res, next) => {
     try {
-        const results = await DriverService.getSummaryForDriver(1);
+        const userId = req.user.id;
+        const results = await DriverService.getSummaryForDriver(userId);
         const summary = buildSummary(results);
         res.json(summary);
     } catch (err) {
