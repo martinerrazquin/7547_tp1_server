@@ -36,7 +36,9 @@ UserService.list = async(page = 0, onlyDrivers = false) => {
   }
 
   var users = await User.findAll(query);
-  var tripCount = await User.count();
+  delete query.offset;
+  delete query.limit;
+  var tripCount = await User.count(query);
   return { pageContents: users, total: tripCount };
 };
 
