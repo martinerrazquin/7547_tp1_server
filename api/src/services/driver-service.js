@@ -125,9 +125,15 @@ DriverService.getInsideRegion = async(region, exclude = []) => {
 
 DriverService.getSummaryForDriver = async(driverId) => {
   try {
-    const minimumDate = moment().subtract(1, 'months').startOf('month').format('YYYY-MM-DD');
+    const minimumDate = moment()
+      .subtract(1, 'months')
+      .startOf('month')
+      .format('YYYY-MM-DD');
 
-    var rawQuery = 'SELECT "driverId", TO_CHAR("createdAt", \'YYYY-MM\') as month, count(id) as total_trips, round(sum(cost)::NUMERIC, 2) as total_money\n' +
+    var rawQuery = 'SELECT "driverId",' +
+        'TO_CHAR("createdAt", \'YYYY-MM\') as month,' +
+        'count(id) as total_trips,' +
+        'round(sum(cost)::NUMERIC, 2) as total_money\n' +
         'FROM "Trips"\n' +
         'WHERE status = \'Finalizado\'\n' +
         'AND "createdAt" >= \'' + minimumDate + '\'\n' +

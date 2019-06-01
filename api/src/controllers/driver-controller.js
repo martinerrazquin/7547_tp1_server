@@ -8,44 +8,44 @@ var DriverController = {};
 DriverController.name = 'DriverController';
 
 DriverController.summary = async(req, res, next) => {
-    try {
-        const driverId = req.user.driverData.id;
-        const results = await DriverService.getSummaryForDriver(driverId);
-        const summary = buildSummary(results);
-        res.json(summary);
-    } catch (err) {
-        next(err);
-    }
+  try {
+    const driverId = req.user.driverData.id;
+    const results = await DriverService.getSummaryForDriver(driverId);
+    const summary = buildSummary(results);
+    res.json(summary);
+  } catch (err) {
+    next(err);
+  }
 };
 
 function buildSummary(results) {
-    var summary = {
-        current: {
-            trips: "0",
-            money: "0",
-        },
-        previous: {
-            trips: "0",
-            money: "0",
-        }
+  var summary = {
+    current: {
+      trips: '0',
+      money: '0',
+    },
+    previous: {
+      trips: '0',
+      money: '0',
+    },
+  };
+  const currentMonth = moment().format('YYYY-MM');
+  const previousMonth = moment().subtract(1, 'months').format('YYYY-MM');
+
+  results.forEach(function(element) {
+    const monthSummary = {
+      trips: element.total_trips,
+      money: element.total_money,
     };
-    const currentMonth = moment().format('YYYY-MM');
-    const previousMonth = moment().subtract(1, 'months').format('YYYY-MM');
 
-    results.forEach(function (element) {
-        const monthSummary = {
-            trips: element.total_trips,
-            money: element.total_money
-        };
-
-        if (element.month === currentMonth){
-            summary.current = monthSummary;
-        }
-        if (element.month === previousMonth){
-            summary.previous = monthSummary;
-        }
-    });
-    return summary;
+    if (element.month === currentMonth){
+      summary.current = monthSummary;
+    }
+    if (element.month === previousMonth){
+      summary.previous = monthSummary;
+    }
+  });
+  return summary;
 }
 
 module.exports = DriverController;
