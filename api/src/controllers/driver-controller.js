@@ -21,12 +21,12 @@ DriverController.summary = async(req, res, next) => {
 function buildSummary(results) {
     var summary = {
         current: {
-            trips: 0,
-            money: 0,
+            trips: "0",
+            money: "0",
         },
         previous: {
-            trips: 0,
-            money: 0,
+            trips: "0",
+            money: "0",
         }
     };
     const currentMonth = moment().format('YYYY-MM');
