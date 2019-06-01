@@ -19,11 +19,25 @@ UserService.createClient = async(userData) => {
   return await User.create(userData);
 };
 
-UserService.list = async(page = 0) => {
-  return await User.findAll({
+UserService.list = async(page = 0, onlyDrivers = false) => {
+  var query = {
     offset: page * PAGE_SIZE,
     limit: PAGE_SIZE,
-  });
+  };
+
+  if (onlyDrivers) {
+    query.include = [
+      {
+        model: Driver,
+        as: 'driverData',
+        required: true,
+      },
+    ];
+  }
+
+  var users = await User.findAll(query);
+  var tripCount = await User.count();
+  return { pageContents: users, total: tripCount };
 };
 
 UserService.getById = async(userId, scope = 'defaultScope') => {

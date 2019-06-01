@@ -70,6 +70,11 @@ module.exports = (sequelize, Sequelize) => {
         return (typeof value === 'string') ? JSON.parse(value) : value;
       },
     },
+    enabledToDrive: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
   }, {
     defaultScope: {
       attributes: {

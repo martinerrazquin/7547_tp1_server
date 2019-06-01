@@ -15,6 +15,15 @@ UserController.list = async(req, res, next) => {
   }
 };
 
+UserController.listDrivers = async(req, res, next) => {
+  try {
+    var drivers = await UserService.list(req.query.page, true);
+    res.json(drivers);
+  } catch (err) {
+    next(err);
+  }
+};
+
 UserController.retrieve = async(req, res, next) => {
   try {
     var user = await UserService.getById(req.params.userId);
@@ -31,6 +40,13 @@ UserController.update = (req, res) => {
 UserController.updateDriverStatus = async(req, res, next) => {
   try {
     delete req.body.id;
+
+    // start by checking if driver is enabled to work.
+    var driver = await DriverService.getById(req.user.driverData.id);
+    if (!driver.enabledToDrive) {
+      return res.status(403).send('Not enabled to work');
+    }
+
     await DriverService.update(
       req.user.driverData.id,
       req.body

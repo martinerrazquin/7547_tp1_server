@@ -26,6 +26,7 @@ module.exports = {
       },
       status: 'No disponible',
       trips: [],
+      enabledToDrive: false,
     },
     hasRole: (role) => {
       return role === 'driver';
