@@ -122,4 +122,25 @@ DriverService.getInsideRegion = async(region, exclude = []) => {
   return results;
 };
 
+
+DriverService.getSummaryForDriver = async(driverId) => {
+  try {
+    var rawQuery = 'SELECT "driverId", TO_CHAR("createdAt", \'YYYY-MM\') as month, count(id) as total_trips, round(sum(cost)::NUMERIC, 2) as total_money\n' +
+        'FROM "Trips"\n' +
+        'WHERE status = \'Finalizado\'\n' +
+        'AND "createdAt" >= \'2019-05-01\'\n' +
+        'AND "driverId"=1\n' +
+        'GROUP BY ("driverId",month);';
+
+    var results = await Driver.connectionInstance.query(rawQuery, {
+      raw: true,
+      type: Sequelize.QueryTypes.SELECT,
+      logging: false,
+    });
+    return results;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 module.exports = DriverService;

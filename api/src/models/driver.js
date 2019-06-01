@@ -90,5 +90,7 @@ module.exports = (sequelize, Sequelize) => {
     });
   };
 
+  Driver.connectionInstance = sequelize;
+
   return Driver;
 };
