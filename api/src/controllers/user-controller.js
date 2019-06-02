@@ -26,14 +26,14 @@ UserController.listDrivers = async(req, res, next) => {
   }
 };
 
-UserController.getSummaries = async (users) => {
-  const driversIds = users.map(function (user) {
+UserController.getSummaries = async(users) => {
+  const driversIds = users.map(function(user) {
     return user.driverData.id;
   });
   const summaries = await DriverService.getSummariesForDrivers(driversIds);
 
   var summariesForDriver = {};
-  driversIds.forEach(function (driverId) {
+  driversIds.forEach(function(driverId) {
     summariesForDriver[driverId] = {
       current: {
         trips: '0',
@@ -43,17 +43,17 @@ UserController.getSummaries = async (users) => {
         trips: '0',
         money: '0',
       },
-    }
+    };
   });
 
   const currentMonth = moment().format('YYYY-MM');
   const previousMonth = moment().subtract(1, 'months').format('YYYY-MM');
-  summaries.forEach(function (item) {
+  summaries.forEach(function(item) {
     if (item.month === currentMonth){
       summariesForDriver[item.driverId]['current'] = item;
     }
     if (item.month === previousMonth){
-        summariesForDriver[item.driverId]['previous'] = item;
+      summariesForDriver[item.driverId]['previous'] = item;
     }
   });
 
