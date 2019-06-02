@@ -1,6 +1,7 @@
 'use strict';
 
 var { UserService, DriverService } = require('../services');
+var { moment } = require('../config/dependencies');
 
 var UserController = {};
 
@@ -18,10 +19,45 @@ UserController.list = async(req, res, next) => {
 UserController.listDrivers = async(req, res, next) => {
   try {
     var drivers = await UserService.list(req.query.page, true);
+    drivers.summaries = await UserController.getSummaries(drivers.pageContents);
     res.json(drivers);
   } catch (err) {
     next(err);
   }
+};
+
+UserController.getSummaries = async (users) => {
+  const driversIds = users.map(function (user) {
+    return user.driverData.id;
+  });
+  const summaries = await DriverService.getSummariesForDrivers(driversIds);
+
+  var summariesForDriver = {};
+  driversIds.forEach(function (driverId) {
+    summariesForDriver[driverId] = {
+      current: {
+        trips: '0',
+        money: '0',
+      },
+      previous: {
+        trips: '0',
+        money: '0',
+      },
+    }
+  });
+
+  const currentMonth = moment().format('YYYY-MM');
+  const previousMonth = moment().subtract(1, 'months').format('YYYY-MM');
+  summaries.forEach(function (item) {
+    if (item.month === currentMonth){
+      summariesForDriver[item.driverId]['current'] = item;
+    }
+    if (item.month === previousMonth){
+        summariesForDriver[item.driverId]['previous'] = item;
+    }
+  });
+
+  return summariesForDriver;
 };
 
 UserController.retrieve = async(req, res, next) => {
