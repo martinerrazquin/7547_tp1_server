@@ -33,6 +33,11 @@ UserService.list = async(page = 0, onlyDrivers = false) => {
         required: true,
       },
     ];
+
+    query.order = [
+      ['driverData', 'enabledToDrive', 'DESC'],
+      ['createdAt', 'DESC'],
+    ];
   }
 
   var users = await User.findAll(query);
