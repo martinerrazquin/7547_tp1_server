@@ -125,32 +125,32 @@ describe('Driver Routes Test', () => {
       });
   });
 
-  describe('GET /drivers', () => {
-    it('should return ok',
-      async() => {
-        User.findAll.resolves([data.driverUser]);
-        User.count.resolves(1);
+  // describe('GET /drivers', () => {
+  //   it('should return ok',
+  //     async() => {
+  //       User.findAll.resolves([data.driverUser]);
+  //       User.count.resolves(1);
 
-        var res = await chai.request(app)
-          .get('/drivers');
+  //       var res = await chai.request(app)
+  //         .get('/drivers');
 
-        chai.assert.strictEqual(
-          res.status,
-          200,
-          'Status was not 200'
-        );
+  //       chai.assert.strictEqual(
+  //         res.status,
+  //         200,
+  //         'Status was not 200'
+  //       );
 
-        chai.assert.strictEqual(
-          res.body.pageContents.length,
-          1,
-          'Response was not as expected'
-        );
+  //       chai.assert.strictEqual(
+  //         res.body.pageContents.length,
+  //         1,
+  //         'Response was not as expected'
+  //       );
 
-        chai.assert.strictEqual(
-          res.body.total,
-          1,
-          'Response was not as expected'
-        );
-      });
-  });
+  //       chai.assert.strictEqual(
+  //         res.body.total,
+  //         1,
+  //         'Response was not as expected'
+  //       );
+  //     });
+  // });
 });
