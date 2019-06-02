@@ -150,7 +150,10 @@ TripService.list = async(page = 0, options = {}) => {
   if (options.clientName){
     trips = await Promise.all(trips.map(addClientNameToTripData));
   }
-  var tripCount = await Trip.count({where: filters});
+  var tripCount = await Trip.count({
+    where: filters,
+    include: [include],
+  });
   return { pageContents: trips, total: tripCount };
 };
 
