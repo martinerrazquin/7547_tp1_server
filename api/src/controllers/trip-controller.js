@@ -98,8 +98,15 @@ TripController.getLocation = async(req, res, next) => {
 
 TripController.list = async(req, res, next) => {
   try {
-    var tripsWithNames = await TripService.list(req.query.page,
-      {driverName: true, clientName: true});
+    var filters = {
+      onlyCurrent: req.query.onlyCurrent === 'true',
+      driverName: req.query.driver ? req.query.driver : null,
+    };
+
+    var tripsWithNames = await TripService.list(
+      req.query.page,
+      { driverName: true, clientName: true, filters: filters }
+    );
     res.json(tripsWithNames);
   } catch (err) {
     next(err);
