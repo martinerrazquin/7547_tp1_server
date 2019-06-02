@@ -1,5 +1,6 @@
 'use strict';
 
+var { Sequelize } = require('../config/dependencies');
 var { Trip, Driver, User } = require('../models');
 var TripCostsService = require('./tripcosts-service');
 
@@ -109,14 +110,39 @@ const addClientNameToTripData = async(tripData) => {
 };
 
 TripService.list = async(page = 0, options = {}) => {
+  var filters = {};
+  if (options.filters && options.filters.onlyCurrent) {
+    filters.status = [ 'Buscando', 'En camino', 'En origen',
+      'En viaje', 'Llegamos'];
+  }
+
+  var include = {
+    model: Driver,
+    as: 'driver',
+    required: false,
+  };
+
+  if (options.filters && options.filters.driverName) {
+    include.required = true;
+    include.include = [{
+      model: User,
+      as: 'userData',
+      where: {
+        name: {
+          [Sequelize.Op.iRegexp]: options.filters.driverName,
+        },
+      },
+    }];
+  }
+
   var trips = await Trip.findAll({
     offset: page * PAGE_SIZE,
     limit: PAGE_SIZE,
-    include: [
-      { model: Driver, as: 'driver', required: false },
-    ],
+    where: filters,
+    include: [include],
     order: [['createdAt', 'DESC']],
   });
+
   trips = trips.map(tripData => tripData.toJSON());
   if (options.driverName){
     trips = await Promise.all(trips.map(addDriverNameToTripData));
@@ -124,7 +150,7 @@ TripService.list = async(page = 0, options = {}) => {
   if (options.clientName){
     trips = await Promise.all(trips.map(addClientNameToTripData));
   }
-  var tripCount = await Trip.count();
+  var tripCount = await Trip.count({where: filters});
   return { pageContents: trips, total: tripCount };
 };
 
