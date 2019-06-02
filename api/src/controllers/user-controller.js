@@ -50,10 +50,16 @@ UserController.getSummaries = async(users) => {
   const previousMonth = moment().subtract(1, 'months').format('YYYY-MM');
   summaries.forEach(function(item) {
     if (item.month === currentMonth){
-      summariesForDriver[item.driverId]['current'] = item;
+      summariesForDriver[item.driverId]['current'] = {
+        money: item.total_money,
+        trips: item.total_trips,
+      };
     }
     if (item.month === previousMonth){
-      summariesForDriver[item.driverId]['previous'] = item;
+      summariesForDriver[item.driverId]['previous'] = {
+        money: item.total_money,
+        trips: item.total_trips,
+      };
     }
   });
 
