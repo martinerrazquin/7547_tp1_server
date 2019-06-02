@@ -48,4 +48,18 @@ function buildSummary(results) {
   return summary;
 }
 
+DriverController.updateEnabledState = async(req, res, next) => {
+  try {
+    var result = await DriverService.update(req.params.driverId, {
+      enabledToDrive: req.body.enabled,
+    });
+    if (!result) {
+      return res.status(404).send('Not found');
+    }
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = DriverController;

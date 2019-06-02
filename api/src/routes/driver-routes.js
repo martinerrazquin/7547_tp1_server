@@ -17,4 +17,14 @@ module.exports = (app) => {
       auth.authorize('driver'),
       DriverController.summary
     );
+
+  app.route('/drivers/:driverId/enabled-state')
+    .post(
+      DriverController.updateEnabledState
+    );
+
+  app.route('/drivers')
+    .get(
+      UserController.listDrivers
+    );
 };

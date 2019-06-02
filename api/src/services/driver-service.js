@@ -32,17 +32,25 @@ DriverService.update = async(driverId, driverData) => {
     where: { id: driverId },
   });
 
-  if (updated.length === 1) {
+  if (updated.length === 1 || updated[1] === 0) {
     return null;
   } else {
     var driver = updated[1][0];
-    return driver.toJSON ? driver.toJSON() : driver;
+    driver = driver.toJSON ? driver.toJSON() : driver;
+    delete driver.drivingRecordImage;
+    delete driver.policyImage;
+    delete driver.transportImage;
+    return driver;
   }
 };
 
 DriverService.isAvailable = async(driverId) => {
   var driver = await Driver.findOne({
-    where: { id: driverId },
+    where: {
+      id: driverId,
+      status: 'Disponible',
+      enabledToDrive: true,
+    },
     include: [{
       association: 'trips',
       attributes: [ 'id' ],
@@ -79,6 +87,7 @@ DriverService.getInsideRegion = async(region, exclude = []) => {
         [Sequelize.Op.notIn]: exclude,
       },
       status: 'Disponible',
+      enabledToDrive: true,
       currentLocation: {
         lat: {
           [Sequelize.Op.between]: [

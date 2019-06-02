@@ -50,7 +50,7 @@ module.exports = (sequelize, type) => {
         required: false,
         attributes: {
           exclude: [
-            'id', 'userId', 'drivingRecordImage',
+            'userId', 'drivingRecordImage',
             'policyImage', 'transportImage',
             'createdAt', 'updatedAt',
           ],
