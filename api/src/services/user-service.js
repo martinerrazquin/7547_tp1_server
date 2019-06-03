@@ -35,7 +35,7 @@ UserService.list = async(page = 0, onlyDrivers = false) => {
     ];
 
     query.order = [
-      ['driverData', 'enabledToDrive', 'DESC'],
+      ['driverData', 'enabledToDrive', 'ASC'],
       ['createdAt', 'DESC'],
     ];
   }
