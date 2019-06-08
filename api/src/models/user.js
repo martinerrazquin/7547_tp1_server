@@ -47,7 +47,12 @@ module.exports = (sequelize, type) => {
       type: Sequelize.BOOLEAN,
       allowNull: false,
       defaultValue: true,
-    }
+    },
+    role: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: 'client',
+    },
   }, {
     defaultScope: {
       include: [{

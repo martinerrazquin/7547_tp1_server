@@ -9,6 +9,7 @@ var UserService = {};
 UserService.name = 'UserService';
 
 UserService.createDriver = async(userData) => {
+  userData.role = 'driver';
   var user = await User.create(userData, {
     include: [ {model: Driver, as: 'driverData'} ],
   });
@@ -16,6 +17,7 @@ UserService.createDriver = async(userData) => {
 };
 
 UserService.createClient = async(userData) => {
+  userData.role = 'client';
   return await User.create(userData);
 };
 
