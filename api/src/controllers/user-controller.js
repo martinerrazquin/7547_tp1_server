@@ -17,12 +17,12 @@ UserController.list = async(req, res, next) => {
 };
 
 UserController.listClients = async(req, res, next) => {
-    try {
-        var clients = await UserService.list(req.query.page, false, 'client');
-        res.json(clients);
-    } catch (err) {
-        next(err);
-    }
+  try {
+    var clients = await UserService.list(req.query.page, false, 'client');
+    res.json(clients);
+  } catch (err) {
+    next(err);
+  }
 };
 
 
@@ -147,17 +147,17 @@ UserController.delete = async(req, res, next) => {
 };
 
 UserController.updateClientEnabledState = async(req, res, next) => {
-    try {
-        var result = await UserService.update(req.params.userId, {
-            "enabledClient": req.body.enabled,
-        });
-        if (!result) {
-            return res.status(404).send('Not found');
-        }
-        res.json(result);
-    } catch (err) {
-        next(err);
+  try {
+    var result = await UserService.update(req.params.userId, {
+      enabledClient: req.body.enabled,
+    });
+    if (!result) {
+      return res.status(404).send('Not found');
     }
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
 };
 
 module.exports = UserController;

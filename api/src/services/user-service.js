@@ -80,7 +80,7 @@ UserService.update = async(userId, userData) => {
     returning: true,
     where: { id: userId },
   });
-  
+
   if (!updated || updated[0] === 0) {
     return null;
   } else {

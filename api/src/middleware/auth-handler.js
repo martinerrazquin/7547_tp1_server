@@ -48,7 +48,7 @@ Auth.authorize = (role) => {
 
 Auth.validateEnabledClient = (req, res, next) => {
   if (!req.user.enabledClient){
-      return res.status(401).send('disabled');
+    return res.status(401).send('disabled');
   }
   next();
 };

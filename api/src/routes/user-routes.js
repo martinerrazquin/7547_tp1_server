@@ -12,10 +12,10 @@ module.exports = (app) => {
     .get(UserController.list);
 
   app.route('/clients')
-      .get(UserController.listClients);
+    .get(UserController.listClients);
 
   app.route('/clients/:userId/enabled-state')
-      .post(
-          UserController.updateClientEnabledState
-      );
+    .post(
+      UserController.updateClientEnabledState
+    );
 };
