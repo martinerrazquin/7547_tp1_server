@@ -43,6 +43,11 @@ module.exports = (sequelize, type) => {
       type: Sequelize.STRING,
       allowNull: false,
     },
+    enabledClient: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+    }
   }, {
     defaultScope: {
       include: [{

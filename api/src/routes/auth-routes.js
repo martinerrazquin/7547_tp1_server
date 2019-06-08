@@ -9,6 +9,7 @@ module.exports = (app) => {
     .post(
       auth.facebookAuthenticate,
       auth.authorize('client'),
+      auth.validateEnabledClient,
       (req, res, next) => {
         res.json(req.user);
       }
