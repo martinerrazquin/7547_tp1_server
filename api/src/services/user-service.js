@@ -9,6 +9,7 @@ var UserService = {};
 UserService.name = 'UserService';
 
 UserService.createDriver = async(userData) => {
+  userData.role = 'driver';
   var user = await User.create(userData, {
     include: [ {model: Driver, as: 'driverData'} ],
   });
@@ -16,14 +17,23 @@ UserService.createDriver = async(userData) => {
 };
 
 UserService.createClient = async(userData) => {
+  userData.role = 'client';
   return await User.create(userData);
 };
 
-UserService.list = async(page = 0, onlyDrivers = false) => {
+UserService.list = async(page = 0, onlyDrivers = false, role = null) => {
   var query = {
     offset: page * PAGE_SIZE,
     limit: PAGE_SIZE,
   };
+
+  if (role){
+    query.where = {role: role};
+  }
+
+  query.order = [
+    ['createdAt', 'DESC'],
+  ];
 
   if (onlyDrivers) {
     query.include = [
@@ -71,7 +81,7 @@ UserService.update = async(userId, userData) => {
     where: { id: userId },
   });
 
-  if (updated.length === 1) {
+  if (!updated || updated[0] === 0) {
     return null;
   } else {
     var user = updated[1][0];

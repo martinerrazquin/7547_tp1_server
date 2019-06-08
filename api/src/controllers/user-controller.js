@@ -16,6 +16,16 @@ UserController.list = async(req, res, next) => {
   }
 };
 
+UserController.listClients = async(req, res, next) => {
+  try {
+    var clients = await UserService.list(req.query.page, false, 'client');
+    res.json(clients);
+  } catch (err) {
+    next(err);
+  }
+};
+
+
 UserController.listDrivers = async(req, res, next) => {
   try {
     var drivers = await UserService.list(req.query.page, true);
@@ -131,6 +141,20 @@ UserController.delete = async(req, res, next) => {
   try {
     var deleted = await UserService.delete(req.params.userId);
     deleted ? res.send() : res.status(404).send();
+  } catch (err) {
+    next(err);
+  }
+};
+
+UserController.updateClientEnabledState = async(req, res, next) => {
+  try {
+    var result = await UserService.update(req.params.userId, {
+      enabledClient: req.body.enabled,
+    });
+    if (!result) {
+      return res.status(404).send('Not found');
+    }
+    res.json(result);
   } catch (err) {
     next(err);
   }
