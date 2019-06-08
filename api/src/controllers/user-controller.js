@@ -16,6 +16,16 @@ UserController.list = async(req, res, next) => {
   }
 };
 
+UserController.listClients = async(req, res, next) => {
+    try {
+        var clients = await UserService.list(req.query.page, false, 'client');
+        res.json(clients);
+    } catch (err) {
+        next(err);
+    }
+};
+
+
 UserController.listDrivers = async(req, res, next) => {
   try {
     var drivers = await UserService.list(req.query.page, true);

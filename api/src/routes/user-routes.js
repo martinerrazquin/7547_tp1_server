@@ -10,4 +10,7 @@ module.exports = (app) => {
 
   app.route('/users')
     .get(UserController.list);
+
+    app.route('/clients')
+        .get(UserController.listClients);
 };

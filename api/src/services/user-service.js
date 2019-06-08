@@ -21,11 +21,19 @@ UserService.createClient = async(userData) => {
   return await User.create(userData);
 };
 
-UserService.list = async(page = 0, onlyDrivers = false) => {
+UserService.list = async(page = 0, onlyDrivers = false, role = null) => {
   var query = {
     offset: page * PAGE_SIZE,
     limit: PAGE_SIZE,
   };
+
+  if (role){
+    query.where = {role: role};
+  }
+
+  query.order = [
+    ['createdAt', 'DESC'],
+  ];
 
   if (onlyDrivers) {
     query.include = [
