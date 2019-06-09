@@ -33,7 +33,16 @@ describe('Trip Service', () => {
       Trip.findAll.resolves([]);
       Trip.count.resolves(0);
       var res = await tripList();
-      chai.assert.deepEqual(res, { pageContents: [], total: 0 }, 'not empty');
+
+      chai.assert.deepEqual(
+        res,
+        {
+          pageContents: [],
+          total: 0,
+          totalMoney: 0,
+        },
+        'not empty'
+      );
 
     });
 
@@ -53,7 +62,7 @@ describe('Trip Service', () => {
       Trip.count.resolves(mockedTrips.length);
 
       var res = await tripList();
-
+      delete res.totalMoney;
       chai.assert.deepEqual(
         res,
         { pageContents: expected, total: expected.length },

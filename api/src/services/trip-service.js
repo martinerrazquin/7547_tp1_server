@@ -138,8 +138,8 @@ TripService.list = async(page = 0, options = {}) => {
   if (options.filters && options.filters.month) {
     where.createdAt = {
       [Sequelize.Op.gt]: options.filters.month.startOf('month').format(),
-      [Sequelize.Op.lt]: options.filters.month.endOf('month').format()
-    }
+      [Sequelize.Op.lt]: options.filters.month.endOf('month').format(),
+    };
   }
 
   var trips = await Trip.findAll({
@@ -166,14 +166,18 @@ TripService.list = async(page = 0, options = {}) => {
   var result = await Trip.findAll({
     where: {
       cost: {
-        [Sequelize.Op.ne]: NaN
-      }
+        [Sequelize.Op.ne]: NaN,
+      },
     },
     attributes: [[Sequelize.fn('sum', Sequelize.col('cost')), 'totalMoney']],
-    raw: true
+    raw: true,
   });
-  
-  return { pageContents: trips, total: tripCount, totalMoney: result[0].totalMoney };
+
+  return {
+    pageContents: trips,
+    total: tripCount,
+    totalMoney: result.length === 1 ? result[0].totalMoney : 0,
+  };
 };
 
 module.exports = TripService;
