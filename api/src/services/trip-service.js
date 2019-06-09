@@ -163,12 +163,9 @@ TripService.list = async(page = 0, options = {}) => {
     include: [include],
   });
 
+  where = Object.assign(where, { cost: { [Sequelize.Op.ne]: NaN } });
   var result = await Trip.findAll({
-    where: {
-      cost: {
-        [Sequelize.Op.ne]: NaN,
-      },
-    },
+    where: where,
     attributes: [[Sequelize.fn('sum', Sequelize.col('cost')), 'totalMoney']],
     raw: true,
   });
