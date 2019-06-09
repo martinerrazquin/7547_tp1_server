@@ -8,6 +8,8 @@ var {
   DriverService,
 } = require('../services');
 
+var { moment } = require('../config/dependencies');
+
 var TripController = {};
 
 TripController.name = 'TripController';
@@ -101,6 +103,7 @@ TripController.list = async(req, res, next) => {
     var filters = {
       onlyCurrent: req.query.onlyCurrent === 'true',
       driverName: req.query.driver ? req.query.driver : null,
+      month: req.query.month ? moment(req.query.month, "MM/YYYY") : null
     };
 
     var tripsWithNames = await TripService.list(

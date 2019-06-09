@@ -110,9 +110,9 @@ const addClientNameToTripData = async(tripData) => {
 };
 
 TripService.list = async(page = 0, options = {}) => {
-  var filters = {};
+  var where = {};
   if (options.filters && options.filters.onlyCurrent) {
-    filters.status = [ 'Buscando', 'En camino', 'En origen',
+    where.status = [ 'Buscando', 'En camino', 'En origen',
       'En viaje', 'Llegamos'];
   }
 
@@ -135,10 +135,17 @@ TripService.list = async(page = 0, options = {}) => {
     }];
   }
 
+  if (options.filters && options.filters.month) {
+    where.createdAt = {
+      [Sequelize.Op.gt]: options.filters.month.startOf('month').format(),
+      [Sequelize.Op.lt]: options.filters.month.endOf('month').format()
+    }
+  }
+
   var trips = await Trip.findAll({
     offset: page * PAGE_SIZE,
     limit: PAGE_SIZE,
-    where: filters,
+    where: where,
     include: [include],
     order: [['createdAt', 'DESC']],
   });
@@ -150,11 +157,23 @@ TripService.list = async(page = 0, options = {}) => {
   if (options.clientName){
     trips = await Promise.all(trips.map(addClientNameToTripData));
   }
+
   var tripCount = await Trip.count({
-    where: filters,
+    where: where,
     include: [include],
   });
-  return { pageContents: trips, total: tripCount };
+
+  var result = await Trip.findAll({
+    where: {
+      cost: {
+        [Sequelize.Op.ne]: NaN
+      }
+    },
+    attributes: [[Sequelize.fn('sum', Sequelize.col('cost')), 'totalMoney']],
+    raw: true
+  });
+  
+  return { pageContents: trips, total: tripCount, totalMoney: result[0].totalMoney };
 };
 
 module.exports = TripService;
