@@ -23,7 +23,7 @@ DriverService.getById = async(driverId) => {
   }];
 
   var driver = await Driver.findOne(query);
-  return driver.toJSON ? driver.toJSON() : driver;
+  return driver && driver.toJSON ? driver.toJSON() : driver;
 };
 
 DriverService.update = async(driverId, driverData) => {
@@ -190,6 +190,15 @@ DriverService.getSummariesForDrivers = async(driverIds) => {
   } catch (err) {
     console.error(err);
   }
+};
+
+DriverService.getDriverImages = async(driverId) => {
+  var query = {
+    where: { id: driverId },
+  };
+
+  var driver = await Driver.scope('full').findOne(query);
+  return driver && driver.toJSON ? driver.toJSON() : driver;
 };
 
 module.exports = DriverService;

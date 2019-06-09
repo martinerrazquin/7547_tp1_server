@@ -27,4 +27,9 @@ module.exports = (app) => {
     .get(
       UserController.listDrivers
     );
+
+  app.route('/drivers/:driverId/images')
+    .get(
+      DriverController.getImages
+    );
 };

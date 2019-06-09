@@ -83,6 +83,10 @@ module.exports = (sequelize, Sequelize) => {
         ],
       },
     },
+    scopes: {
+      full: {
+      },
+    },
   });
 
   Driver.associate = function(models) {

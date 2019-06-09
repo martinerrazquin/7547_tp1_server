@@ -62,4 +62,16 @@ DriverController.updateEnabledState = async(req, res, next) => {
   }
 };
 
+DriverController.getImages = async(req, res, next) => {
+  try {
+    var result = await DriverService.getDriverImages(req.params.driverId);
+    if (!result) {
+      return res.status(404).send();
+    }
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = DriverController;
