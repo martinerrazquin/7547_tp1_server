@@ -125,7 +125,7 @@ TripService.list = async(page = 0, options = {}) => {
   if (options.filters && options.filters.driverName) {
     include.required = true;
     include.include = [{
-      model: User,
+      model: User.scope('noIncludes'),
       as: 'userData',
       where: {
         name: {
@@ -166,7 +166,7 @@ TripService.list = async(page = 0, options = {}) => {
   where = Object.assign(where, { cost: { [Sequelize.Op.ne]: NaN } });
   include.attributes = [];
   if (include.include) {
-    include.include = [];
+    include.include[0].attributes = [];
   }
   var result = await Trip.findAll({
     where: where,

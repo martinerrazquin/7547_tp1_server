@@ -127,6 +127,7 @@ module.exports = (sequelize, type) => {
           exclude: ['facebookToken'],
         },
       },
+      noIncludes: {}
     },
   });
 
