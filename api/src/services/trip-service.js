@@ -128,8 +128,8 @@ TripService.list = async(page = 0, options = {}) => {
       model: User,
       as: 'userData',
       where: {
-        name: {
-          [Sequelize.Op.iRegexp]: options.filters.driverName,
+        name: 
+{          [Sequelize.Op.iRegexp]: options.filters.driverName,
         },
       },
     }];
@@ -167,6 +167,7 @@ TripService.list = async(page = 0, options = {}) => {
   var result = await Trip.findAll({
     where: where,
     attributes: [[Sequelize.fn('sum', Sequelize.col('cost')), 'totalMoney']],
+    include: [include],
     raw: true,
   });
 
