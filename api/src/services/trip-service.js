@@ -165,6 +165,9 @@ TripService.list = async(page = 0, options = {}) => {
 
   where = Object.assign(where, { cost: { [Sequelize.Op.ne]: NaN } });
   include.attributes = [];
+  if (include.include) {
+    include.include = [];
+  }
   var result = await Trip.findAll({
     where: where,
     include: [include],
